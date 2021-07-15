@@ -1,0 +1,4 @@
+Login Page -> Cohort Select Page -> Dashboard View:
+    DASHBOARD:
+        * current grades data
+        * 
