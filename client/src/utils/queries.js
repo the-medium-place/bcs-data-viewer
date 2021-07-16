@@ -5,12 +5,17 @@ export const GET_ALL_USERS = gql`
         allUsers {
           _id
           name
-          todos {
-              _id
-              title
+          cohorts {
+            _id
+            cohortId
+            cohortCode
+            studentRoster
+            droppedStudents
+            notes {
               content
-              isComplete
-              dueDate
+              createdAt
+              createdBy
+            }
           }
         }
       }
@@ -27,9 +32,15 @@ export const GET_ONE_USER = gql`
             }
             cohorts {
               _id
+              cohortId
               cohortCode
               studentRoster
               droppedStudents
+              notes {
+                content
+                createdAt
+                createdBy
+              }
             }
         }
     }`
@@ -51,7 +62,39 @@ export const GET_ME = gql`
          enrollmentId
          studentRoster
          droppedStudents
+         notes {
+           content
+           createdAt
+           createdBy {
+            _id
+            name
+            email
+          }
+         }
        }
      }
+    }
+  `;
+
+export const GET_COHORT = gql`
+    query getCohort($cohortId: ID!){
+      getCohort(cohortId: $cohortId){
+        _id
+        cohortId
+        cohortCode
+        enrollmentId
+        studentRoster
+        droppedStudents
+        notes {
+          _id
+          content
+          createdAt
+          createdBy {
+            _id
+            name
+            email
+          }
+        }
+      }
     }
   `;

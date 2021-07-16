@@ -15,7 +15,6 @@ export default function UserPage() {
 
 
     const params = useParams();
-    // console.log(params)
     const userId = params.id
 
 
@@ -25,8 +24,6 @@ export default function UserPage() {
             variables: { userId },
         }
     );
-
-
     if (error) { console.log(JSON.stringify(error)) }
 
     // Check if data is returning from the `QUERY_ME` query, then the `QUERY_SINGLE_PROFILE` query
@@ -53,21 +50,21 @@ export default function UserPage() {
                     {loading ? <h1>userpage Loading!!</h1> : error ? <h1>there was an error!</h1> : (
                         <>
                             <h1>{loggedInUser.name}<small style={{ color: 'red', fontWeight: 'bold', cursor: 'pointer' }} onClick={Auth.logout}>&nbsp;Logout</small></h1>
-                            <button onClick={cohortInfoClick}>Click Here to get Cohort Info!</button>
-                            <ul>{loggedInUser.cohorts.length > 0 ? "All linked Cohorts (Saved to app): " : null}
-                                {loggedInUser.cohorts.length > 0 ? loggedInUser.cohorts.map(cohort => <CohortListItem key={cohort._id} cohort={cohort} saveButton={false} />) : null}
+                            <ul>{loggedInUser.cohorts.length > 0 ? "Your 'Linked' cohorts (Saved to app): " : null}
+                                {loggedInUser.cohorts.length > 0 ? loggedInUser.cohorts.map(cohort => <Link key={cohort._id} to={`/cohorts/${cohort._id}`}><CohortListItem cohort={cohort} saveButton={false} loggedInUser={loggedInUser} /></Link>) : null}
                             </ul>
 
 
+                            <button onClick={cohortInfoClick}>Click Here to see all cohorts you are connected to!</button>
                             <ul>{cohortInfo.length > 0 ? "All associated Cohorts:" : null}
-                                {cohortInfo.length > 0 ? cohortInfo.map(cohort => <CohortListItem key={cohort.cohortId} cohort={cohort} saveButton={true} />) : <h1>Click above to view your cohorts!</h1>}
+                                {cohortInfo.length > 0 ? cohortInfo.map(cohort => <CohortListItem key={cohort.cohortId} cohort={cohort} saveButton={true} loggedInUser={loggedInUser} />) : null}
                             </ul>
                         </>
                     )}
 
                 </>) : (
-                // RENDER IF NOT LOGGED 
-                // ====================
+                // RENDER IF NOT LOGGED IN
+                // =======================
                 <h1>please <Link to="/login">Login</Link> or <Link to="/signup">Sign Up</Link> to view todos </h1>
             )}
         </div>

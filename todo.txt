@@ -1,4 +1,18 @@
+BACKEND:
+    user table - include array of associated cohorts
+    cohort table - include array of students who have dropped (to eliminate from results output), include array of Notes
+    student table - include basic student info and array of Notes from instructional staff
+    notes table - used for both cohort and student notes - include creation date, content, and creator profile info
+
+
 Login Page -> Cohort Select Page -> Dashboard View:
     DASHBOARD:
-        * current grades data
-        * 
+        * select cohort (small data on each cohort before select)
+    COHORT PAGE:
+        * grades table (organized by student, showing averages and missing assignments)
+        * select student
+    STUDENT PAGE:
+        * student grade data
+        * # of missing assignments
+        * average grade
+        * Notes from instructional staff

@@ -12,6 +12,10 @@ const CohortSchema = new Schema({
     }],
     droppedStudents: [{
         type: String
+    }],
+    notes: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Note'
     }]
 
 })

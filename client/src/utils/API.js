@@ -59,12 +59,43 @@ const API = {
                     resArr.push(infoObj)
 
                 })
-                // console.table(resArr);
-
-                // return resArr;
             })
             .catch(err => new Error(err))
         return resArr
+    },
+
+    getStudentNames: async function (bcsEmail, bcsPassword, courseId) {
+        // this uses the BCS course ID (4-digit INT)
+
+        const authToken = await this.getAuthToken(bcsEmail, bcsPassword)
+
+        // API CALL SETUP
+        const gradesURL = 'https://bootcampspot.com/api/instructor/v1/grades';
+        const payload = {
+            courseId: parseInt(courseId)
+        }
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                authToken
+            }
+        }
+
+        // API CALL FOR GRADES INFO
+        // ========================
+        try {
+            const res = await axios.post(gradesURL, payload, config)
+            // console.log(res.data)
+            console.log("API request SUCCESS!\n================================================\n")
+            console.log('res: ', res)
+            // makeGradeCSV(res)
+            return res;
+        } catch (err) {
+
+            console.log("API Request FAILURE: \n==========================\n", err)
+        }
+
+
     }
 
 

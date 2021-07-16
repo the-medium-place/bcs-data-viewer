@@ -1,7 +1,6 @@
-const { User, Cohort } = require('../models');
+const { User, Cohort, Note, Student } = require('../models');
 const { AuthenticationError } = require('apollo-server-express');
 const { signToken } = require('../utils/auth');
-
 
 const resolvers = {
 
@@ -17,14 +16,32 @@ const resolvers = {
     },
 
     me: async (parent, args, context) => {
+      // console.log(context.user);
       // console.log(context)
       if (context.user) {
-        const loggedInUser = await User.findOne({ _id: context.user._id }).populate('cohorts');
+        const loggedInUser = await User.findOne({ _id: context.user._id }).populate({
+          path: 'cohorts',
+          populate: {
+            path: 'notes',
+          }
+        });
         // console.log(loggedInUser)
         return loggedInUser;
       }
       throw new AuthenticationError('You need to be logged in!');
     },
+
+    getCohort: async (parent, { cohortId }, context) => {
+      if (context.user) {
+        return await Cohort.findOne({ _id: cohortId }).populate({
+          path: 'notes',
+          populate: {
+            path: 'createdBy'
+          }
+        })
+      }
+      throw new AuthenticationError('You need to be logged in!');
+    }
   },
 
   // MUTATIONS
@@ -59,16 +76,16 @@ const resolvers = {
       // Return an `Auth` object that consists of the signed token and user's information
       return { token, user };
     },
-    addCohort: async (parent, { cohortCode, cohortId, enrollmentId }, context) => {
+    addCohort: async (parent, { cohortCode, cohortId, enrollmentId, studentRoster }, context) => {
+      // console.log('studentRoster backend: ', studentRoster)
       if (context.user) {
         let cohortToAdd;
         let cohortExists = await Cohort.findOne({ cohortCode })
-        // console.log("cohortExists: ", cohortExists)
 
         // check if cohort is already in database
         // ======================================
         if (!cohortExists) {
-          cohortToAdd = await Cohort.create({ cohortCode, cohortId, enrollmentId })
+          cohortToAdd = await Cohort.create({ cohortCode, cohortId, enrollmentId, studentRoster })
         } else {
           cohortToAdd = cohortExists;
         }
@@ -76,35 +93,36 @@ const resolvers = {
         // add cohort to logged in user's cohorts list
         // ===========================================
         const updatedUser = await User.findOneAndUpdate({ _id: context.user._id }, { $addToSet: { cohorts: cohortToAdd._id } }, { new: true }).populate('cohorts')
-        console.log("updatedUser: ", updatedUser)
+        // console.log("updatedUser: ", updatedUser)
 
 
         return updatedUser;
       }
       throw new AuthenticationError('You are not logged in!');
+    },
+
+    dropStudent: async (parent, { name, cohortId }, context) => {
+      // if (context.user) {
+      return await Cohort.findOneAndUpdate({ _id: cohortId }, { $addToSet: { droppedStudents: name } }, { new: true }).populate({ path: 'notes', populate: 'createdBy' })
+      // }
+      // return new AuthenticationError('You are not logged in!')
+    },
+
+    removeDropStudent: async (parent, { name, cohortId }, context) => {
+      return await Cohort.findOneAndUpdate({ _id: cohortId }, { $pull: { droppedStudents: name } }, { new: true }).populate({ path: 'notes', populate: 'createdBy' })
+    },
+
+    addCohortNote: async (parent, { content, createdBy, cohortId }, context) => {
+      // create note in database
+      const newNote = await Note.create({ content, createdBy })
+
+      // assign new note to cohort
+      return await Cohort.findOneAndUpdate({ _id: cohortId }, { $addToSet: { notes: newNote._id } }, { new: true }).populate({ path: 'notes', populate: 'createdBy' })
     }
+  },
 
-    // addTodo: async (parent, { userId, todoId }, context) => {
-    //   if (context.user) {
 
-    //     return User.findOneAndUpdate(
-    //       { _id: userId },
-    //       {
-    //         $addToSet: { todos: todoId },
-    //       },
-    //       {
-    //         new: true,
-    //         // runValidators: true,
-    //       }
-    //     ).populate('cohorts');
-    //   }
-    //   throw new AuthenticationError('You are not logged in!');
 
-    // },
-    // removeUser: async (parent, { userId }) => {
-    //   return User.findOneAndDelete({ _id: userId });
-    // },
-  }
 };
 
 module.exports = resolvers;

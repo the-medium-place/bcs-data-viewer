@@ -25,8 +25,8 @@ export const ADD_USER = gql`
 `;
 
 export const ADD_COHORT = gql`
-  mutation addCohort($cohortCode: String!, $cohortId: Int!, $enrollmentId: Int!) {
-    addCohort(cohortCode: $cohortCode, cohortId: $cohortId, enrollmentId: $enrollmentId) {
+  mutation addCohort($cohortCode: String!, $cohortId: Int!, $enrollmentId: Int!, $studentRoster: [String!]) {
+    addCohort(cohortCode: $cohortCode, cohortId: $cohortId, enrollmentId: $enrollmentId, studentRoster: $studentRoster) {
         _id
         name
         email
@@ -39,52 +39,76 @@ export const ADD_COHORT = gql`
           cohortCode
           cohortId
           enrollmentId
-          studentRoster
-          droppedStudents
-
         }
     }
   }
 `
 
-export const CREATE_TODO = gql`
-  mutation createTodo($title: String!, $content: String!, $dueDate: String) {
-    createTodo(title: $title, content: $content, dueDate: $dueDate) {
-       _id
-       name
-       todos {
-         _id
-         title
-         content
-         dueDate
-       }
+export const DROP_STUDENT = gql`
+  mutation dropStudent($name: String!, $cohortId: ID!){
+    dropStudent(name: $name, cohortId: $cohortId){
+      _id
+      cohortCode
+      cohortId
+      enrollmentId
+      studentRoster
+      droppedStudents
+      notes {
+        _id
+        content
+        createdAt
+        createdBy {
+          _id
+          name
+          email
+        }
+      }
     }
   }
 `;
 
-export const DELETE_TODO = gql`
-  mutation deleteTodo($todoId: ID!) {
-    deleteTodo(todoId: $todoId) {
+export const REMOVE_DROP_STUDENT = gql`
+mutation removeDropStudent($name: String!, $cohortId: ID!){
+  removeDropStudent(name: $name, cohortId: $cohortId){
+    _id
+    cohortCode
+    cohortId
+    enrollmentId
+    studentRoster
+    droppedStudents
+    notes {
       _id
-      name
-      todos {
+      content
+      createdAt
+      createdBy {
         _id
-        title
-        content
-        dueDate
+        name
+        email
       }
     }
   }
-`
+}
+`;
 
-export const EDIT_TODO = gql`
-mutation editTodo($todoId: ID!, $title: String!, $content: String!, $isComplete: Boolean!, $dueDate: String) {
-  editTodo(todoId: $todoId, title: $title, content: $content, isComplete: $isComplete, dueDate: $dueDate) {
+export const ADD_COHORT_NOTE = gql`
+mutation addCohortNote($content: String!, $createdBy: ID!, $cohortId: ID!){
+  addCohortNote(content: $content, createdBy: $createdBy, cohortId: $cohortId){
     _id
-    title
-    content
-    isComplete
-    dueDate
+    cohortCode
+    cohortId
+    enrollmentId
+    studentRoster
+    droppedStudents
+    notes {
+      _id
+      content
+      createdAt
+      createdBy {
+        _id
+        name
+        email
+      }
+    }
   }
 }
-`
+`;

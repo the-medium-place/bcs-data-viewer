@@ -1,10 +1,10 @@
 import { ApolloClient, InMemoryCache, createHttpLink, ApolloProvider } from '@apollo/client';
-import MainPage from './pages/MainUserPage';
 import UserPage from './pages/UserPage';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import Cohort from './pages/Cohort';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { setContext } from '@apollo/client/link/context';
 
@@ -49,6 +49,10 @@ function App() {
 
             <Route exact path={["/users/:id", "/me"]}>
               <UserPage />
+            </Route>
+
+            <Route exact path="/cohorts/:id">
+              <Cohort />
             </Route>
 
             <Route exact path="/login">
