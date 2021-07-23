@@ -39,7 +39,7 @@ function App() {
   return (
     <ApolloProvider client={client}>
       <Header />
-      <div className="App" style={{ minHeight: '90vh' }}>
+      <div className="App mx-3" style={{ minHeight: '90vh' }}>
         <Router>
           <Switch>
 

@@ -55,11 +55,11 @@ export default function CohortListItem({ cohort, saveButton, loggedInUser }) {
     // console.log(JSON.stringify(error))
 
     return (
-        <li className="CohortListItem" styla={{ display: 'flex', justifyContent: 'space-between', width: '100%', flexDirection: 'row' }}>
-            <p>{cohort.cohortCode}</p>
-            <p>{cohort.cohortId}</p>
-            <p>{cohort.enrollmentId}</p>
-            {saveButton ? <button onClick={handleSave}>Save to profile</button> : null}
+        <li className="CohortListItem list-group-item w-100 text-center" styla={{ display: 'flex', justifyContent: 'space-between', width: '100%', flexDirection: 'row' }}>
+            <p className="lead mb-1" style={{ textDecoration: 'none' }}>{cohort.cohortCode} {saveButton ? <button className="btn btn-secondary" onClick={handleSave}>Save to profile</button> : null}</p>
+            {/* <p>{cohort.cohortId}</p> */}
+            {/* <p>{cohort.enrollmentId}</p> */}
+
         </li>
     )
 }
