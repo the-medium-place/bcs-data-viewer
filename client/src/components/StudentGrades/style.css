@@ -1,0 +1,23 @@
+.c-grade {
+    background-color: orange;
+}
+
+span[data-descr]:active::after, span[data-descr]:hover::after {
+    content: attr(data-descr);
+    position: absolute;
+    left: 0px;
+    bottom: 24px;
+    width: 300%;
+    /* min-width: 200px; */
+    border: 1px #aaaaaa solid;
+    background-color: #13293d;
+    padding: 12px;
+    color: #fff;
+    font-size: 80%;
+    z-index: 1;
+}
+
+th, td {
+    width: 12em;
+    position: relative;
+}

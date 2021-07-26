@@ -87,7 +87,7 @@ const API = {
             const res = await axios.post(gradesURL, payload, config)
             // console.log(res.data)
             console.log("API request SUCCESS!\n================================================\n")
-            console.log('res: ', res)
+            // console.log('res: ', res)
             // makeGradeCSV(res)
             return res;
         } catch (err) {
@@ -102,7 +102,7 @@ const API = {
         // GET AUTHORIZATION TOKEN FOR ALL DATA RETRIEVAL
         const authToken = await this.getAuthToken(bcsEmail, bcsPassword)
 
-        console.log({ courseId })
+        // console.log({ courseId })
         // API CALL SETUP
         const gradesURL = 'https://bootcampspot.com/api/instructor/v1/grades';
         const payload = {
@@ -120,8 +120,8 @@ const API = {
         try {
             const res = await axios.post(gradesURL, payload, config)
             // console.log(res.data)
-            console.log("API request SUCCESS! Building .CSV now...\n================================================\n")
-            console.log(res.data)
+            console.log("API request SUCCESS!\n================================================\n")
+            // console.log(res.data)
             return await this.makeStudentGradeObjects(res.data, bcsEmail, bcsPassword, enrollmentId)
 
         } catch (err) {
@@ -173,12 +173,12 @@ const API = {
                 name: gradeObj.assignmentTitle,
                 submitted: gradeObj.submitted ? 'yes' : 'no',
                 // grade: grades2nums[gradeObj.grade] || '',
-                grade: gradeObj.grade && isDue ? grades2nums[gradeObj.grade] : !gradeObj.grade && isDue ? 15 : grades2nums[gradeObj.grade] || '',
+                grade: gradeObj.grade && isDue ? gradeObj.grade : !gradeObj.grade && isDue ? 'Overdue or Ungraded' : grades2nums[gradeObj.grade] || '',
             })
         })
 
         // console.log(assignmentArr)
-        console.log({ studentObj, assignmentArr })
+        // console.log({ studentObj, assignmentArr })
         return { studentObj, assignmentArr }
     },
 

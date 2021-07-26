@@ -29,7 +29,7 @@ export default function Cohort() {
 
     // Check if data is returning from the `GET_ME` query
     const loggedInUser = meData?.me || {};
-    console.log(loggedInUser)
+    // console.log(loggedInUser)
 
     // Check if data is returning from GET_COHORT query
     const bcsCohortId = data?.getCohort.cohortId || 'no id yet'
@@ -39,7 +39,7 @@ export default function Cohort() {
     const droppedStudents = data?.getCohort.droppedStudents || [];
     const cohortNotes = data?.getCohort.notes || [];
 
-    console.log("cohortNotes: ", cohortNotes)
+    // console.log("cohortNotes: ", cohortNotes)
 
 
     // if (error) { console.log(JSON.stringify(error)) }
@@ -66,7 +66,7 @@ export default function Cohort() {
                     </div>
                 </div>
                 <hr />
-                <div className="cohortNotes row">
+                <div className="cohortNotes row d-flex justify-content-center">
                     {view === 'grades' ? <StudentGrades bcsCohortId={bcsCohortId} enrollmentId={enrollmentId} loggedInUser={loggedInUser} studentRoster={studentRoster} droppedStudents={droppedStudents} /> : view === "roster" ? <StudentRoster cohortId={cohortId} studentRoster={studentRoster} droppedStudents={droppedStudents} /> : view === "feedback" ? <StudentFeedback /> : null}
 
                     <h3 className="bg-dark text-light text-bold p-1">Cohort Notes:</h3>
@@ -76,10 +76,10 @@ export default function Cohort() {
                             <ul className="list-group">
                                 {cohortNotes.map(note => {
                                     return (
-                                        <li className="list-group-item">
+                                        <li key={note["_id"]} className="list-group-item">
                                             <p className="border">{note.content}</p>
                                             {/* <br /> */}
-                                            - <strong>{note.createdBy.name}</strong> on <em>{new Date(parseInt(note.createdAt)).toLocaleString()}</em>
+                                            - <strong>{note.createdBy.name}</strong>&nbsp;<small><em>{new Date(parseInt(note.createdAt)).toLocaleString()}</em></small>
                                         </li>
                                     )
                                 })}
