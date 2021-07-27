@@ -10,6 +10,8 @@ export default function StudentGrades({ enrollmentId, bcsCohortId, studentRoster
 
     const [gradeData, setGradeData] = useState(null)
 
+
+
     useEffect(() => {
         async function fetchData() {
 
@@ -34,36 +36,79 @@ export default function StudentGrades({ enrollmentId, bcsCohortId, studentRoster
             'D-': 'table-danger',
             'F': 'table-dark',
             'I': 'table-dark',
-            'Overdue or Ungraded': 'table-light',
+            'Overdue!': 'table-light text-danger text-bold',
+            'Not Due!': 'table-secondary',
+            'Ungraded': 'text-danger'
         }
 
         return GRADE_CLASS_MAP[grade]
     }
 
+    function getKeyByValue(object, value) {
+        return Object.keys(object).find(key => object[key] === value);
+    }
+    const MAP_GRADES_TO_INT = {
+        'A+': 1,
+        'A': 2,
+        'A-': 3,
+        'B+': 4,
+        'B': 5,
+        'B-': 6,
+        'C+': 7,
+        'C': 8,
+        'C-': 9,
+        'D+': 10,
+        'D': 11,
+        'D-': 12,
+        'F': 13,
+        'I': 13,
+        'Overdue!': 13,
+        'Not Due!': 13,
+        'Ungraded': 13,
+        'N/A': 0
+    }
+
     return (
-        <div className="StudentGrades my-5 px-5 border" style={{ overflow: 'auto', maxHeight: 800, width: '95%' }}>
+        <div className="StudentGrades my-5 border" style={{ overflow: 'auto', maxHeight: 800, width: '95%' }}>
             {gradeData ? (
-                <div className="table">
-                    <table className="table table-sm table-bordered table-hover table-condensed">
+                <div className="table-wrapper">
+                    <table className="table table-sm table-hover table-condensed w-100">
                         <thead>
                             <tr>
-                                <th scope="col">Student Name</th>
+                                <th className="table-light th-name-avg" scope="col">Student Name</th>
+                                <th className="table-light th-name-avg second-child" scope="col">Average Grade</th>
                                 {gradeData.assignmentArr.map(assignment => <th scope="col" key={assignment}>{assignment}</th>)}
                             </tr>
                         </thead>
                         <tbody>
                             {activeStudents.map(student => {
+                                // trying to capture average grade
+                                let numDue = 0,
+                                    totalGradeVal = 0,
+                                    gradeAvg = 0;
+
+                                gradeData.studentObj[student].assignments.forEach(assignmentObj => {
+                                    if (assignmentObj.isDue) {
+                                        numDue++
+                                        totalGradeVal += MAP_GRADES_TO_INT[assignmentObj.grade]
+                                    }
+                                })
+                                gradeAvg = totalGradeVal / (numDue || 1);
+
+
                                 return (
                                     <tr key={student}>
-                                        <th scope="row">{student}</th>
+                                        <th className="th-col-header table-light" scope="row">{student}</th>
+                                        <th className="th-avg-grade table-light second-child" scope="row">{getKeyByValue(MAP_GRADES_TO_INT, Math.round(gradeAvg))}</th>
                                         {gradeData.studentObj[student].assignments.map((assignmentObj, i) => {
-                                            const gradeExists = assignmentObj.grade ? true : false;
+
+                                            // if(assignmengObj.grade)
                                             return (
                                                 <td
                                                     key={assignmentObj.name + i}
-                                                    className={gradeExists ? getTdClassName(assignmentObj.grade) : 'table-secondary'}
+                                                    className={getTdClassName(assignmentObj.grade)}
                                                 >
-                                                    <span data-descr={`Student: ${student} -- Assignment: "${assignmentObj.name}"`}>{assignmentObj.grade || 'Not yet due!'}</span>
+                                                    <span data-student={student} data-assignment={assignmentObj.name}>{assignmentObj.grade}</span>
                                                 </td>
                                             )
                                         })}

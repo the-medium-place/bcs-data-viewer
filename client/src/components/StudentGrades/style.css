@@ -2,13 +2,13 @@
     background-color: orange;
 }
 
-span[data-descr]:active::after, span[data-descr]:hover::after {
-    content: attr(data-descr);
+span[data-student]:active::after, span[data-student]:hover::after {
+    content: attr(data-student) '\00000a' attr(data-assignment);
+    white-space: pre;
     position: absolute;
     left: 0px;
     bottom: 24px;
-    width: 300%;
-    /* min-width: 200px; */
+    width: auto;
     border: 1px #aaaaaa solid;
     background-color: #13293d;
     padding: 12px;
@@ -20,4 +20,37 @@ span[data-descr]:active::after, span[data-descr]:hover::after {
 th, td {
     width: 12em;
     position: relative;
+}
+
+thead {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: white;
+    border-bottom: 3px solid black;
+}
+
+.th-col-header {
+    position: sticky;
+    z-index: 1;
+    background: white;
+    left: 0;
+    border-right: none;
+}
+
+.th-avg-grade {
+    position: sticky;
+    z-index: 1;
+    background: white;
+    /* left: 6rem; */
+}
+
+.th-name-avg {
+    position: sticky;
+    z-index: 2;
+    left: 0;
+}
+
+.second-child {
+    left: 6rem;
 }

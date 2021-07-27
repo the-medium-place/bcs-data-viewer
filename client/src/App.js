@@ -7,6 +7,7 @@ import Footer from './components/Footer';
 import Cohort from './pages/Cohort';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { setContext } from '@apollo/client/link/context';
+import Splash from './pages/Splash';
 
 // Construct our main GraphQL API endpoint
 const httpLink = createHttpLink({
@@ -39,12 +40,12 @@ function App() {
   return (
     <ApolloProvider client={client}>
       <Header />
-      <div className="App mx-3" style={{ minHeight: '90vh' }}>
+      <div className="App container" style={{ minHeight: '90vh', overflowX: 'hide' }}>
         <Router>
           <Switch>
 
             <Route exact path="/">
-              <h1>welcome to the front page</h1>
+              <Splash />
             </Route>
 
             <Route exact path={["/users/:id", "/me"]}>

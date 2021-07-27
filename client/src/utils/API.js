@@ -170,10 +170,22 @@ const API = {
                 assignmentArr.push(gradeObj.assignmentTitle)
             }
             studentObj[gradeObj.studentName].assignments.push({
+                // include assignment name
                 name: gradeObj.assignmentTitle,
-                submitted: gradeObj.submitted ? 'yes' : 'no',
-                // grade: grades2nums[gradeObj.grade] || '',
-                grade: gradeObj.grade && isDue ? gradeObj.grade : !gradeObj.grade && isDue ? 'Overdue or Ungraded' : grades2nums[gradeObj.grade] || '',
+                // include whether student has submitted assigment
+                submitted: gradeObj.submitted ? true : false,
+                // include whether assignment is currently due
+                isDue,
+                // include assignment grade (or other data)
+                // graded, is due - return the grade
+                grade: gradeObj.grade && isDue ? gradeObj.grade :
+                    // no grade, is due, not submitted - student has not turned in assignment 
+                    !gradeObj.grade && isDue && !gradeObj.submitted ? 'Overdue!' :
+                        // assignment is not yet due
+                        !isDue ? 'Not Due!' :
+                            // assignment is due and submitted, but not yet graded
+                            isDue && gradeObj.submitted && !gradeObj.grade ? 'Ungraded' :
+                                grades2nums[gradeObj.grade] || '',
             })
         })
 

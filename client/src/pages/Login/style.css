@@ -7,13 +7,17 @@
 }
 
 .company__info {
-    background-color: #008080;
+    background-color: #1576d4;
     border-top-left-radius: 20px;
     border-bottom-left-radius: 20px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     color: #fff;
+}
+
+.company__logo {
+    max-width: 70%;
 }
 
 .fa-android {
@@ -40,7 +44,7 @@
 }
 
 .row>h2 {
-    color: #008080;
+    color: #1576d4;
 }
 
 .login_form {
@@ -68,7 +72,7 @@ form {
 }
 
 .form__input:focus {
-    border-bottom-color: #008080;
+    border-bottom-color: #1576d4;
     box-shadow: 0 0 5px rgba(0, 80, 80, .4);
     border-radius: 4px;
 }
@@ -77,15 +81,15 @@ form {
     transition: all .5s ease;
     width: 70%;
     border-radius: 30px;
-    color: #008080;
+    color: #1576d4;
     font-weight: 600;
     background-color: #fff;
-    border: 1px solid #008080;
+    border: 1px solid #1576d4;
     margin-top: 1.5em;
     margin-bottom: 1em;
 }
 
 .form-btn:hover, .form-btn:focus {
-    background-color: #008080;
+    background-color: #1576d4;
     color: #fff;
 }

@@ -4,6 +4,7 @@ import { LOGIN_USER } from '../../utils/mutations';
 import Auth from '../../utils/auth';
 import { Link } from 'react-router-dom';
 import './style.css';
+import logo2u from '../../assets/images/2uLogo.png'
 
 
 
@@ -44,7 +45,11 @@ export default function Login() {
         <>
             <div className="row main-content bg-success text-center">
                 <div className="col-md-4 text-center company__info">
-                    <span className="company__logo"><h2><span className="fa fa-android"></span></h2></span>
+                    <div className="logo__wrapper p-2 d-flex justify-content-center align-items-center" style={{ background: 'white', borderRadius: '50%', aspectRatio: '1/1' }}>
+
+                        <img className="company__logo" src={logo2u} />
+                    </div>
+
                     <h4 className="company_title">BCS Data Viewer</h4>
                 </div>
                 <div className="col-md-8 col-xs-12 col-sm-12 login_form ">
@@ -57,6 +62,7 @@ export default function Login() {
                                 <div className="row">
                                     <input className="form-input form__input"
                                         placeholder="Your username"
+                                        aria-label="name"
                                         name="name"
                                         type="name"
                                         value={loginState.name}
@@ -66,6 +72,7 @@ export default function Login() {
                                     {/* <!-- <span className="fa fa-lock"></span> --> */}
                                     <input className="form-input form__input"
                                         placeholder="******"
+                                        aria-label="password"
                                         name="password"
                                         type="password"
                                         value={loginState.password}
@@ -95,55 +102,4 @@ export default function Login() {
         </>
 
     );
-
-
-    // return (
-    //     <main className="flex-row justify-center mb-4">
-    //         <div className="col-12 col-lg-10">
-    //             <div className="card">
-    //                 <h4 className="card-header bg-dark text-light p-2">Login</h4>
-    //                 <div className="card-body">
-    //                     {data ? (
-    //                         <p>
-    //                             Success! You may now head{' '}
-    //                             <Link to="/">back to the homepage.</Link>
-    //                         </p>
-    //                     ) : (
-    //                         <form onSubmit={handleFormSubmit}>
-    //                             <input
-    //                                 className="form-input"
-    //                                 placeholder="Your username"
-    //                                 name="name"
-    //                                 type="name"
-    //                                 value={loginState.name}
-    //                                 onChange={handleInput}
-    //                             />
-    //                             <input
-    //                                 className="form-input"
-    //                                 placeholder="******"
-    //                                 name="password"
-    //                                 type="password"
-    //                                 value={loginState.password}
-    //                                 onChange={handleInput}
-    //                             />
-    //                             <button
-    //                                 className="btn btn-block btn-info"
-    //                                 style={{ cursor: 'pointer' }}
-    //                                 type="submit"
-    //                             >
-    //                                 Submit
-    //                             </button>
-    //                         </form>
-    //                     )}
-
-    //                     {error && (
-    //                         <div className="my-3 p-3 bg-danger text-white">
-    //                             {error.message}
-    //                         </div>
-    //                     )}
-    //                 </div>
-    //             </div>
-    //         </div>
-    //     </main>
-    // );
 }

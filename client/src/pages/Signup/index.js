@@ -4,8 +4,10 @@ import { Link } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import { ADD_USER } from '../../utils/mutations';
 
+import logo2u from '../../assets/images/2uLogo.png'
+
 import Auth from '../../utils/auth';
-import './style.css';
+import '../Login/style.css';
 
 const Signup = () => {
   const [formState, setFormState] = useState({
@@ -75,8 +77,10 @@ const Signup = () => {
       <div className="row main-content bg-success text-center">
 
         <div className="col-md-2 text-center company__info">
-          <span className="company__logo"><h2><span className="fa fa-android"></span></h2></span>
-          <h4 className="company_title">BCS</h4>
+          <div className="logo__wrapper p-2 d-flex justify-content-center align-items-center" style={{ background: 'white', borderRadius: '50%', aspectRatio: '1/1' }}>
+            <img className="company__logo" src={logo2u} />
+          </div>
+          {/* <h4 className="company_title">BCS Data Viewer</h4> */}
         </div>
 
         <div className="col-md-10 col-xs-12 col-sm-12 login_form ">
@@ -94,6 +98,7 @@ const Signup = () => {
                   <input
                     className="form-input form__input"
                     placeholder="Your username"
+                    aria-label="name"
                     name="name"
                     type="text"
                     value={formState.name}
@@ -105,6 +110,7 @@ const Signup = () => {
                   <input
                     className="form-input form__input"
                     placeholder="Your email"
+                    aria-label="email"
                     name="email"
                     type="email"
                     value={formState.email}
@@ -117,6 +123,7 @@ const Signup = () => {
                   <input
                     className="form-input form__input"
                     placeholder="******"
+                    aria-label="password"
                     name="password"
                     type="password"
                     value={formState.password}
@@ -132,13 +139,21 @@ const Signup = () => {
                   <label htmlhtmlFor="sameInfoCheckbox">
                     Use same Login info:
                   </label>
-                  <input name="sameInfoCheckbox" id="sameInfoCheckbox" type="checkbox" checked={sameInfoCheckbox} onChange={handleSameInfoClick} />
+                  <input
+                    name="sameInfoCheckbox"
+                    id="sameInfoCheckbox"
+                    type="checkbox"
+                    aria-label="Use same information for BCS and BCS Data Viewer"
+                    checked={sameInfoCheckbox}
+                    onChange={handleSameInfoClick}
+                  />
 
                 </div>
                 <div className="row">
                   <input
                     className="form-input form__input"
                     placeholder="BCS Login Email"
+                    aria-label="bootcamp spot email"
                     name="bcsEmail"
                     type="email"
                     readOnly={sameInfoCheckbox}
@@ -150,6 +165,7 @@ const Signup = () => {
                   <input
                     className="form-input form__input"
                     placeholder="******"
+                    aria-label="bootcamp spot password"
                     name="bcsPassword"
                     type="password"
                     readOnly={sameInfoCheckbox}
@@ -183,92 +199,6 @@ const Signup = () => {
     </>
 
   );
-
-  // return (
-  //   <main className="Signup">
-  //     <div className="">
-  //       <div className="">
-  //         <h4 className="">Sign Up</h4>
-  //         <div className="">
-  //           {data ? (
-  //             <p>
-  //               Success! You may now head{' '}
-  //               <Link to="/">back to the homepage.</Link>
-  //             </p>
-  //           ) : (
-  //             <form onSubmit={handleFormSubmit}>
-  //               <input
-  //                 className="form-input"
-  //                 placeholder="Your username"
-  //                 name="name"
-  //                 type="text"
-  //                 value={formState.name}
-  //                 onChange={handleChange}
-  //               />
-  //               <br />
-  //               <input
-  //                 className="form-input"
-  //                 placeholder="Your email"
-  //                 name="email"
-  //                 type="email"
-  //                 value={formState.email}
-  //                 onChange={handleChange}
-  //               />
-  //               <br />
-  //               <input
-  //                 className="form-input"
-  //                 placeholder="******"
-  //                 name="password"
-  //                 type="password"
-  //                 value={formState.password}
-  //                 onChange={handleChange}
-  //               />
-  //               <hr />
-  //               <h3>Your BCS Login Information (required)</h3>
-  //               <label htmlhtmlFor="sameInfoCheckbox">
-  //                 Use the Same info:
-  //               </label>
-  //               <input name="sameInfoCheckbox" id="sameInfoCheckbox" type="checkbox" checked={sameInfoCheckbox} onChange={handleSameInfoClick} />
-  //               <br />
-  //               <input
-  //                 className="form-input"
-  //                 placeholder="BCS Login Email"
-  //                 name="bcsEmail"
-  //                 type="email"
-  //                 readOnly={sameInfoCheckbox}
-  //                 value={!sameInfoCheckbox ? formState.bcsEmail : formState.email}
-  //                 onChange={handleChange}
-  //               />
-  //               <br />
-  //               <input
-  //                 className="form-input"
-  //                 placeholder="******"
-  //                 name="bcsPassword"
-  //                 type="password"
-  //                 readOnly={sameInfoCheckbox}
-  //                 value={!sameInfoCheckbox ? formState.bcsPassword : formState.password}
-  //                 onChange={handleChange}
-  //               />
-  //               <button
-  //                 className="btn btn-block btn-info"
-  //                 style={{ cursor: 'pointer' }}
-  //                 type="submit"
-  //               >
-  //                 Submit
-  //               </button>
-  //             </form>
-  //           )}
-
-  //           {error && (
-  //             <div className="my-3 p-3 bg-danger text-white">
-  //               {error.message}
-  //             </div>
-  //           )}
-  //         </div>
-  //       </div>
-  //     </div>
-  //   </main>
-  // );
 };
 
 export default Signup;
