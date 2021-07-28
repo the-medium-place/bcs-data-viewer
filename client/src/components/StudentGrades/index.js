@@ -68,8 +68,23 @@ export default function StudentGrades({ enrollmentId, bcsCohortId, studentRoster
         'N/A': 0
     }
 
+    const getGradeAvg = (student) => {
+        let numDue = 0,
+            totalGradeVal = 0,
+            gradeAvg = 0;
+
+        gradeData.studentObj[student].assignments.forEach(assignmentObj => {
+            if (assignmentObj.isDue) {
+                numDue++
+                totalGradeVal += MAP_GRADES_TO_INT[assignmentObj.grade]
+            }
+        })
+        gradeAvg = totalGradeVal / (numDue || 1);
+        return gradeAvg;
+    }
+
     return (
-        <div className="StudentGrades my-5 border" style={{ overflow: 'auto', maxHeight: 800, width: '95%' }}>
+        <div className="StudentGrades my-5 border" style={{ overflow: 'auto', maxHeight: '60vh', width: '95%' }}>
             {gradeData ? (
                 <div className="table-wrapper">
                     <table className="table table-sm table-hover table-condensed w-100">
@@ -82,27 +97,14 @@ export default function StudentGrades({ enrollmentId, bcsCohortId, studentRoster
                         </thead>
                         <tbody>
                             {activeStudents.map(student => {
-                                // trying to capture average grade
-                                let numDue = 0,
-                                    totalGradeVal = 0,
-                                    gradeAvg = 0;
 
-                                gradeData.studentObj[student].assignments.forEach(assignmentObj => {
-                                    if (assignmentObj.isDue) {
-                                        numDue++
-                                        totalGradeVal += MAP_GRADES_TO_INT[assignmentObj.grade]
-                                    }
-                                })
-                                gradeAvg = totalGradeVal / (numDue || 1);
-
+                                const gradeAvg = getGradeAvg(student);
 
                                 return (
                                     <tr key={student}>
                                         <th className="th-col-header table-light" scope="row">{student}</th>
                                         <th className="th-avg-grade table-light second-child" scope="row">{getKeyByValue(MAP_GRADES_TO_INT, Math.round(gradeAvg))}</th>
                                         {gradeData.studentObj[student].assignments.map((assignmentObj, i) => {
-
-                                            // if(assignmengObj.grade)
                                             return (
                                                 <td
                                                     key={assignmentObj.name + i}

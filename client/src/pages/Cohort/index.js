@@ -9,6 +9,8 @@ import AddNote from '../../components/AddNote';
 import StudentRoster from '../../components/StudentRoster';
 import StudentFeedback from '../../components/StudentFeedback';
 import StudentGrades from '../../components/StudentGrades';
+import CohortNotes from '../../components/CohortNotes';
+import MakeGroups from '../../components/MakeGroups';
 
 
 export default function Cohort() {
@@ -54,44 +56,29 @@ export default function Cohort() {
         <div className="Cohort">
             {Auth.loggedIn() ? (<>
                 <h1 className="text-center text-bold">{cohortCode}</h1>
-                <h3>BCS Cohort ID: {bcsCohortId}</h3>
+                {/* <h3>BCS Cohort ID: {bcsCohortId}</h3> */}
                 {/* <h3>Cohort Mongoose Id: {cohortId}</h3> */}
-                <h3>Cohort Enrollment Id: {enrollmentId}</h3>
+                {/* <h3>Cohort Enrollment Id: {enrollmentId}</h3> */}
                 <hr />
                 <div className="view-select w-100 d-flex justify-content-center">
                     <div className="btn-group" role="group" aria-label="Basic example">
                         <button type="button" className="btn btn-primary btn-lg" onClick={() => setView('grades')}>Grades</button>
                         <button type="button" className="btn btn-primary btn-lg" onClick={() => setView('roster')}>Roster</button>
                         <button type="button" className="btn btn-primary btn-lg" onClick={() => setView('feedback')}>Feedback</button>
+                        <button type="button" className="btn btn-primary btn-lg" onClick={() => setView('makegroups')}>Make Groups</button>
                     </div>
                 </div>
                 <hr />
-                <div className="cohortNotes row d-flex justify-content-center">
-                    {view === 'grades' ? <StudentGrades bcsCohortId={bcsCohortId} enrollmentId={enrollmentId} loggedInUser={loggedInUser} studentRoster={studentRoster} droppedStudents={droppedStudents} /> : view === "roster" ? <StudentRoster cohortId={cohortId} studentRoster={studentRoster} droppedStudents={droppedStudents} /> : view === "feedback" ? <StudentFeedback /> : null}
-
-                    <h3 className="bg-dark text-light text-bold p-1">Cohort Notes:</h3>
-                    <div className="notes-content row">
-                        <div className="col-lg-6 text-center">
-
-                            <ul className="list-group">
-                                {cohortNotes.map(note => {
-                                    return (
-                                        <li key={note["_id"]} className="list-group-item">
-                                            <p className="border">{note.content}</p>
-                                            {/* <br /> */}
-                                            - <strong>{note.createdBy.name}</strong>&nbsp;<small><em>{new Date(parseInt(note.createdAt)).toLocaleString()}</em></small>
-                                        </li>
-                                    )
-                                })}
-                            </ul>
-                        </div>
-                        <div className="col-lg-6">
-
-                            <AddNote userId={loggedInUser._id} recipientId={cohortId} />
-                        </div>
-
-                    </div>
+                <div className="student-grades-wrapper row d-flex justify-content-center">
+                    {view === 'grades' ? <StudentGrades bcsCohortId={bcsCohortId} enrollmentId={enrollmentId} loggedInUser={loggedInUser} studentRoster={studentRoster} droppedStudents={droppedStudents} /> :
+                        view === "roster" ? <StudentRoster cohortId={cohortId} studentRoster={studentRoster} droppedStudents={droppedStudents} /> :
+                            view === "feedback" ? <StudentFeedback /> :
+                                view === "makegroups" ? <MakeGroups loggedInUser={loggedInUser} studentRoster={studentRoster} droppedStudents={droppedStudents} bcsCohortId={bcsCohortId} enrollmentId={enrollmentId} /> : <h1>what???</h1>}
                 </div>
+
+                {/* NOTES FOR THIS COHORT */}
+                <CohortNotes cohortNotes={cohortNotes} loggedInUser={loggedInUser} cohortId={cohortId} />
+
             </>
             ) : (
                 // RENDER IF NOT LOGGED IN
