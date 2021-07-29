@@ -14,7 +14,7 @@ span[data-student]:active::after, span[data-student]:hover::after {
     padding: 12px;
     color: #fff;
     font-size: 80%;
-    z-index: 1;
+    z-index: 5;
 }
 
 th, td {

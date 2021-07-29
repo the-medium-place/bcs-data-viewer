@@ -11,7 +11,7 @@ export default function CohortNotes({ cohortNotes, loggedInUser, cohortId }) {
 
     return (
         <div className="CohortNotes">
-            <h3 className="bg-dark text-light text-bold p-1">Cohort Notes:</h3>
+            {/* <h3 className="bg-dark text-light text-bold p-1">Cohort Notes:</h3> */}
             <div className="notes-content row">
                 <div className="col-lg-6 text-center">
 

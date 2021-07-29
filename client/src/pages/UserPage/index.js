@@ -27,7 +27,7 @@ export default function UserPage() {
 
     // Check if data is returning from the `QUERY_ME` query, then the `QUERY_SINGLE_PROFILE` query
     const loggedInUser = data?.me || data?.user || {};
-    console.log(loggedInUser)
+    // console.log(loggedInUser)
     // get bcs login info from user object
     const bcsEmail = loggedInUser.bcsLoginInfo?.bcsEmail || null;
     const bcsPassword = loggedInUser.bcsLoginInfo?.bcsPassword || null;
@@ -38,7 +38,7 @@ export default function UserPage() {
         setCohortInfo(cohortsArr)
     }
 
-    console.log("cohortInfo: ", cohortInfo)
+    // console.log("cohortInfo: ", cohortInfo)
     return (
         <div className="UserPage">
 

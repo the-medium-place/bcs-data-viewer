@@ -34,6 +34,7 @@ export default function MakeGroups({ loggedInUser, studentRoster, droppedStudent
     const [gradesArr, setGradesArr] = useState([])
     const [groups, setGroups] = useState(null);
     const [showGroups, setShowGroups] = useState(false);
+    const [showButton, setShowButton] = useState(true)
 
 
     // GET AND STORE ALL GRADE DATA
@@ -64,25 +65,37 @@ export default function MakeGroups({ loggedInUser, studentRoster, droppedStudent
 
     const handleGroupNumChange = e => {
         const value = e.target.value;
-        setGradesArr([])
-        if (value <= 0) { setNumGroups(1) }
+        // SHOW THE 'MAKE GROUPS' BUTTON
+        setShowButton(true);
 
+        // RESET gradesArr STATE
+        setGradesArr([])
+
+        // UPDATE numGroups STATE
+        if (value <= 0) { setNumGroups(1) }
         setNumGroups(value)
     }
 
+    /**
+     * Groups student objects into chunks
+     * @returns groupsObj
+     */
     const chunkArray = () => {
-        // empty obj to hold group arrays
+        // EMPTY OBJECT TO HOLD FINAL GROUPS
         const groupsObj = {};
-        // sort array by grade
+
+        // SORT STUDENT ARRAY BY AVERAGE GRADE VALUE
         const sortedArr = gradesArr.sort((a, b) => a.gradeAvg - b.gradeAvg)
-        console.log(sortedArr)
+        // console.log(sortedArr)
 
         for (let i = 1; i <= numGroups; i++) {
-            // create object with multiple keys (num of groups)
+            // CREATE KEY IN groupsObj FOR EACH GROUP
             groupsObj[`Group ${i}`] = [];
         }
 
-        // one-by-one push objects to new arrays in order (since they are sorted, the grades will be evenly distributed)
+        // PUSH STUDENTS INTO GROUPS ONE-BY-ONE IN ORDER --
+        // SINCE STUDENTS ARE SORTED BY GRADE, DIFFERENT GRADE
+        // AVERAGES WILL BE SPREAD EVENLY THROUGHOUT THE GROUPS
         let counter = 1;
         sortedArr.forEach(gradeObj => {
             if (counter <= numGroups) {
@@ -96,26 +109,34 @@ export default function MakeGroups({ loggedInUser, studentRoster, droppedStudent
         })
 
 
-        console.log(groupsObj)
+        // console.log(groupsObj)
         return groupsObj;
     }
 
     const handleGroupButtonClick = async (e) => {
         e.preventDefault();
-        setShowGroups(false);
-        setGradesArr([])
-        // console.log({ activeStudents });
+
+        // HIDE THE 'MAKE GROUPS' BUTTON
+        setShowButton(false)
+
+        // LOOP THROUGH ACTIVE STUDENTS
+        // getGradeAvg() RETURNS OBJECT --
+        // {student: <student name>, gradeAvg: <numerical representation of average grade>}
+        // PUSH RESULTING OBJECT TO gradesArr STATE
         await activeStudents.forEach(student => {
             // console.log({ student })
             const arrCopy = gradesArr;
             arrCopy.push(getGradeAvg(student));
             setGradesArr(arrCopy)
         })
-        await setGroups(chunkArray(gradesArr))
-        setShowGroups(true);
-        console.log(gradesArr);
 
-        console.log(chunkArray(gradesArr));
+        // UPDATE groups STATE
+        // chunkArray() RETURNS OBJECT --
+        // EACH KEY IS A GROUP AND VALUE IS AN ARRAY OF STUDENT OBJECTS MAKING UP THAT GROUP
+        await setGroups(chunkArray())
+
+        // SHOW THE GROUPS
+        setShowGroups(true);
     }
 
 
@@ -123,41 +144,44 @@ export default function MakeGroups({ loggedInUser, studentRoster, droppedStudent
         <div className="MakeGroups">
             {gradeData ? (
 
-                <div className="d-flex justify-content-center w-100 mt-5 mb-1 w-25">
-                    {/* <h3>no. active students: {activeStudents.length}</h3>
-                    <h3>no. gradesArr: {gradesArr.length}</h3> */}
+                <div className="d-flex justify-content-center w-100 p-2 mt-5 mb-1 w-25 bg-dark text-light">
                     <form onSubmit={handleGroupButtonClick}>
-                        <label className="form-label" htmlFor="numGroups">Desired number of groups:</label>
+                        <label className="form-label" htmlFor="numGroups"><strong>Desired number of groups:</strong></label>
                         <input className="form-control" type="number" min="1" name="numGroups" id="numGroups" value={numGroups} onChange={handleGroupNumChange} />
-                        <button type="submit">Form Groups</button>
+                        <div className="button-wrapper w-100 d-flex justify-content-center p-1" style={{ height: '3rem' }}>
+                            {showButton ? <button className="btn btn-secondary" type="submit" onClick={handleGroupButtonClick}>Form Groups</button> : null}
+                        </div>
                     </form>
                 </div>
 
-            ) : <p>loading data...</p>}
-            <div className="groups-wrapper d-flex justify-content-around flex-wrap mb-5" style={{ border: '1px solid black', }}>
+            ) : (
+                <div className="d-flex align-items-center my-5 p-5">
+                    <strong>Preparing student data...</strong>
+                    <div className="spinner-border ms-auto" role="status" aria-hidden="true"></div>
+                </div>
+            )}
+            <div className="groups-wrapper d-flex justify-content-center flex-wrap mb-5" style={{ border: '1px solid black', }}>
                 <br />
-                {/* <p>{JSON.stringify(gradeData)}</p> */}
                 {showGroups ? (
-                    Object.keys(groups).map(group => {
+                    Object.keys(groups).map((group, i) => {
 
                         return (
-                            <div className="m-2 text-center flex-wrap w-25 border">
-
-                                {/* <span>{student} {gradeAvg}</span> */}
-                                {/* <span>{JSON.stringify(groups[group])}</span> */}
-                                {groups[group].map(student => {
-                                    return (
-                                        <><span>{student.student}</span><br /></>
-                                    )
-                                })}
+                            <div key={group} className="m-2 text-center flex-wrap w-25 border shadow shadow-sm rounded">
+                                <ol>
+                                    <strong>{`Group ${i + 1}`}</strong>
+                                    {groups[group].map(student => {
+                                        return (
+                                            <li key={student.student}>{student.student}</li>
+                                        )
+                                    })}
+                                </ol>
                             </div>
                         )
                     }
                     )
                 ) : (
-                    <div className="d-flex align-items-center my-5 p-5">
-                        <strong>Forming Groups...</strong>
-                        <div className="spinner-border ms-auto" role="status" aria-hidden="true"></div>
+                    <div className="d-flex align-items-center justify-content-center text-center my-5 p-5 w-100">
+                        <strong>{gradeData ? 'Groups will appear here!' : 'Waiting on data...'}</strong>
                     </div>
                 )
                 }
