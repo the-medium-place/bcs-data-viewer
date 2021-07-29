@@ -142,9 +142,11 @@ export default function MakeGroups({ loggedInUser, studentRoster, droppedStudent
 
     return (
         <div className="MakeGroups">
+            <p className="text-center mt-3" >Use this tool to form groups for projects and/or class activities. Groups are formed by calculating the 'average' grade for each student, then evenly distributing students among the selected number of groups so that each group has a mixture of performance levels.</p>
+
             {gradeData ? (
 
-                <div className="d-flex justify-content-center w-100 p-2 mt-5 mb-1 w-25 bg-dark text-light">
+                <div className="d-flex justify-content-center w-100 p-2 mt-2 mb-1 w-25 bg-dark text-light">
                     <form onSubmit={handleGroupButtonClick}>
                         <label className="form-label" htmlFor="numGroups"><strong>Desired number of groups:</strong></label>
                         <input className="form-control" type="number" min="1" name="numGroups" id="numGroups" value={numGroups} onChange={handleGroupNumChange} />
@@ -181,7 +183,7 @@ export default function MakeGroups({ loggedInUser, studentRoster, droppedStudent
                     )
                 ) : (
                     <div className="d-flex align-items-center justify-content-center text-center my-5 p-5 w-100">
-                        <strong>{gradeData ? 'Groups will appear here!' : 'Waiting on data...'}</strong>
+                        <strong>{gradeData ? 'Ready to form groups!' : 'Waiting on data...'}</strong>
                     </div>
                 )
                 }

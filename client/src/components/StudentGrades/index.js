@@ -84,51 +84,55 @@ export default function StudentGrades({ enrollmentId, bcsCohortId, studentRoster
     }
 
     return (
-        <div className="StudentGrades my-5 border" style={{ overflow: 'auto', maxHeight: '60vh', width: '95%' }}>
-            {gradeData ? (
-                <div className="table-wrapper">
-                    <table className="table table-sm table-hover table-condensed w-100">
-                        <thead>
-                            <tr>
-                                <th className="table-light th-name-avg" scope="col">Student Name</th>
-                                <th className="table-light th-name-avg second-child" scope="col">Average Grade</th>
-                                {gradeData.assignmentArr.map(assignment => <th scope="col" key={assignment}>{assignment}</th>)}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {activeStudents.map(student => {
+        <div className="StudentGrades">
+            <p className="text-center mt-3" >The table below will populate with all active students and their current grades on all assignments.</p>
+            <div className="my-5 border" style={{ overflow: 'auto', maxHeight: '60vh', width: '95%' }}>
+                {gradeData ? (
+                    <div className="table-wrapper">
+                        <table className="table table-sm table-hover table-condensed w-100">
+                            <thead>
+                                <tr>
+                                    <th className="table-light th-name-avg" scope="col">Student Name</th>
+                                    <th className="table-light th-name-avg second-child" scope="col">Average Grade</th>
+                                    {gradeData.assignmentArr.map(assignment => <th scope="col" key={assignment}>{assignment}</th>)}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {activeStudents.map(student => {
 
-                                const gradeAvg = getGradeAvg(student);
+                                    const gradeAvg = getGradeAvg(student);
 
-                                return (
-                                    <tr key={student}>
-                                        <th className="th-col-header table-light" scope="row">{student}</th>
-                                        <th className="th-avg-grade table-light second-child" scope="row">{getKeyByValue(MAP_GRADES_TO_INT, Math.round(gradeAvg))}</th>
-                                        {gradeData.studentObj[student].assignments.map((assignmentObj, i) => {
-                                            return (
-                                                <td
-                                                    key={assignmentObj.name + i}
-                                                    className={getTdClassName(assignmentObj.grade)}
-                                                >
-                                                    <span data-student={student} data-assignment={assignmentObj.name}>{assignmentObj.grade}</span>
-                                                </td>
-                                            )
-                                        })}
-                                    </tr>
-                                )
-                            }
-                            )}
+                                    return (
+                                        <tr key={student}>
+                                            <th className="th-col-header table-light" scope="row">{student}</th>
+                                            <th className="th-avg-grade table-light second-child" scope="row">{getKeyByValue(MAP_GRADES_TO_INT, Math.round(gradeAvg))}</th>
+                                            {gradeData.studentObj[student].assignments.map((assignmentObj, i) => {
+                                                return (
+                                                    <td
+                                                        key={assignmentObj.name + i}
+                                                        className={getTdClassName(assignmentObj.grade)}
+                                                    >
+                                                        <span data-student={student} data-assignment={assignmentObj.name}>{assignmentObj.grade}</span>
+                                                    </td>
+                                                )
+                                            })}
+                                        </tr>
+                                    )
+                                }
+                                )}
 
 
-                        </tbody>
-                    </table>
-                </div>
-            ) : (
-                <div className="d-flex align-items-center my-5 p-5">
-                    <strong>Loading Grade Data Table...</strong>
-                    <div className="spinner-border ms-auto" role="status" aria-hidden="true"></div>
-                </div>
-            )}
+                            </tbody>
+                        </table>
+                    </div>
+
+                ) : (
+                    <div className="d-flex align-items-center my-5 p-5">
+                        <strong>Loading Grade Data Table...</strong>
+                        <div className="spinner-border ms-auto" role="status" aria-hidden="true"></div>
+                    </div>
+                )}
+            </div>
         </div>
     )
 }

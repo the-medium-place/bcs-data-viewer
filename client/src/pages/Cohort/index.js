@@ -12,6 +12,7 @@ import StudentGrades from '../../components/StudentGrades';
 import CohortNotes from '../../components/CohortNotes';
 import MakeGroups from '../../components/MakeGroups';
 
+import './style.css';
 
 export default function Cohort() {
     const params = useParams();
@@ -77,16 +78,16 @@ export default function Cohort() {
                 </div> */}
                 <nav className="row">
                     <ul className="nav nav-tabs">
-                        <li onClick={handleTabClick} data-view="roster" className="nav-item">
+                        <li onClick={handleTabClick} data-view="roster" className="nav-item tab-li">
                             <span data-view="roster" className={`nav-link ${view === 'roster' ? 'active' : null}`}>Roster</span>
                         </li>
-                        <li onClick={handleTabClick} data-view="grades" className='nav-item'>
+                        <li onClick={handleTabClick} data-view="grades" className='nav-item tab-li'>
                             <span data-view="grades" className={`nav-link ${view === 'grades' ? 'active' : null}`}>Grades</span>
                         </li>
-                        <li onClick={handleTabClick} data-view="makegroups" className='nav-item'>
+                        <li onClick={handleTabClick} data-view="makegroups" className='nav-item tab-li'>
                             <span data-view="makegroups" className={`nav-link ${view === 'makegroups' ? 'active' : null}`}>Make Groups</span>
                         </li>
-                        <li onClick={handleTabClick} data-view="feedback" className='nav-item'>
+                        <li onClick={handleTabClick} data-view="feedback" className='nav-item tab-li'>
                             <span data-view="feedback" className={`nav-link ${view === 'feedback' ? 'active' : null}`}>Feedback</span>
                         </li>
                     </ul>
