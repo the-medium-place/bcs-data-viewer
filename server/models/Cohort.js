@@ -16,6 +16,10 @@ const CohortSchema = new Schema({
     notes: [{
         type: Schema.Types.ObjectId,
         ref: 'Note'
+    }],
+    groups: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Groups'
     }]
 
 })

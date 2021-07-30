@@ -1,4 +1,4 @@
-const { User, Cohort, Note, Student } = require('../models');
+const { User, Cohort, Note, Student, Groups } = require('../models');
 const { AuthenticationError } = require('apollo-server-express');
 const { signToken } = require('../utils/auth');
 
@@ -23,6 +23,9 @@ const resolvers = {
           path: 'cohorts',
           populate: {
             path: 'notes',
+          },
+          populate: {
+            path: 'groups'
           }
         });
         // console.log(loggedInUser)
@@ -32,15 +35,16 @@ const resolvers = {
     },
 
     getCohort: async (parent, { cohortId }, context) => {
-      if (context.user) {
-        return await Cohort.findOne({ _id: cohortId }).populate({
-          path: 'notes',
-          populate: {
-            path: 'createdBy'
-          }
-        })
-      }
-      throw new AuthenticationError('You need to be logged in!');
+      // if (context.user) {
+      return await Cohort.findOne({ _id: cohortId }).populate({
+        path: 'notes',
+        populate: {
+          path: 'createdBy'
+        }
+      })
+        .populate('groups')
+      // }
+      // throw new AuthenticationError('You need to be logged in!');
     }
   },
 
@@ -102,22 +106,47 @@ const resolvers = {
     },
 
     dropStudent: async (parent, { name, cohortId }, context) => {
-      // if (context.user) {
-      return await Cohort.findOneAndUpdate({ _id: cohortId }, { $addToSet: { droppedStudents: name } }, { new: true }).populate({ path: 'notes', populate: 'createdBy' })
-      // }
-      // return new AuthenticationError('You are not logged in!')
+      if (context.user) {
+        return await Cohort.findOneAndUpdate({ _id: cohortId }, { $addToSet: { droppedStudents: name } }, { new: true }).populate({ path: 'notes', populate: 'createdBy' }).populate('groups')
+      }
+      return new AuthenticationError('You are not logged in!')
     },
 
     removeDropStudent: async (parent, { name, cohortId }, context) => {
-      return await Cohort.findOneAndUpdate({ _id: cohortId }, { $pull: { droppedStudents: name } }, { new: true }).populate({ path: 'notes', populate: 'createdBy' })
+      if (context.user) {
+
+        return await Cohort.findOneAndUpdate({ _id: cohortId }, { $pull: { droppedStudents: name } }, { new: true }).populate({ path: 'notes', populate: 'createdBy' }).populate('groups')
+      }
+      throw new AuthenticationError('You are not logged in!');
+
     },
 
     addCohortNote: async (parent, { content, createdBy, cohortId }, context) => {
       // create note in database
-      const newNote = await Note.create({ content, createdBy })
+      if (context.user) {
 
-      // assign new note to cohort
-      return await Cohort.findOneAndUpdate({ _id: cohortId }, { $addToSet: { notes: newNote._id } }, { new: true }).populate({ path: 'notes', populate: 'createdBy' })
+        const newNote = await Note.create({ content, createdBy })
+
+        // assign new note to cohort
+        return await Cohort.findOneAndUpdate({ _id: cohortId }, { $addToSet: { notes: newNote._id } }, { new: true }).populate({ path: 'notes', populate: 'createdBy' }).populate('groups')
+      }
+      throw new AuthenticationError('You are not logged in!');
+
+    },
+
+    saveGroups: async (parent, { title, groups, cohortId }, context) => {
+      if (context.user) {
+        // create the group mongo object
+        const newGroups = await Groups.create({ title, groups })
+
+        // find the cohort and add new group object to groups array
+        return await Cohort.findOneAndUpdate({ _id: cohortId }, { $addToSet: { groups: newGroups._id } }, { new: true })
+          .populate({ path: 'notes', populate: 'createdBy' })
+          .populate('groups')
+      }
+
+      throw new AuthenticationError('You are not logged in!');
+
     }
   },
 

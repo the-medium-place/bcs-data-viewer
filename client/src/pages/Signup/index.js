@@ -78,7 +78,7 @@ const Signup = () => {
 
         <div className="col-md-2 text-center company__info">
           <div className="logo__wrapper p-2 d-flex justify-content-center align-items-center" style={{ background: 'white', borderRadius: '50%', aspectRatio: '1/1' }}>
-            <img className="company__logo" src={logo2u} />
+            <img className="company__logo" src={logo2u} alt="2U Logo" />
           </div>
           {/* <h4 className="company_title">BCS Data Viewer</h4> */}
         </div>
@@ -98,6 +98,7 @@ const Signup = () => {
                   <input
                     className="form-input form__input"
                     placeholder="Your username"
+                    autoComplete="username"
                     aria-label="name"
                     name="name"
                     type="text"
@@ -123,6 +124,7 @@ const Signup = () => {
                   <input
                     className="form-input form__input"
                     placeholder="******"
+                    autoComplete="new-password"
                     aria-label="password"
                     name="password"
                     type="password"
@@ -136,7 +138,7 @@ const Signup = () => {
                   <h3>BCS Information</h3>
                 </div>
                 <div className="row">
-                  <label htmlhtmlFor="sameInfoCheckbox">
+                  <label htmlFor="sameInfoCheckbox">
                     Use same Login info:
                   </label>
                   <input

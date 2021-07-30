@@ -109,6 +109,39 @@ mutation addCohortNote($content: String!, $createdBy: ID!, $cohortId: ID!){
         email
       }
     }
+    groups {
+      _id
+      title
+      groups
+    }
   }
 }
 `;
+
+export const SAVE_GROUPS = gql`
+mutation saveGroups($title: String!, $groups: JSON!, $cohortId: ID!){
+  saveGroups(title:$title, groups: $groups, cohortId: $cohortId){
+    _id
+    cohortCode
+    cohortId
+    enrollmentId
+    studentRoster
+    droppedStudents
+    notes {
+      _id
+      content
+      createdAt
+      createdBy {
+        _id
+        name
+        email
+      }
+    }
+    groups {
+      _id
+      title
+      groups
+    }
+  }
+}
+`

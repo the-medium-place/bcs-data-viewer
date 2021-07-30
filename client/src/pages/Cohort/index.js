@@ -11,6 +11,7 @@ import StudentFeedback from '../../components/StudentFeedback';
 import StudentGrades from '../../components/StudentGrades';
 import CohortNotes from '../../components/CohortNotes';
 import MakeGroups from '../../components/MakeGroups';
+import SavedGroups from '../../components/SavedGroups';
 
 import './style.css';
 
@@ -29,7 +30,7 @@ export default function Cohort() {
     );
     const { loading: meLoading, error: meError, data: meData } = useQuery(GET_ME);
     if (error) { console.log(JSON.stringify(error)) }
-
+    if (meError) { console.log(JSON.stringify(meError)) }
 
     // Check if data is returning from the `GET_ME` query
     const loggedInUser = meData?.me || {};
@@ -42,6 +43,9 @@ export default function Cohort() {
     const studentRoster = data?.getCohort.studentRoster || [];
     const droppedStudents = data?.getCohort.droppedStudents || [];
     const cohortNotes = data?.getCohort.notes || [];
+    const cohortGroups = data?.getCohort.groups || []
+
+    console.log({ cohortGroups })
 
     // console.log("cohortNotes: ", cohortNotes)
 
@@ -87,6 +91,9 @@ export default function Cohort() {
                         <li onClick={handleTabClick} data-view="makegroups" className='nav-item tab-li'>
                             <span data-view="makegroups" className={`nav-link ${view === 'makegroups' ? 'active' : null}`}>Make Groups</span>
                         </li>
+                        <li onClick={handleTabClick} data-view="savedgroups" className='nav-item tab-li'>
+                            <span data-view="savedgroups" className={`nav-link ${view === 'savedgroups' ? 'active' : null}`}>Saved Groups</span>
+                        </li>
                         <li onClick={handleTabClick} data-view="feedback" className='nav-item tab-li'>
                             <span data-view="feedback" className={`nav-link ${view === 'feedback' ? 'active' : null}`}>Feedback</span>
                         </li>
@@ -98,8 +105,9 @@ export default function Cohort() {
                         view === 'grades' ? <StudentGrades bcsCohortId={bcsCohortId} enrollmentId={enrollmentId} loggedInUser={loggedInUser} studentRoster={studentRoster} droppedStudents={droppedStudents} /> :
                             view === "roster" ? <StudentRoster cohortId={cohortId} studentRoster={studentRoster} droppedStudents={droppedStudents} /> :
                                 view === "feedback" ? <StudentFeedback /> :
-                                    view === "makegroups" ? <MakeGroups loggedInUser={loggedInUser} studentRoster={studentRoster} droppedStudents={droppedStudents} bcsCohortId={bcsCohortId} enrollmentId={enrollmentId} /> :
-                                        <h1>what???</h1>
+                                    view === "makegroups" ? <MakeGroups cohortGroups={cohortGroups} loggedInUser={loggedInUser} studentRoster={studentRoster} droppedStudents={droppedStudents} bcsCohortId={bcsCohortId} enrollmentId={enrollmentId} cohortId={cohortId} /> :
+                                        view === 'savedgroups' ? <SavedGroups cohortGroups={cohortGroups} /> :
+                                            <h1>what???</h1>
                     }
                 </div>
 

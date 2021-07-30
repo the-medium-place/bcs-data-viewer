@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import API from '../../utils/API';
+import { useMutation } from '@apollo/client';
+import { SAVE_GROUPS } from '../../utils/mutations'
 
-export default function MakeGroups({ loggedInUser, studentRoster, droppedStudents, bcsCohortId, enrollmentId }) {
+
+export default function MakeGroups({ loggedInUser, studentRoster, droppedStudents, bcsCohortId, enrollmentId, cohortId, cohortGroups }) {
 
 
     const bcsEmail = loggedInUser.bcsLoginInfo.bcsEmail;
@@ -28,6 +31,9 @@ export default function MakeGroups({ loggedInUser, studentRoster, droppedStudent
         'N/A': 0
     }
 
+    const [saveGroups, { error, data }] = useMutation(SAVE_GROUPS);
+    if (error) { console.log(JSON.stringify(error)) }
+
 
     const [gradeData, setGradeData] = useState(null);
     const [numGroups, setNumGroups] = useState(6);
@@ -36,13 +42,13 @@ export default function MakeGroups({ loggedInUser, studentRoster, droppedStudent
     const [showGroups, setShowGroups] = useState(false);
     const [showButton, setShowButton] = useState(true)
 
+    async function fetchData() {
 
+        setGradeData(await API.getGradeData(bcsEmail, bcsPassword, bcsCohortId, enrollmentId));
+    }
     // GET AND STORE ALL GRADE DATA
     useEffect(() => {
-        async function fetchData() {
 
-            setGradeData(await API.getGradeData(bcsEmail, bcsPassword, bcsCohortId, enrollmentId));
-        }
         fetchData();
 
     }, [])
@@ -133,15 +139,33 @@ export default function MakeGroups({ loggedInUser, studentRoster, droppedStudent
         // UPDATE groups STATE
         // chunkArray() RETURNS OBJECT --
         // EACH KEY IS A GROUP AND VALUE IS AN ARRAY OF STUDENT OBJECTS MAKING UP THAT GROUP
-        await setGroups(chunkArray())
+        const finalGroups = chunkArray()
+        console.log({ finalGroups })
+        await setGroups(finalGroups)
 
         // SHOW THE GROUPS
         setShowGroups(true);
     }
 
+    const handleSaveClick = async e => {
+        e.preventDefault();
+        console.log({ groups, cohortId })
+        const groupTitle = prompt('Please enter a name for this selection of groups: ');
+
+        try {
+            const { data } = await saveGroups({
+                variables: { title: groupTitle, groups, cohortId },
+            })
+            console.log(data)
+        } catch (err) {
+            console.log(err)
+        }
+
+    }
+
 
     return (
-        <div className="MakeGroups">
+        <div className="MakeGroups mb-5">
             <p className="text-center mt-3" >Use this tool to form groups for projects and/or class activities. Groups are formed by calculating the 'average' grade for each student, then evenly distributing students among the selected number of groups so that each group has a mixture of performance levels.</p>
 
             {gradeData ? (
@@ -162,7 +186,7 @@ export default function MakeGroups({ loggedInUser, studentRoster, droppedStudent
                     <div className="spinner-border ms-auto" role="status" aria-hidden="true"></div>
                 </div>
             )}
-            <div className="groups-wrapper d-flex justify-content-center flex-wrap mb-5" style={{ border: '1px solid black', }}>
+            <div className="groups-wrapper d-flex justify-content-center flex-wrap" style={{ border: '1px solid black', }}>
                 <br />
                 {showGroups ? (
                     Object.keys(groups).map((group, i) => {
@@ -170,7 +194,7 @@ export default function MakeGroups({ loggedInUser, studentRoster, droppedStudent
                         return (
                             <div key={group} className="m-2 text-center flex-wrap w-25 border shadow shadow-sm rounded">
                                 <ol>
-                                    <strong>{`Group ${i + 1}`}</strong>
+                                    <strong>{group}</strong>
                                     {groups[group].map(student => {
                                         return (
                                             <li key={student.student}>{student.student}</li>
@@ -180,6 +204,7 @@ export default function MakeGroups({ loggedInUser, studentRoster, droppedStudent
                             </div>
                         )
                     }
+
                     )
                 ) : (
                     <div className="d-flex align-items-center justify-content-center text-center my-5 p-5 w-100">
@@ -188,6 +213,10 @@ export default function MakeGroups({ loggedInUser, studentRoster, droppedStudent
                 )
                 }
             </div>
-        </div>
+            {showGroups ? (
+                < button className={`btn btn-lg ${data ? 'btn-secondary' : error ? 'btn-danger' : 'btn-secondary'}`} onClick={handleSaveClick} disabled={data || error}>{data ? 'Groups Saved!' : error ? 'There was a problem!' : 'Save Groups!'}</button>
+
+            ) : null}
+        </div >
     )
 }

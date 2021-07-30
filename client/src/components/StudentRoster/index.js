@@ -53,7 +53,7 @@ export default function StudentRoster({ cohortId, studentRoster, droppedStudents
 
     return (
         <div className="StudentRoster row d-flex p-3">
-            <p className="text-center mt-3" >Use this tool to view all current students enrolled in this cohort. Since students are not removed from the roster when they drop the course, you are able to move students to a 'dropped' list. <em>Dropped</em> students will be removed from all further actions, such as viewing grades and forming of groups. </p>
+            <p className="text-center mt-3" >Use this tool to view all current students enrolled in this cohort. Since students are not removed from the roster when they drop the course, you are able to move students to an <em>inactive</em> list. <em>Inactive</em> students will be removed from all further actions, such as viewing grades and forming of groups. </p>
 
             <div className="col-md-6">
 
@@ -63,20 +63,18 @@ export default function StudentRoster({ cohortId, studentRoster, droppedStudents
                 </ol>
             </div>
             <div className="dropped-students p-2 col-md-6">
-                <h3>Dropped Students: </h3>
+                <h3>Inactive Students: </h3>
                 <form onSubmit={handleDropStudentSubmit}>
-                    Add Students to the drop-list:
-                    <br />
                     <label htmlFor="student-select">Select a Student:</label>
 
                     <select className="form-select" aria-label="Default select example" value={studentDrop} name="student-select" id="student-select" onChange={handleDroppedNameSelect}>
-                        <option selected defaultValue>Select a student...</option>
+                        <option defaultValue>Select a student...</option>
                         {studentRoster.filter(student => !droppedStudents.includes(student)).map(student => <option value={student} key={student}>{student}</option>)}
                     </select>
-                    <button type="submit">Add Student</button>
+                    <button type="submit" className="btn btn-secondary">Remove from active roster</button>
                 </form>
                 <ol className="list-group list-group-numbered">
-                    {droppedStudents.map(student => <li className="list-group-item w-100" key={student}>{student} <span style={{ cursor: 'pointer' }} data-studentname={student} onClick={handleRemoveClick}>&times;</span></li>)}
+                    {droppedStudents.map(student => <li className="list-group-item w-100" key={student}>{student} <span className="float-end text-danger" style={{ cursor: 'pointer' }} data-studentname={student} onClick={handleRemoveClick}>&times;</span></li>)}
                 </ol>
 
             </div>

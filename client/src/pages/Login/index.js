@@ -47,7 +47,7 @@ export default function Login() {
                 <div className="col-md-4 text-center company__info">
                     <div className="logo__wrapper p-2 d-flex justify-content-center align-items-center" style={{ background: 'white', borderRadius: '50%', aspectRatio: '1/1' }}>
 
-                        <img className="company__logo" src={logo2u} />
+                        <img className="company__logo" src={logo2u} alt="2U Logo" />
                     </div>
 
                     <h4 className="company_title">BCS Data Viewer</h4>

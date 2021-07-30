@@ -95,6 +95,11 @@ export const GET_COHORT = gql`
             email
           }
         }
+        groups {
+          _id
+          title
+          groups
+        }
       }
     }
   `;

@@ -1,6 +1,10 @@
 const { gql } = require('apollo-server-express');
+const GraphQLJSON = require('graphql-type-json');
+
 
 const typeDefs = gql`
+  scalar JSON
+
   type User {
     _id: ID
     name: String
@@ -20,6 +24,12 @@ const typeDefs = gql`
     createdAt: String
     createdBy: User
   }
+  
+  type Groups {
+    _id: ID!
+    title: String
+    groups: JSON
+  }
 
   type Cohort {
     _id: ID
@@ -29,6 +39,7 @@ const typeDefs = gql`
     studentRoster:[String]
     droppedStudents:[String]
     notes: [Note]
+    groups: [Groups]
   }
 
   type Auth {
@@ -41,6 +52,7 @@ const typeDefs = gql`
     user(userId: ID!): User
     me: User
     getCohort(cohortId: ID!): Cohort
+
   }
 
   type Mutation {
@@ -50,6 +62,7 @@ const typeDefs = gql`
     dropStudent(name: String!, cohortId: ID!): Cohort
     removeDropStudent(name: String!, cohortId: ID!): Cohort
     addCohortNote(content: String!, createdBy: ID!, cohortId: ID!): Cohort
+    saveGroups(title: String!, groups: JSON!, cohortId: ID!): Cohort
   }
 `;
 

@@ -17,6 +17,7 @@
     "bcrypt": "^5.0.1",
     "express": "^4.17.1",
     "graphql": "^15.5.1",
+    "graphql-type-json": "^0.3.2",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.9"
   },
