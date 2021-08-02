@@ -1,6 +1,7 @@
 const { User, Cohort, Note, Student, Groups } = require('../models');
 const { AuthenticationError } = require('apollo-server-express');
 const { signToken } = require('../utils/auth');
+const crypto = require('crypto')
 
 const resolvers = {
 
@@ -28,23 +29,49 @@ const resolvers = {
             path: 'groups'
           }
         });
-        // console.log(loggedInUser)
+
+        // DECRYPT SAVED BCS PASSWORD BEFORE SENDING TO FRONT END
+        function decryptPass() {
+          // console.log('inside decryptPass()')
+
+          // ALGORIGHM, IV AND KEY MATCHING VALUES FROM ENCRYPTION AT SAVE
+          const algorithm = 'aes-256-cbc';
+          const initVector = crypto.scryptSync(loggedInUser.bcsLoginInfo.bcsEmail, 'salt', 16);
+          const SecurityKey = crypto.scryptSync(loggedInUser.bcsLoginInfo.bcsEmail, 'salt', 32);
+
+          // decipher function
+          const decipher = crypto.createDecipheriv(algorithm, SecurityKey, initVector);
+
+          let decryptedPassword = decipher.update(loggedInUser.bcsLoginInfo.bcsPassword, 'hex', 'utf-8');
+
+          decryptedPassword += decipher.final('utf-8');
+          console.log({ decryptedPassword })
+
+          return decryptedPassword;
+
+        }
+
+
+        // console.log(loggedInUser.bcsLoginInfo.bcsPassword)
+        loggedInUser.bcsLoginInfo.bcsPassword = decryptPass();
+        // console.log(loggedInUser.bcsLoginInfo.bcsPasswoÍrd)
+
         return loggedInUser;
       }
       throw new AuthenticationError('You need to be logged in!');
     },
 
     getCohort: async (parent, { cohortId }, context) => {
-      // if (context.user) {
-      return await Cohort.findOne({ _id: cohortId }).populate({
-        path: 'notes',
-        populate: {
-          path: 'createdBy'
-        }
-      })
-        .populate('groups')
-      // }
-      // throw new AuthenticationError('You need to be logged in!');
+      if (context.user) {
+        return await Cohort.findOne({ _id: cohortId }).populate({
+          path: 'notes',
+          populate: {
+            path: 'createdBy'
+          }
+        })
+          .populate('groups')
+      }
+      throw new AuthenticationError('You need to be logged in!');
     }
   },
 

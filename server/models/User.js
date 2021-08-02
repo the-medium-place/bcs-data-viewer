@@ -33,7 +33,7 @@ const UserSchema = new Schema({
 // BCRYPT PASSWORD ENCRYPTION
 UserSchema.pre('save', async function save(next) {
   function encryptBCS(password, bcsEmail) {
-    console.log({ password })
+    console.log({ crypto })
 
     // ENCRYPT BCS LOGIN INFO USING NODE.JS CRYPTO
     const algorithm = 'aes-256-cbc';
