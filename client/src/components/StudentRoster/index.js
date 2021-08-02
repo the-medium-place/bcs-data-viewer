@@ -16,7 +16,7 @@ export default function StudentRoster({ cohortId, studentRoster, droppedStudents
 
     useEffect(() => {
 
-    }, [droppedStudents])
+    }, [droppedStudents, studentRoster])
 
 
     const handleDroppedNameSelect = e => {
@@ -65,7 +65,7 @@ export default function StudentRoster({ cohortId, studentRoster, droppedStudents
             <div className="dropped-students p-2 col-md-6">
                 <h3>Inactive Students: </h3>
                 <form onSubmit={handleDropStudentSubmit}>
-                    <label htmlFor="student-select">Select a Student:</label>
+                    <label htmlFor="student-select">Move a student to the inactive list</label>
 
                     <select className="form-select" aria-label="Default select example" value={studentDrop} name="student-select" id="student-select" onChange={handleDroppedNameSelect}>
                         <option defaultValue>Select a student...</option>
@@ -73,6 +73,7 @@ export default function StudentRoster({ cohortId, studentRoster, droppedStudents
                     </select>
                     <button type="submit" className="btn btn-secondary">Remove from active roster</button>
                 </form>
+                <hr />
                 <ol className="list-group list-group-numbered">
                     {droppedStudents.map(student => <li className="list-group-item w-100" key={student}>{student} <span className="float-end text-danger" style={{ cursor: 'pointer' }} data-studentname={student} onClick={handleRemoveClick}>&times;</span></li>)}
                 </ol>

@@ -14,6 +14,7 @@ import MakeGroups from '../../components/MakeGroups';
 import SavedGroups from '../../components/SavedGroups';
 
 import './style.css';
+import NotLoggedIn from '../../components/NotLoggedIn';
 
 export default function Cohort() {
     const params = useParams();
@@ -124,7 +125,9 @@ export default function Cohort() {
             ) : (
                 // RENDER IF NOT LOGGED IN
                 // =======================
-                <h1>please <Link to="/login">Login</Link> or <Link to="/signup">Sign Up</Link> to view todos </h1>
+                <>
+                    <NotLoggedIn />
+                </>
             )}
         </div>
     )

@@ -1,12 +1,33 @@
 import axios from 'axios';
+const crypto = require('crypto');
 
 const API_URL = process.env.REACT_APP_API_URL || 'https://bootcampspot.com/api/instructor/v1/';
 
 const API = {
     // RETRIEVE AUTH TOKEN FOR PROVIDED INSTRUCTOR LOGIN INFO
     // ======================================================
-    getAuthToken: async function (bcsEmail, bcsPassword) {
+    getAuthToken: async function (bcsEmail, encryptedPassword) {
         console.log("Getting Auth Token...");
+
+        function decryptPass() {
+            console.log('inside decryptPass()')
+            const algorithm = 'aes-256-cbc';
+            const initVector = crypto.scryptSync(bcsEmail, 'salt', 16);
+            const SecurityKey = crypto.scryptSync(bcsEmail, 'salt', 32);
+
+            // decipher function
+            const decipher = crypto.createDecipheriv(algorithm, SecurityKey, initVector);
+
+            let decryptedPassword = decipher.update(encryptedPassword, 'hex', 'utf-8');
+
+            decryptedPassword += decipher.final('utf-8');
+            console.log({ decryptedPassword })
+
+            return decryptedPassword;
+
+        }
+
+        const bcsPassword = decryptPass();
 
         const loginBody = {
             "email": bcsEmail,

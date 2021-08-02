@@ -34,16 +34,16 @@ export default function MakeGroups({ loggedInUser, studentRoster, droppedStudent
     const [saveGroups, { error, data }] = useMutation(SAVE_GROUPS);
     if (error) { console.log(JSON.stringify(error)) }
 
-
     const [gradeData, setGradeData] = useState(null);
     const [numGroups, setNumGroups] = useState(6);
     const [gradesArr, setGradesArr] = useState([])
     const [groups, setGroups] = useState(null);
     const [showGroups, setShowGroups] = useState(false);
-    const [showButton, setShowButton] = useState(true)
+    const [showButton, setShowButton] = useState(true);
+    const [disableSave, setDisableSave] = useState(false);
+    const [memberRepeat, setMemberRepeat] = useState(true);
 
     async function fetchData() {
-
         setGradeData(await API.getGradeData(bcsEmail, bcsPassword, bcsCohortId, enrollmentId));
     }
     // GET AND STORE ALL GRADE DATA
@@ -123,7 +123,9 @@ export default function MakeGroups({ loggedInUser, studentRoster, droppedStudent
         e.preventDefault();
 
         // HIDE THE 'MAKE GROUPS' BUTTON
-        setShowButton(false)
+        setShowButton(false);
+        // ENABLE THE 'SAVE GROUPS' BUTTON
+        setDisableSave(false);
 
         // LOOP THROUGH ACTIVE STUDENTS
         // getGradeAvg() RETURNS OBJECT --
@@ -149,8 +151,16 @@ export default function MakeGroups({ loggedInUser, studentRoster, droppedStudent
 
     const handleSaveClick = async e => {
         e.preventDefault();
+
+        // DISABLE 'SAVE GROUPS' BUTTON
+        setDisableSave(true);
         console.log({ groups, cohortId })
-        const groupTitle = prompt('Please enter a name for this selection of groups: ');
+
+        let groupTitle = prompt('Please enter a name for this selection of groups: ');
+        // MAKE SURE USER ENTERS A TITLE
+        while (groupTitle.length === 0 || !groupTitle) {
+            groupTitle = prompt('You must enter a valid name for this selection of groups: ')
+        }
 
         try {
             const { data } = await saveGroups({
@@ -160,7 +170,6 @@ export default function MakeGroups({ loggedInUser, studentRoster, droppedStudent
         } catch (err) {
             console.log(err)
         }
-
     }
 
 
@@ -171,9 +180,17 @@ export default function MakeGroups({ loggedInUser, studentRoster, droppedStudent
             {gradeData ? (
 
                 <div className="d-flex justify-content-center w-100 p-2 mt-2 mb-1 w-25 bg-dark text-light">
-                    <form onSubmit={handleGroupButtonClick}>
+                    <form onSubmit={handleGroupButtonClick} className="d-flex flex-column justify-content-center">
                         <label className="form-label" htmlFor="numGroups"><strong>Desired number of groups:</strong></label>
-                        <input className="form-control" type="number" min="1" name="numGroups" id="numGroups" value={numGroups} onChange={handleGroupNumChange} />
+                        <input className="form-control mb-2" type="number" min="1" name="numGroups" id="numGroups" value={numGroups} onChange={handleGroupNumChange} />
+                        {cohortGroups.length > 0 ? (
+
+                            <div className="w-75 text-center">
+                                <label className="form-check-label" htmlFor="memberRepeat"><strong>Place students who have worked together before in separate groups (no repeating members):</strong></label>
+                                <input className="form--check-input" type="checkbox" checked={memberRepeat} onChange={() => setMemberRepeat(!memberRepeat)} />
+                            </div>
+                        ) : null}
+
                         <div className="button-wrapper w-100 d-flex justify-content-center p-1" style={{ height: '3rem' }}>
                             {showButton ? <button className="btn btn-secondary" type="submit" onClick={handleGroupButtonClick}>Form Groups</button> : null}
                         </div>
@@ -214,7 +231,7 @@ export default function MakeGroups({ loggedInUser, studentRoster, droppedStudent
                 }
             </div>
             {showGroups ? (
-                < button className={`btn btn-lg ${data ? 'btn-secondary' : error ? 'btn-danger' : 'btn-secondary'}`} onClick={handleSaveClick} disabled={data || error}>{data ? 'Groups Saved!' : error ? 'There was a problem!' : 'Save Groups!'}</button>
+                < button className={`btn btn-lg ${data ? 'btn-secondary' : error ? 'btn-danger' : 'btn-secondary'}`} onClick={handleSaveClick} disabled={disableSave}>{data ? 'Groups Saved!' : error ? 'There was a problem!' : 'Save Groups!'}</button>
 
             ) : null}
         </div >

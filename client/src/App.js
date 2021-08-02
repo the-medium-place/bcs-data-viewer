@@ -64,6 +64,10 @@ function App() {
               <Signup />
             </Route>
 
+            <Route exact path="*">
+              <h1>404 not found</h1>
+            </Route>
+
           </Switch>
         </Router>
       </div>

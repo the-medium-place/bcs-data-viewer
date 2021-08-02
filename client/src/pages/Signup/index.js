@@ -20,6 +20,7 @@ const Signup = () => {
   });
   const [sameInfoCheckbox, setSameInfoCheckbox] = useState(false);
   const [addUser, { error, data }] = useMutation(ADD_USER);
+  if (error) { console.log(JSON.stringify(error)) }
 
   // update state based on form input changes
   const handleChange = (event) => {

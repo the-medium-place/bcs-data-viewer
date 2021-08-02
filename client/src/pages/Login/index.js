@@ -11,6 +11,7 @@ import logo2u from '../../assets/images/2uLogo.png'
 export default function Login() {
 
     const [login, { error, data }] = useMutation(LOGIN_USER);
+    // if (error) { console.log(JSON.stringify(error.message)) }
     const [loginState, setLoginState] = useState({
         name: '',
         password: ''
@@ -56,6 +57,7 @@ export default function Login() {
                     <div className="container-fluid">
                         <div className="row">
                             <h2>Log In</h2>
+                            <p className={`text-danger ${error ? 'd-block' : 'd-none'}`}>{error ? error.message : null}</p>
                         </div>
                         <div className="row">
                             <form control="" className="form-group" onSubmit={handleFormSubmit}>

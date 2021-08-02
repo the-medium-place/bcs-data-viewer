@@ -6,10 +6,12 @@ import { useParams } from 'react-router';
 import Auth from '../../utils/auth';
 import API from '../../utils/API';
 import CohortListItem from '../../components/CohortListItem';
+import NotLoggedIn from '../../components/NotLoggedIn';
 
 
 export default function UserPage() {
     const [cohortInfo, setCohortInfo] = useState([])
+    const [apiError, setApiError] = useState(false);
 
 
 
@@ -34,8 +36,15 @@ export default function UserPage() {
 
 
     const cohortInfoClick = async e => {
-        const cohortsArr = await API.getInstructorInfo(bcsEmail, bcsPassword)
-        setCohortInfo(cohortsArr)
+        setApiError(false);
+        try {
+
+            const cohortsArr = await API.getInstructorInfo(bcsEmail, bcsPassword)
+            setCohortInfo(cohortsArr)
+        } catch (err) {
+            setApiError(true);
+            console.log(err.message)
+        }
     }
 
     // console.log("cohortInfo: ", cohortInfo)
@@ -60,6 +69,10 @@ export default function UserPage() {
                             <hr />
 
                             <p className="text-center p-1 bg-dark text-light w-75 mx-auto">To see all cohorts to which you are associated, click <button className="btn btn-secondary" onClick={cohortInfoClick}>Here!</button></p>
+                            {apiError ? (
+                                <p className="text-center p-1 text-danger">There was an error connecting to the BCS database. Please check your BCS login info...</p>
+                            ) : null}
+
                             <div className="d-flex justify-content-center">
 
                                 <ul className="list-group list-group-flush w-75">{cohortInfo.length > 0 ? "All associated Cohorts:" : null}
@@ -72,7 +85,7 @@ export default function UserPage() {
                 </>) : (
                 // RENDER IF NOT LOGGED IN
                 // =======================
-                <h1>please <Link to="/login">Login</Link> or <Link to="/signup">Sign Up</Link> to view todos </h1>
+                <NotLoggedIn />
             )}
         </div>
     )

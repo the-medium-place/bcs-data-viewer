@@ -6,9 +6,10 @@ export default function StudentGrades({ enrollmentId, bcsCohortId, studentRoster
 
     const bcsEmail = loggedInUser.bcsLoginInfo.bcsEmail;
     const bcsPassword = loggedInUser.bcsLoginInfo.bcsPassword;
-    const activeStudents = studentRoster.filter(student => !droppedStudents.includes(student))
+    // const activeStudents = studentRoster.filter(student => !droppedStudents.includes(student))
 
     const [gradeData, setGradeData] = useState(null)
+    const [activeStudents, setActiveStudents] = useState(studentRoster.filter(student => !droppedStudents.includes(student)))
 
 
 
@@ -92,8 +93,8 @@ export default function StudentGrades({ enrollmentId, bcsCohortId, studentRoster
                         <table className="table table-sm table-hover table-condensed w-100">
                             <thead>
                                 <tr>
-                                    <th className="table-light th-name-avg" scope="col">Student Name</th>
-                                    <th className="table-light th-name-avg second-child" scope="col">Average Grade</th>
+                                    <th className="table-light th-name-avg" scope="col">Student Name<br /></th>
+                                    <th className="table-light th-name-avg second-child" scope="col">Average Grade<br /></th>
                                     {gradeData.assignmentArr.map(assignment => <th scope="col" key={assignment}>{assignment}</th>)}
                                 </tr>
                             </thead>
@@ -128,7 +129,7 @@ export default function StudentGrades({ enrollmentId, bcsCohortId, studentRoster
 
                 ) : (
                     <div className="d-flex align-items-center my-5 p-5">
-                        <strong>Loading Grade Data Table...</strong>
+                        <strong>Loading Grade Data...</strong>
                         <div className="spinner-border ms-auto" role="status" aria-hidden="true"></div>
                     </div>
                 )}
