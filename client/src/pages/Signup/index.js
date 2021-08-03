@@ -7,7 +7,7 @@ import { ADD_USER } from '../../utils/mutations';
 import logo2u from '../../assets/images/2uLogo.png'
 
 import Auth from '../../utils/auth';
-import '../Login/style.css';
+import './style.css';
 
 const Signup = () => {
   const [formState, setFormState] = useState({
@@ -75,7 +75,7 @@ const Signup = () => {
 
   return (
     <>
-      <div className="row main-content bg-success text-center">
+      <div className="row main-signup-content bg-success text-center">
 
         <div className="col-md-2 text-center company__info">
           <div className="logo__wrapper p-2 d-flex justify-content-center align-items-center" style={{ background: 'white', borderRadius: '50%', aspectRatio: '1/1' }}>
@@ -134,7 +134,7 @@ const Signup = () => {
                   />
                 </div>
               </div>
-              <div className="col-lg-6">
+              <div className="col-lg-6 p-3 signup-bcs-info text-light">
                 <div className="row">
                   <h3>BCS Information</h3>
                 </div>
@@ -167,7 +167,7 @@ const Signup = () => {
                 <div className="row">
                   <input
                     className="form-input form__input"
-                    placeholder="******"
+                    placeholder="BCS Login Password"
                     aria-label="bootcamp spot password"
                     name="bcsPassword"
                     type="password"

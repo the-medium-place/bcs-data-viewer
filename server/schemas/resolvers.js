@@ -45,7 +45,7 @@ const resolvers = {
           let decryptedPassword = decipher.update(loggedInUser.bcsLoginInfo.bcsPassword, 'hex', 'utf-8');
 
           decryptedPassword += decipher.final('utf-8');
-          console.log({ decryptedPassword })
+          // console.log({ decryptedPassword })
 
           return decryptedPassword;
 
