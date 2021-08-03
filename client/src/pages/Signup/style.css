@@ -1,11 +1,11 @@
 .main-signup-content {
-    width: 80%;
-    border-radius: 20px;
-    box-shadow: 0 5px 5px rgba(0, 0, 0, .4);
-    margin: 5em auto;
-    display: flex;
+  width: 80%;
+  border-radius: 20px;
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.4);
+  margin: 5em auto;
+  display: flex;
 }
 
 .signup-bcs-info {
-    background: #1576d4;
+  background: var(--bcsBlue);
 }
