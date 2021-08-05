@@ -169,20 +169,22 @@ export default function MakeGroups({
     let groupTitle = prompt(
       "Please enter a name for this selection of groups: "
     );
-    // MAKE SURE USER ENTERS A TITLE
-    while (groupTitle.length === 0 || !groupTitle) {
-      groupTitle = prompt(
-        "You must enter a valid name for this selection of groups: "
-      );
+
+    if (!groupTitle || groupTitle.length === 0) {
+      alert('Please enter a group name to save. Press the save button to try again...')
+      setDisableSave(false);
     }
 
-    try {
-      const { data } = await saveGroups({
-        variables: { title: groupTitle, groups, cohortId },
-      });
-      console.log(data);
-    } catch (err) {
-      console.log(err);
+    if (groupTitle && groupTitle.length > 1) {
+
+      try {
+        const { data } = await saveGroups({
+          variables: { title: groupTitle, groups, cohortId },
+        });
+        console.log(data);
+      } catch (err) {
+        console.log(err);
+      }
     }
   };
 
@@ -257,7 +259,7 @@ export default function MakeGroups({
         </div>
       )}
       <div
-        className="row groups-wrapper d-flex justify-content-center flex-wrap border"
+        className="row groups-wrapper d-flex justify-content-center flex-wrap"
       >
         <br />
         {showGroups ? (
@@ -265,10 +267,10 @@ export default function MakeGroups({
             return (
               <div
                 key={group}
-                className="bg-light col-10 col-md-5 col-lg-3 col-xl-2 m-2 text-center flex-wrap border shadow shadow-sm rounded"
+                className="bg-light col-10 col-md-5 col-lg-3 col-xl-2 m-2 flex-wrap border shadow shadow-sm rounded"
               >
                 <ol>
-                  <strong>{group}</strong>
+                  <strong className>{group}</strong>
                   {groups[group].map((student) => {
                     return <li key={student.student}>{student.student}</li>;
                   })}
