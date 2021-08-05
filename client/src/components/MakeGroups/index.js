@@ -10,7 +10,7 @@ export default function MakeGroups({
   bcsCohortId,
   enrollmentId,
   cohortId,
-  cohortGroups,
+  cohortGroups
 }) {
   const bcsEmail = loggedInUser.bcsLoginInfo.bcsEmail;
   const bcsPassword = loggedInUser.bcsLoginInfo.bcsPassword;
@@ -95,7 +95,7 @@ export default function MakeGroups({
 
   /**
    * Groups student objects into chunks
-   * @returns groupsObj
+   * @returns groupsObj 
    */
   const chunkArray = () => {
     // EMPTY OBJECT TO HOLD FINAL GROUPS
@@ -196,7 +196,7 @@ export default function MakeGroups({
       </p>
 
       {gradeData ? (
-        <div className="d-flex justify-content-center w-100 p-2 mt-2 mb-1 w-25 bg-dark text-light">
+        <div className="d-flex justify-content-center w-100 p-2 mt-2 mb-1 w-25 bg-bcs text-light">
           <form
             onSubmit={handleGroupButtonClick}
             className="d-flex flex-column justify-content-center"
@@ -236,7 +236,7 @@ export default function MakeGroups({
             >
               {showButton ? (
                 <button
-                  className="btn btn-secondary"
+                  className="btn bg-light"
                   type="submit"
                   onClick={handleGroupButtonClick}
                 >
@@ -257,8 +257,7 @@ export default function MakeGroups({
         </div>
       )}
       <div
-        className="groups-wrapper d-flex justify-content-center flex-wrap"
-        style={{ border: "1px solid black" }}
+        className="row groups-wrapper d-flex justify-content-center flex-wrap border"
       >
         <br />
         {showGroups ? (
@@ -266,7 +265,7 @@ export default function MakeGroups({
             return (
               <div
                 key={group}
-                className="m-2 text-center flex-wrap w-25 border shadow shadow-sm rounded"
+                className="bg-light col-10 col-md-5 col-lg-3 col-xl-2 m-2 text-center flex-wrap border shadow shadow-sm rounded"
               >
                 <ol>
                   <strong>{group}</strong>
@@ -294,8 +293,8 @@ export default function MakeGroups({
           {data
             ? "Groups Saved!"
             : error
-            ? "There was a problem!"
-            : "Save Groups!"}
+              ? "There was a problem!"
+              : "Save Groups!"}
         </button>
       ) : null}
     </div>

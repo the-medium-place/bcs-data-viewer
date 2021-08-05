@@ -114,7 +114,7 @@ export default function Cohort() {
 
                 {/* NOTES FOR THIS COHORT */}
                 <div className="row d-flex flex-column">
-                    <h3 className="d-flex justify-content-between bg-dark text-light text-bold p-1">Cohort Notes:<span className="d-flex mr-3 align-self-end" style={{ cursor: 'pointer', fontSize: '.6em' }} onClick={() => setShowNotes(!showNotes)}>{showNotes ? 'Hide' : 'Show'}</span></h3>
+                    <h3 className="d-flex justify-content-between bg-bcs text-light text-bold p-1">Cohort Notes:<span className="d-flex mr-3 align-self-end" style={{ cursor: 'pointer', fontSize: '.6em' }} onClick={() => setShowNotes(!showNotes)}>{showNotes ? 'Hide' : 'Show'}</span></h3>
 
                     {showNotes ? (
 

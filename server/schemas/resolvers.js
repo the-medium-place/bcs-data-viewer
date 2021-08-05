@@ -1,7 +1,7 @@
 const { User, Cohort, Note, Student, Groups } = require('../models');
 const { AuthenticationError } = require('apollo-server-express');
 const { signToken } = require('../utils/auth');
-const crypto = require('crypto')
+const decryptPassword = require('../utils/decryptPassword');
 
 const resolvers = {
 
@@ -30,30 +30,8 @@ const resolvers = {
           }
         });
 
-        // DECRYPT SAVED BCS PASSWORD BEFORE SENDING TO FRONT END
-        function decryptPass() {
-          // console.log('inside decryptPass()')
-
-          // ALGORIGHM, IV AND KEY MATCHING VALUES FROM ENCRYPTION AT SAVE
-          const algorithm = 'aes-256-cbc';
-          const initVector = crypto.scryptSync(loggedInUser.bcsLoginInfo.bcsEmail, 'salt', 16);
-          const SecurityKey = crypto.scryptSync(loggedInUser.bcsLoginInfo.bcsEmail, 'salt', 32);
-
-          // decipher function
-          const decipher = crypto.createDecipheriv(algorithm, SecurityKey, initVector);
-
-          let decryptedPassword = decipher.update(loggedInUser.bcsLoginInfo.bcsPassword, 'hex', 'utf-8');
-
-          decryptedPassword += decipher.final('utf-8');
-          // console.log({ decryptedPassword })
-
-          return decryptedPassword;
-
-        }
-
-
         // console.log(loggedInUser.bcsLoginInfo.bcsPassword)
-        loggedInUser.bcsLoginInfo.bcsPassword = decryptPass();
+        loggedInUser.bcsLoginInfo.bcsPassword = decryptPassword(loggedInUser.bcsLoginInfo.bcsEmail, loggedInUser.bcsLoginInfo.bcsPassword);
         // console.log(loggedInUser.bcsLoginInfo.bcsPasswoÍrd)
 
         return loggedInUser;

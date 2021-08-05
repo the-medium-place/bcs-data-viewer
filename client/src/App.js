@@ -8,6 +8,7 @@ import Cohort from './pages/Cohort';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { setContext } from '@apollo/client/link/context';
 import Splash from './pages/Splash';
+import TestPage from './pages/TestPage';
 
 // Construct our main GraphQL API endpoint
 const httpLink = createHttpLink({
@@ -62,6 +63,10 @@ function App() {
 
             <Route exact path="/signup">
               <Signup />
+            </Route>
+
+            <Route exact path="/testingtesting">
+              <TestPage />
             </Route>
 
             <Route exact path="*">
