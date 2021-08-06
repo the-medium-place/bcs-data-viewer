@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import API from "../../utils/API";
 import { useMutation } from "@apollo/client";
 import { SAVE_GROUPS } from "../../utils/mutations";
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 
 export default function MakeGroups({
   loggedInUser,
@@ -51,6 +52,10 @@ export default function MakeGroups({
   const [showButton, setShowButton] = useState(true);
   const [disableSave, setDisableSave] = useState(false);
   const [memberRepeat, setMemberRepeat] = useState(true);
+
+  const draggableRef = useRef(null);
+  const droppableRef = useRef(null);
+
 
   async function fetchData() {
     setGradeData(
@@ -188,6 +193,46 @@ export default function MakeGroups({
     }
   };
 
+  const onDragEnd = (result) => {
+    // console.log(result);
+    // console.log(groups)
+    const { destination, source, draggableId } = result;
+
+    if (!destination) { return }
+    if (destination.droppalbeId === source.droppableId &&
+      destination.index === source.index) {
+      return;
+    }
+    const sourceColumn = groups[source.droppableId];
+    const destinationColumn = groups[destination.droppableId]
+
+    // console.log(column);
+    const newSourceItemIds = Array.from(sourceColumn);
+    const newDestinationItemIds = Array.from(destinationColumn)
+    // console.log(newItemIds)
+
+    // remove item from source list
+    newSourceItemIds.splice(source.index, 1);
+    // add item to destination list
+    newDestinationItemIds.splice(destination.index, 0, groups[source.droppableId].find(obj => obj.student === draggableId));
+
+    const newSourceColumn = [
+      ...newSourceItemIds
+    ]
+
+    const newDestinationColumn = [
+      ...newDestinationItemIds
+    ]
+
+    // console.log(newSourceColumn, newDestinationColumn)
+    const groupsCopy = { ...groups };
+    groupsCopy[source.droppableId] = newSourceColumn;
+    groupsCopy[destination.droppableId] = newDestinationColumn;
+    // console.log({ groupsCopy })
+    setGroups(groupsCopy);
+
+  }
+
   return (
     <div className="MakeGroups mb-5">
       <p className="text-center mt-3">
@@ -231,7 +276,6 @@ export default function MakeGroups({
                 />
               </div>
             ) : null}
-
             <div
               className="button-wrapper w-100 d-flex justify-content-center p-1"
               style={{ height: "3rem" }}
@@ -258,34 +302,71 @@ export default function MakeGroups({
           ></div>
         </div>
       )}
-      <div
-        className="row groups-wrapper d-flex justify-content-center flex-wrap"
+      <h3 className="text-bold text-center p-2 bg-secondary text-light">Drag and Drop students to re-order or move between groups!</h3>
+      <DragDropContext
+        // onDragStart
+        // onDragUpdate
+        onDragEnd={onDragEnd}
       >
-        <br />
-        {showGroups ? (
-          Object.keys(groups).map((group, i) => {
-            return (
-              <div
-                key={group}
-                className="bg-light col-10 col-md-5 col-lg-3 col-xl-2 m-2 flex-wrap border shadow shadow-sm rounded"
-              >
-                <ol>
-                  <strong className>{group}</strong>
-                  {groups[group].map((student) => {
-                    return <li key={student.student}>{student.student}</li>;
-                  })}
-                </ol>
-              </div>
-            );
-          })
-        ) : (
-          <div className="d-flex align-items-center justify-content-center text-center my-5 p-5 w-100">
-            <strong>
-              {gradeData ? "Ready to form groups!" : "Waiting on data..."}
-            </strong>
-          </div>
-        )}
-      </div>
+        <div
+          className="row groups-wrapper d-flex justify-content-center flex-wrap"
+        >
+          <br />
+          {showGroups ? (
+            Object.keys(groups).map((group, i) => {
+              return (
+                <Droppable
+                  droppableId={group}
+                  key={group}
+                  innerRef={droppableRef}
+                >
+                  {(provided) => (
+                    <div
+                      ref={provided.innerRef}
+                      {...provided.droppableProps}
+                      // key={group}
+                      className="bg-light col-10 col-md-5 col-lg-3 col-xl-2 m-2 flex-wrap border shadow shadow-sm rounded"
+                    >
+                      <ol>
+                        <strong>{group}</strong>
+                        {groups[group].map((student, i) => {
+                          return (
+                            <Draggable
+                              key={student.student}
+                              draggableId={student.student}
+                              index={i}
+                              innerRef={draggableRef}
+                            >
+                              {(provided) => (
+                                <li
+                                  className="border mb-2"
+                                  // key={student.student}
+                                  {...provided.draggableProps}
+                                  {...provided.dragHandleProps}
+                                  ref={provided.innerRef}
+                                >
+                                  {student.student}
+                                </li>
+                              )}
+                            </Draggable>
+                          );
+                        })}
+                      </ol>
+                      {provided.placeholder}
+                    </div>
+                  )}
+                </Droppable>
+              );
+            })
+          ) : (
+            <div className="d-flex align-items-center justify-content-center text-center my-5 p-5 w-100">
+              <strong>
+                {gradeData ? "Ready to form groups!" : "Waiting on data..."}
+              </strong>
+            </div>
+          )}
+        </div>
+      </DragDropContext>
       {showGroups ? (
         <button
           className={`btn btn-lg ${error ? "btn-danger" : "btn-secondary"}`}
