@@ -18,7 +18,7 @@ export default function CohortNotes({ cohortNotes, loggedInUser, cohortId }) {
                     <ul className="list-group">
                         {cohortNotes.map(note => {
                             return (
-                                <li key={note["_id"]} className="list-group-item">
+                                <li key={note["_id"]} className="list-group-item mb-3 border shadow shadow-sm">
                                     <p className="border">{note.content}</p>
                                     {/* <br /> */}
                                     - <strong>{note.createdBy.name}</strong>&nbsp;<small><em>{new Date(parseInt(note.createdAt)).toLocaleString()}</em></small>

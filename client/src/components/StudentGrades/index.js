@@ -75,7 +75,7 @@ export default function StudentGrades({ enrollmentId, bcsCohortId, studentRoster
             gradeAvg = 0;
 
         gradeData.studentObj[student].assignments.forEach(assignmentObj => {
-            if (assignmentObj.isDue) {
+            if (assignmentObj.isDue && assignmentObj.grade !== 'Ungraded') {
                 numDue++
                 totalGradeVal += MAP_GRADES_TO_INT[assignmentObj.grade]
             }
@@ -86,10 +86,13 @@ export default function StudentGrades({ enrollmentId, bcsCohortId, studentRoster
 
     return (
         <div className="StudentGrades">
-            <p className="text-center mt-3" >The table below will populate with all active students and their current grades on all assignments.</p>
-            <div className="my-5 border" style={{ overflow: 'auto', maxHeight: '60vh', width: '95%' }}>
+            <div className="w-100 text-center">
+
+                <p className="lead text-center mt-3 p-2 border-bcs w-75 mx-auto" >The table below will populate with all active students and their current grades on all assignments. <strong>Average Grades</strong> are calculated using only <em>currently due</em> assignments. Assignments which have been turned in but <em>not</em> graded are not factored into the calculations.</p>
+            </div>
+            <div className="my-5 border" style={{ overflow: 'auto', maxHeight: '75vh', width: '100%' }}>
                 {gradeData ? (
-                    <div className="table-wrapper">
+                    <div className="table-wrapper w-100">
                         <table className="table table-sm table-hover table-condensed w-100">
                             <thead>
                                 <tr>

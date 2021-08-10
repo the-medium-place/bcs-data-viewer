@@ -180,18 +180,23 @@ export default function MakeGroups({
       setDisableSave(false);
     }
 
-    if (groupTitle && groupTitle.length > 1) {
+    if (groupTitle && groupTitle.length >= 1) {
 
       try {
         const { data } = await saveGroups({
           variables: { title: groupTitle, groups, cohortId },
         });
-        console.log(data);
+        // console.log(data);
       } catch (err) {
         console.log(err);
       }
     }
   };
+
+  // const onDragStart = (result, event) => {
+  //   // console.log(event)
+
+  // }
 
   const onDragEnd = (result) => {
     // console.log(result);
@@ -203,18 +208,26 @@ export default function MakeGroups({
       destination.index === source.index) {
       return;
     }
+    // capture which 'column' (group) was the drag source and destination
     const sourceColumn = groups[source.droppableId];
     const destinationColumn = groups[destination.droppableId]
 
-    // console.log(column);
+    // get list of student objects for both 'columns'
     const newSourceItemIds = Array.from(sourceColumn);
-    const newDestinationItemIds = Array.from(destinationColumn)
-    // console.log(newItemIds)
+    let newDestinationItemIds = Array.from(destinationColumn)
 
-    // remove item from source list
+    // remove student from source list
     newSourceItemIds.splice(source.index, 1);
-    // add item to destination list
-    newDestinationItemIds.splice(destination.index, 0, groups[source.droppableId].find(obj => obj.student === draggableId));
+    // add student to destination list 
+    // first making sure that the destination and source columns arent the same -
+    // then using student name to search for entire student object in original 'groups' state
+    const movedStudentObj = groups[source.droppableId].find(obj => obj.student === draggableId)
+    newDestinationItemIds.splice(destination.index, 0, movedStudentObj);
+    // ensure no duplicate team members
+    // (bug catch when moving member within group)
+    if (source.droppableId === destination.droppableId) {
+      newDestinationItemIds = new Set(newDestinationItemIds)
+    }
 
     const newSourceColumn = [
       ...newSourceItemIds
@@ -224,87 +237,104 @@ export default function MakeGroups({
       ...newDestinationItemIds
     ]
 
-    // console.log(newSourceColumn, newDestinationColumn)
+    // update state with new column values
     const groupsCopy = { ...groups };
     groupsCopy[source.droppableId] = newSourceColumn;
     groupsCopy[destination.droppableId] = newDestinationColumn;
-    // console.log({ groupsCopy })
     setGroups(groupsCopy);
 
   }
 
+  // const onMouseDown = e => {
+  //   console.log(e.target.classList)
+  //   e.target.classList.add("bg-danger")
+  // }
+
+  // const onMouseUp = e => {
+  //   e.target.classList.remove("bg-danger")
+  // }
+
   return (
     <div className="MakeGroups mb-5">
-      <p className="text-center mt-3">
-        Use this tool to form groups for projects and/or class activities.
-        Groups are formed by calculating the 'average' grade for each student,
-        then evenly distributing students among the selected number of groups so
-        that each group has a mixture of performance levels.
-      </p>
+      <div className="row">
+        <div className="col-12 col-md-8 border-bcs p-2 mt-2 mb-1">
+          <p className="lead text-center mt-3">
+            Use this tool to form groups for projects and/or class activities.
+            Groups are formed by calculating the 'average' grade for each student,
+            then evenly distributing students among the selected number of groups so
+            that each group has a mixture of performance levels.
+          </p>
+          {cohortGroups.length > 0 ? (
+            <p className="lead text-center mt-1">Clicking the <em>No Repeats</em> box will ensure that no students are paired together if they have already been paired in one of your 'saved' groups. Use this option to create project groups without repeating group members!</p>
+          ) : null}
+          <p className="align-text-bottom text-center p-1 bg-bcs text-light"><strong>Drag and drop students to re-order or move to a different group!</strong></p>
+        </div>
 
-      {gradeData ? (
-        <div className="d-flex justify-content-center w-100 p-2 mt-2 mb-1 w-25 bg-bcs text-light">
-          <form
-            onSubmit={handleGroupButtonClick}
-            className="d-flex flex-column justify-content-center"
-          >
-            <label className="form-label" htmlFor="numGroups">
-              <strong>Desired number of groups:</strong>
-            </label>
-            <input
-              className="form-control mb-2"
-              type="number"
-              min="1"
-              name="numGroups"
-              id="numGroups"
-              value={numGroups}
-              onChange={handleGroupNumChange}
-            />
-            {cohortGroups.length > 0 ? (
-              <div className="w-100 text-center px-5">
-                <label className="form-check-label" htmlFor="memberRepeat">
-                  <strong>
-                    Place students who have worked together in separate groups
-                    (no repeating members):
-                  </strong>
-                </label>
-                <input
-                  className="form--check-input"
-                  type="checkbox"
-                  checked={memberRepeat}
-                  onChange={() => setMemberRepeat(!memberRepeat)}
-                />
-              </div>
-            ) : null}
-            <div
-              className="button-wrapper w-100 d-flex justify-content-center p-1"
-              style={{ height: "3rem" }}
+        {gradeData ? (
+          <div className="col-12 col-md-4 d-flex justify-content-center p-2 mt-2 mb-1 bg-bcs text-light rounded-right">
+            <form
+              onSubmit={handleGroupButtonClick}
+              className="d-flex flex-column justify-content-center"
             >
-              {showButton ? (
-                <button
-                  className="btn bg-light"
-                  type="submit"
-                  onClick={handleGroupButtonClick}
-                >
-                  Form Groups
-                </button>
-              ) : null}
-            </div>
-          </form>
-        </div>
-      ) : (
-        <div className="d-flex align-items-center my-5 p-5">
-          <strong>Preparing student data...</strong>
-          <div
-            className="spinner-border ms-auto"
-            role="status"
-            aria-hidden="true"
-          ></div>
-        </div>
-      )}
-      <h3 className="text-bold text-center p-2 bg-secondary text-light">Drag and Drop students to re-order or move between groups!</h3>
+              <label className="form-label" htmlFor="numGroups">
+                <strong>Desired number of groups:</strong>
+              </label>
+              <input
+                className="form-control mb-2"
+                type="number"
+                min="1"
+                name="numGroups"
+                id="numGroups"
+                value={numGroups}
+                onChange={handleGroupNumChange}
+              />
+              {cohortGroups.length > 0 ? (
+                <div className="w-100 text-center px-5">
+                  <label className="form-check-label" htmlFor="memberRepeat">
+                    <strong>
+                      No Repeats: &nbsp;&nbsp;
+                    </strong>
+
+                  </label>
+                  <input
+                    className="form--check-input"
+                    type="checkbox"
+                    checked={memberRepeat}
+                    onChange={() => setMemberRepeat(!memberRepeat)}
+                  />
+                  <br />
+                  <span className="bg-danger p-1">**not yet functional**</span>
+                </div>
+              ) : <div className="col-6 col-md-4"></div>}
+              <div
+                className="button-wrapper w-100 d-flex justify-content-center p-1"
+                style={{ height: "3rem" }}
+              >
+                {showButton ? (
+                  <button
+                    className="btn bg-light"
+                    type="submit"
+                    onClick={handleGroupButtonClick}
+                  >
+                    Form Groups
+                  </button>
+                ) : null}
+              </div>
+            </form>
+          </div>
+        ) : (
+          <div className="col-6 col-md-4 d-flex align-items-center p-2 mt-2 mb-1 bg-bcs text-light rounded-right">
+            <strong>Preparing student data...</strong>
+            <div
+              className="spinner-border ms-auto"
+              role="status"
+              aria-hidden="true"
+            ></div>
+          </div>
+        )}
+      </div>
       <DragDropContext
-        // onDragStart
+        // onDragStart={onDragStart}
         // onDragUpdate
         onDragEnd={onDragEnd}
       >
@@ -339,7 +369,9 @@ export default function MakeGroups({
                             >
                               {(provided) => (
                                 <li
-                                  className="border mb-2"
+                                  className="border mb-2 p-1 text-center"
+                                  // onMouseDown={onMouseDown}
+                                  // onMouseUp={onMouseUp}
                                   // key={student.student}
                                   {...provided.draggableProps}
                                   {...provided.dragHandleProps}

@@ -15,6 +15,7 @@ import SavedGroups from '../../components/SavedGroups';
 
 import './style.css';
 import NotLoggedIn from '../../components/NotLoggedIn';
+import ProjectPresentations from '../../components/ProjectPresentations';
 
 export default function Cohort() {
     const params = useParams();
@@ -95,6 +96,9 @@ export default function Cohort() {
                         <li onClick={handleTabClick} data-view="savedgroups" className='nav-item tab-li'>
                             <span data-view="savedgroups" className={`nav-link ${view === 'savedgroups' ? 'active' : null}`}>Saved Groups</span>
                         </li>
+                        <li onClick={handleTabClick} data-view="projectpresentations" className='nav-item tab-li'>
+                            <span data-view="projectpresentations" className={`nav-link ${view === 'projectpresentations' ? 'active' : null}`}>Presentation Notes</span>
+                        </li>
                         <li onClick={handleTabClick} data-view="feedback" className='nav-item tab-li'>
                             <span data-view="feedback" className={`nav-link ${view === 'feedback' ? 'active' : null}`}>Feedback</span>
                         </li>
@@ -108,13 +112,14 @@ export default function Cohort() {
                                 view === "feedback" ? <StudentFeedback /> :
                                     view === "makegroups" ? <MakeGroups cohortGroups={cohortGroups} loggedInUser={loggedInUser} studentRoster={studentRoster} droppedStudents={droppedStudents} bcsCohortId={bcsCohortId} enrollmentId={enrollmentId} cohortId={cohortId} /> :
                                         view === 'savedgroups' ? <SavedGroups cohortGroups={cohortGroups} /> :
-                                            <h1>what???</h1>
+                                            view === "projectpresentations" ? <ProjectPresentations /> :
+                                                <h1>what???</h1>
                     }
                 </div>
 
                 {/* NOTES FOR THIS COHORT */}
                 <div className="row d-flex flex-column">
-                    <h3 className="d-flex justify-content-between bg-bcs text-light text-bold p-1">Cohort Notes:<span className="d-flex mr-3 align-self-end" style={{ cursor: 'pointer', fontSize: '.6em' }} onClick={() => setShowNotes(!showNotes)}>{showNotes ? 'Hide' : 'Show'}</span></h3>
+                    <h3 className="mb-4 d-flex justify-content-between bg-bcs text-light text-bold p-1 shadow">Cohort Notes:<span className="d-flex mr-3 align-self-end" style={{ cursor: 'pointer', fontSize: '.6em' }} onClick={() => setShowNotes(!showNotes)}>{showNotes ? 'Hide' : 'Show'}</span></h3>
 
                     {showNotes ? (
 

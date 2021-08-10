@@ -25,4 +25,9 @@ code {
 
 .bg-bcs {
   background-color: var(--bcsBlue);
+  /* background: linear-gradient(to right, var(--bcsBlue) 85%, lightblue) */
+}
+
+.border-bcs {
+  border: 2px solid var(--bcsBlue);
 }
