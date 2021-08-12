@@ -10,8 +10,9 @@ export default function StudentGrades({ enrollmentId, bcsCohortId, studentRoster
 
     const [gradeData, setGradeData] = useState(null)
     const [activeStudents, setActiveStudents] = useState(studentRoster.filter(student => !droppedStudents.includes(student)))
-
-
+    const [modifiableStudents, setModifiableStudents] = useState(activeStudents);
+    const [isGradeSorted, setIsGradeSorted] = useState(false);
+    const [isAlphaSorted, setIsAlphaSorted] = useState(true);
 
     useEffect(() => {
         async function fetchData() {
@@ -84,6 +85,58 @@ export default function StudentGrades({ enrollmentId, bcsCohortId, studentRoster
         return gradeAvg;
     }
 
+    const alphaSort = () => {
+        const studentsCopy = [...activeStudents];
+        setIsGradeSorted(false);
+        if (isAlphaSorted) {
+            studentsCopy.sort((a, b) => {
+                if (a > b) { return -1; }
+                if (a < b) { return 1; }
+                return 0;
+            })
+            setIsAlphaSorted(false);
+        } else {
+            studentsCopy.sort((a, b) => {
+                if (a < b) { return -1; }
+                if (a > b) { return 1; }
+                return 0;
+            })
+            setIsAlphaSorted(true);
+        }
+
+        setModifiableStudents(studentsCopy);
+    }
+
+    const gradeSort = () => {
+        setIsAlphaSorted(false);
+        const studentsCopy = [...activeStudents];
+
+        studentsCopy.sort((a, b) => {
+            const aGrade = getGradeAvg(a);
+            const bGrade = getGradeAvg(b);
+            if (isGradeSorted) {
+
+                if (aGrade > bGrade) { return -1; }
+                if (aGrade < bGrade) { return 1; }
+                setIsGradeSorted(false)
+                return 0;
+            } else {
+                if (aGrade < bGrade) { return -1; }
+                if (aGrade > bGrade) { return 1; }
+                setIsGradeSorted(true)
+                return 0;
+            }
+        })
+
+        setModifiableStudents(studentsCopy);
+    }
+
+    const renderIcon = (direction) => {
+        return (
+            <i class={`bi-caret-${direction}-fill`}></i>
+        )
+    }
+
     return (
         <div className="StudentGrades">
             <div className="w-100 text-center">
@@ -96,13 +149,13 @@ export default function StudentGrades({ enrollmentId, bcsCohortId, studentRoster
                         <table className="table table-sm table-hover table-condensed w-100">
                             <thead>
                                 <tr>
-                                    <th className="table-light th-name-avg" scope="col">Student Name<br /></th>
-                                    <th className="table-light th-name-avg second-child" scope="col">Average Grade<br /></th>
+                                    <th className="table-light th-name-avg" scope="col" style={{ minWidth: 100 }}>Student Name&nbsp;&nbsp;<span onClick={alphaSort}>{isAlphaSorted ? renderIcon('down') : renderIcon('up')}</span></th>
+                                    <th className="table-light th-name-avg second-child" scope="col" style={{ minWidth: 100 }}>Avg&nbsp;&nbsp;<span onClick={gradeSort}>{isGradeSorted ? renderIcon('down') : renderIcon('up')}</span></th>
                                     {gradeData.assignmentArr.map(assignment => <th scope="col" key={assignment}>{assignment}</th>)}
                                 </tr>
                             </thead>
                             <tbody>
-                                {activeStudents.map(student => {
+                                {modifiableStudents.map(student => {
 
                                     const gradeAvg = getGradeAvg(student);
 
