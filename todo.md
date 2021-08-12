@@ -1,15 +1,18 @@
-BACKEND:
-    user table - include array of associated cohorts
-    cohort table - include array of students who have dropped (to eliminate from results output), include array of Notes
-    student table - include basic student info and array of Notes from instructional staff
-    notes table - used for both cohort and student notes - include creation date, content, and creator profile info
+### BACKEND:
+- [x] user table - include array of associated cohorts
+- [x] cohort table - include array of students who have dropped (to eliminate from results output), include array of Notes
+- [x] groups table - save project/class activity groups 
+- [x] notes table - used for both cohort and student notes - include creation date, content, and creator profile info
+- [ ] student table - include basic student info and array of Notes from instructional staff
 
 
 Login Page -> Cohort Select Page -> Dashboard View:
 ### DASHBOARD:
 - [x] select cohort (small data on each cohort before select) :heavy_check_mark:
+
 ### COHORT PAGE:
 - [x] Notes from instructional staff
+- [x] Tabs to switch between function/view options 
 
 #### Roster:
 - [x] View full enrolled roster
@@ -17,7 +20,8 @@ Login Page -> Cohort Select Page -> Dashboard View:
 #### Grades:
 - [x] student grade data
 - [x] grades table (organized by student, showing averages and missing assignments)
-- [ ] organize table by name, avg grade, assignment grade(?)
+- [ ] organize table by name, avg grade, assignment grade(?) (click arrow in col header?)
+- [ ] filter output (search field to filter by name?)
 
 #### Make Groups:
 - [x] select number of groups
