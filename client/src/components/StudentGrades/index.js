@@ -89,19 +89,19 @@ export default function StudentGrades({ enrollmentId, bcsCohortId, studentRoster
         const studentsCopy = [...activeStudents];
         setIsGradeSorted(false);
         if (isAlphaSorted) {
+            setIsAlphaSorted(false);
             studentsCopy.sort((a, b) => {
                 if (a > b) { return -1; }
                 if (a < b) { return 1; }
                 return 0;
             })
-            setIsAlphaSorted(false);
         } else {
+            setIsAlphaSorted(true);
             studentsCopy.sort((a, b) => {
                 if (a < b) { return -1; }
                 if (a > b) { return 1; }
                 return 0;
             })
-            setIsAlphaSorted(true);
         }
 
         setModifiableStudents(studentsCopy);
@@ -116,14 +116,14 @@ export default function StudentGrades({ enrollmentId, bcsCohortId, studentRoster
             const bGrade = getGradeAvg(b);
             if (isGradeSorted) {
 
+                setIsGradeSorted(false)
                 if (aGrade > bGrade) { return -1; }
                 if (aGrade < bGrade) { return 1; }
-                setIsGradeSorted(false)
                 return 0;
             } else {
+                setIsGradeSorted(true)
                 if (aGrade < bGrade) { return -1; }
                 if (aGrade > bGrade) { return 1; }
-                setIsGradeSorted(true)
                 return 0;
             }
         })

@@ -53,7 +53,7 @@ export default function StudentRoster({ cohortId, studentRoster, droppedStudents
 
     return (
         <div className="StudentRoster row d-flex p-3">
-            <p className="text-center mt-3" >Use this tool to view all current students enrolled in this cohort. Since students are not removed from the roster when they drop the course, you are able to move students to an <em>inactive</em> list. <em>Inactive</em> students will be removed from all further actions, such as viewing grades and forming of groups. </p>
+            <p className="text-center p-2 w-75 mt-3 mx-auto lead border-bcs" >Use this tool to view all current students enrolled in this cohort. Since students are not removed from the roster when they drop the course, you are able to move students to an <em>inactive</em> list. <em>Inactive</em> students will be removed from all further actions, such as viewing grades and forming of groups. </p>
 
             <div className="col-md-6">
 

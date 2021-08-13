@@ -3,6 +3,7 @@ import API from "../../utils/API";
 import { useMutation } from "@apollo/client";
 import { SAVE_GROUPS } from "../../utils/mutations";
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
+import './style.css';
 
 export default function MakeGroups({
   loggedInUser,
@@ -51,7 +52,7 @@ export default function MakeGroups({
   const [showGroups, setShowGroups] = useState(false);
   const [showButton, setShowButton] = useState(true);
   const [disableSave, setDisableSave] = useState(false);
-  const [memberRepeat, setMemberRepeat] = useState(true);
+  const [memberRepeat, setMemberRepeat] = useState(false);
 
   const draggableRef = useRef(null);
   const droppableRef = useRef(null);
@@ -193,11 +194,6 @@ export default function MakeGroups({
     }
   };
 
-  // const onDragStart = (result, event) => {
-  //   // console.log(event)
-
-  // }
-
   const onDragEnd = (result) => {
     // console.log(result);
     // console.log(groups)
@@ -245,15 +241,6 @@ export default function MakeGroups({
 
   }
 
-  // const onMouseDown = e => {
-  //   console.log(e.target.classList)
-  //   e.target.classList.add("bg-danger")
-  // }
-
-  // const onMouseUp = e => {
-  //   e.target.classList.remove("bg-danger")
-  // }
-
   return (
     <div className="MakeGroups mb-5">
       <div className="row">
@@ -294,7 +281,6 @@ export default function MakeGroups({
                     <strong>
                       No Repeats: &nbsp;&nbsp;
                     </strong>
-
                   </label>
                   <input
                     className="form--check-input"
@@ -303,7 +289,7 @@ export default function MakeGroups({
                     onChange={() => setMemberRepeat(!memberRepeat)}
                   />
                   <br />
-                  <span className="bg-danger p-1">**not yet functional**</span>
+                  <span className="bg-danger p-1 m-1">**not yet functional**</span>
                 </div>
               ) : <div className="col-6 col-md-4"></div>}
               <div
@@ -369,10 +355,7 @@ export default function MakeGroups({
                             >
                               {(provided) => (
                                 <li
-                                  className="border mb-2 p-1 text-center"
-                                  // onMouseDown={onMouseDown}
-                                  // onMouseUp={onMouseUp}
-                                  // key={student.student}
+                                  className="border mb-2 p-1 text-center draggable-name"
                                   {...provided.draggableProps}
                                   {...provided.dragHandleProps}
                                   ref={provided.innerRef}

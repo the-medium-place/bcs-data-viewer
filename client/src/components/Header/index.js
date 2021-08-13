@@ -1,20 +1,38 @@
 import React from 'react'
-import { Link } from 'react-router-dom';
 import Auth from '../../utils/auth';
 
 
 export default function Header() {
+
+    const loggedInUser = Auth.loggedIn() ? Auth.getProfile() : null;
+
+
     return (
-        <div className="Header p-2" style={{ background: 'lightgrey', width: '100vw' }}>
-            <div className="row w-100">
+        <nav className="Header p-2 navbar bg-bcs text-light">
+            <div className="container-fluid d-flex justify-content-start" >
+                <span class="navbar-brand mb-0 h1">BCS Data Viewer</span>
 
-                <h1 className="text-center text-bold w-100 p-2">BCS Data Viewer</h1>
-            </div>
-            <div className="row w-100">
+                <div className="nav-item dropdown">
+                    <span class="nav-link dropdown-toggle text-light" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        {loggedInUser ? loggedInUser.data.name : 'Welcome!'}
+                    </span>
+                    <ul class="dropdown-menu">
+                        {loggedInUser ? (
+                            <>
+                                <li><a className="dropdown-item" href="/">Home</a></li>
+                                <li><a className="dropdown-item" href="/me">Cohort Select</a></li>
+                                <li><span className="dropdown-item" onClick={Auth.logout}>Logout</span></li>
+                            </>
+                        ) : (
+                            <>
+                                <li><a className="dropdown-item" href="/login">Login</a></li>
+                                <li><a className="dropdown-item" href="/signup">Register</a></li>
+                            </>
+                        )}
+                    </ul>
 
-                {Auth.loggedIn() ? (
-                    <span className="d-block w-100 text-center"><a className="text-dark text-decoration-none" href="/">Home</a> | <a className="text-dark text-decoration-none" href="/me">Dashboard</a> | <span onClick={Auth.logout} style={{ cursor: "pointer" }}>Logout</span></span>) : null}
+                </div>
             </div>
-        </div>
+        </nav>
     )
 }
