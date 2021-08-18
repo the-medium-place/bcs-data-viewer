@@ -10,20 +10,16 @@ export default function CohortListItem({ cohort, saveButton, loggedInUser }) {
 
 
     const getStudentData = async e => {
-        // console.log("running getStudentData()")
 
         let studentArr = [];
 
-        // console.log('running the api check')
         const studentData = await API.getStudentNames(loggedInUser.bcsLoginInfo.bcsEmail, loggedInUser.bcsLoginInfo.bcsPassword, cohort.cohortId)
-        // console.log('studentData: ', studentData)
         if (studentData.data) {
             studentData.data.forEach(studentObj => {
                 if (!studentArr.includes(studentObj.studentName)) {
                     studentArr.push(studentObj.studentName)
                 }
             })
-            // console.log('studentArr: ', studentArr)
             return studentArr;
         }
 
@@ -55,11 +51,8 @@ export default function CohortListItem({ cohort, saveButton, loggedInUser }) {
     // console.log(JSON.stringify(error))
 
     return (
-        <li role="button" className="CohortListItem list-group-item w-100 text-center d-flex justify-content-center w-100">
+        <li role="button" className="CohortListItem list-group-item list-group-item-action w-100 text-center d-flex justify-content-center w-100">
             <p className="lead mb-1" style={{ textDecoration: 'none' }}>{cohort.cohortCode} {saveButton ? <button className="btn btn-secondary" onClick={handleSave}>Save to profile</button> : null}</p>
-            {/* <p>{cohort.cohortId}</p> */}
-            {/* <p>{cohort.enrollmentId}</p> */}
-
         </li>
     )
 }

@@ -58,17 +58,17 @@ export default function UserPage() {
                     {loading ? <h1>userpage Loading!!</h1> : error ? <h1>there was an error!</h1> : (
                         <>
                             {/* <h1>{loggedInUser.name}</h1> */}
-                            <p className="lead p-2 m-2 text-center border-bcs w-75 mx-auto">Select a cohort below, or click the button at the bottom of the page to see all the cohorts connected to you on BCS</p>
+                            <p className="lead p-2 m-2 mb-3 text-center border-bcs w-75 mx-auto">Select a cohort below, or click the button at the bottom of the page to see all the cohorts connected to you on BCS</p>
                             <div className="d-flex justify-content-center">
 
-                                <ul className="list-group list-group-flush w-75">{loggedInUser.cohorts.length > 0 ? "Your 'Linked' cohorts (Saved to app): " : <h2>No saved cohorts yet! Click the button below to view and select a cohort and view its data.</h2>}
+                                <ul className="list-group list-group-flush w-75">{loggedInUser.cohorts.length > 0 ? null : <h2>No saved cohorts yet! Click the button below to view and select a cohort and view its data.</h2>}
                                     {loggedInUser.cohorts.length > 0 ? loggedInUser.cohorts.map(cohort => <Link className="text-decoration-none" key={cohort._id} to={`/cohorts/${cohort._id}`}><CohortListItem cohort={cohort} saveButton={false} loggedInUser={loggedInUser} /></Link>) : null}
                                 </ul>
                             </div>
                             <br />
                             <hr />
 
-                            <p className="text-center p-1 bg-dark text-light w-75 mx-auto">To see all cohorts to which you are associated, click <button className="btn btn-secondary" onClick={cohortInfoClick}>Here!</button></p>
+                            <p className="text-center p-1 bg-bcs text-light w-75 mx-auto shadow"><button className="btn btn-light text-bcs" onClick={cohortInfoClick}>Click Here</button> to view all your cohorts from the BCS Database</p>
                             {apiError ? (
                                 <p className="text-center p-1 text-danger">There was an error connecting to the BCS database. Please check your BCS login info...</p>
                             ) : null}
