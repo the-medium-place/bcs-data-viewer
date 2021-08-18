@@ -4,6 +4,7 @@ import { useMutation } from "@apollo/client";
 import { SAVE_GROUPS } from "../../utils/mutations";
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import './style.css';
+import { chunkArray, chunkArrayNoRepeats, getGradeAvg } from './groupUtils';
 
 export default function MakeGroups({
   loggedInUser,
@@ -19,26 +20,6 @@ export default function MakeGroups({
   const activeStudents = studentRoster.filter(
     (student) => !droppedStudents.includes(student)
   );
-  const MAP_GRADES_TO_INT = {
-    "A+": 1,
-    A: 2,
-    "A-": 3,
-    "B+": 4,
-    B: 5,
-    "B-": 6,
-    "C+": 7,
-    C: 8,
-    "C-": 9,
-    "D+": 10,
-    D: 11,
-    "D-": 12,
-    F: 13,
-    I: 13,
-    "Overdue!": 13,
-    "Not Due!": 13,
-    Ungraded: 13,
-    "N/A": 0,
-  };
 
   const [saveGroups, { error, data }] = useMutation(SAVE_GROUPS);
   if (error) {
@@ -53,6 +34,7 @@ export default function MakeGroups({
   const [showButton, setShowButton] = useState(true);
   const [disableSave, setDisableSave] = useState(false);
   const [memberRepeat, setMemberRepeat] = useState(false);
+  const [noRepeatGroup, setNoRepeatGroup] = useState(null)
 
   const draggableRef = useRef(null);
   const droppableRef = useRef(null);
@@ -68,21 +50,6 @@ export default function MakeGroups({
     fetchData();
   }, []);
 
-  // GET AVERAGE GRADE FOR SINGLE STUDENT
-  const getGradeAvg = (student) => {
-    let numDue = 0,
-      totalGradeVal = 0,
-      gradeAvg = 0;
-
-    gradeData.studentObj[student].assignments.forEach((assignmentObj) => {
-      if (assignmentObj.isDue) {
-        numDue++;
-        totalGradeVal += MAP_GRADES_TO_INT[assignmentObj.grade];
-      }
-    });
-    gradeAvg = totalGradeVal / (numDue || 1);
-    return { student, gradeAvg };
-  };
 
   const handleGroupNumChange = (e) => {
     const value = e.target.value;
@@ -97,42 +64,6 @@ export default function MakeGroups({
       setNumGroups(1);
     }
     setNumGroups(value);
-  };
-
-  /**
-   * Groups student objects into chunks
-   * @returns groupsObj 
-   */
-  const chunkArray = () => {
-    // EMPTY OBJECT TO HOLD FINAL GROUPS
-    const groupsObj = {};
-
-    // SORT STUDENT ARRAY BY AVERAGE GRADE VALUE
-    const sortedArr = gradesArr.sort((a, b) => a.gradeAvg - b.gradeAvg);
-    // console.log(sortedArr)
-
-    for (let i = 1; i <= numGroups; i++) {
-      // CREATE KEY IN groupsObj FOR EACH GROUP
-      groupsObj[`Group ${i}`] = [];
-    }
-
-    // PUSH STUDENTS INTO GROUPS ONE-BY-ONE IN ORDER --
-    // SINCE STUDENTS ARE SORTED BY GRADE, DIFFERENT GRADE
-    // AVERAGES WILL BE SPREAD EVENLY THROUGHOUT THE GROUPS
-    let counter = 1;
-    sortedArr.forEach((gradeObj) => {
-      if (counter <= numGroups) {
-        groupsObj[`Group ${counter}`].push(gradeObj);
-        counter++;
-      } else {
-        counter = 1;
-        groupsObj[`Group ${counter}`].push(gradeObj);
-        counter++;
-      }
-    });
-
-    // console.log(groupsObj)
-    return groupsObj;
   };
 
   const handleGroupButtonClick = async (e) => {
@@ -150,15 +81,15 @@ export default function MakeGroups({
     await activeStudents.forEach((student) => {
       // console.log({ student })
       const arrCopy = gradesArr;
-      arrCopy.push(getGradeAvg(student));
+      arrCopy.push(getGradeAvg(student, gradeData));
       setGradesArr(arrCopy);
     });
 
     // UPDATE groups STATE
     // chunkArray() RETURNS OBJECT --
     // EACH KEY IS A GROUP AND VALUE IS AN ARRAY OF STUDENT OBJECTS MAKING UP THAT GROUP
-    const finalGroups = chunkArray();
-    console.log({ finalGroups });
+    const finalGroups = memberRepeat ? chunkArrayNoRepeats(gradesArr, numGroups, JSON.parse(noRepeatGroup), activeStudents) : chunkArray(gradesArr, numGroups);
+    // console.log({ finalGroups });
     await setGroups(finalGroups);
 
     // SHOW THE GROUPS
@@ -289,9 +220,23 @@ export default function MakeGroups({
                     onChange={() => setMemberRepeat(!memberRepeat)}
                   />
                   <br />
-                  <span className="bg-danger p-1 m-1">**not yet functional**</span>
+                  {/* <span className="bg-danger p-1 m-1">**not yet functional**</span> */}
                 </div>
               ) : <div className="col-6 col-md-4"></div>}
+
+              {memberRepeat ? (
+
+                <select className="form-select mt-2" aria-label="Default select example" onChange={(e) => { console.log(e.target.value); setNoRepeatGroup(e.target.value) }}>
+                  <option selected defaultValue disabled>Select saved group to compare...</option>
+                  {cohortGroups.map(cohortGroup => {
+
+                    return (
+                      <option value={JSON.stringify(cohortGroup)}>{cohortGroup.title}</option>
+                    )
+                  })}
+                </select>
+              ) : null}
+
               <div
                 className="button-wrapper w-100 d-flex justify-content-center p-1"
                 style={{ height: "3rem" }}
