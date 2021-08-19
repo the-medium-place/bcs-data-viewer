@@ -13,14 +13,35 @@ export default function StudentGrades({ enrollmentId, bcsCohortId, studentRoster
     const [modifiableStudents, setModifiableStudents] = useState(activeStudents);
     const [isGradeSorted, setIsGradeSorted] = useState(false);
     const [isAlphaSorted, setIsAlphaSorted] = useState(true);
+    const [avgGrades, setAvgGrades] = useState(null)
 
+    const avgGradeObj = {};
     useEffect(() => {
         async function fetchData() {
 
             setGradeData(await API.getGradeData(bcsEmail, bcsPassword, bcsCohortId, enrollmentId));
+            setAvgGrades(getAvgAssignmentScore());
+            // console.log({ gradeData })
         }
         fetchData();
     }, [])
+
+    const getAvgAssignmentScore = () => {
+        gradeData.assignmentArr.forEach(assignment => {
+            avgGradeObj[assignment] = 0;
+        })
+        for (let student in gradeData.studentObj) {
+            // console.log(gradeData.studentObj[student])
+            let avgDivisor = activeStudents.length;
+            gradeData.studentObj[student].assignments.forEach(gradeObj => {
+                // console.log(gradeObj.grade)
+                avgGradeObj[gradeObj.name] += MAP_GRADES_TO_INT[gradeObj.grade];
+            })
+        }
+
+        // console.log(avgGradeObj)
+        return avgGradeObj;
+    }
 
     const getTdClassName = (grade) => {
         const GRADE_CLASS_MAP = {
@@ -49,6 +70,7 @@ export default function StudentGrades({ enrollmentId, bcsCohortId, studentRoster
     function getKeyByValue(object, value) {
         return Object.keys(object).find(key => object[key] === value);
     }
+
     const MAP_GRADES_TO_INT = {
         'A+': 1,
         'A': 2,
@@ -73,16 +95,20 @@ export default function StudentGrades({ enrollmentId, bcsCohortId, studentRoster
     const getGradeAvg = (student) => {
         let numDue = 0,
             totalGradeVal = 0,
-            gradeAvg = 0;
+            gradeAvg = 0,
+            failingGrades = 0;
 
         gradeData.studentObj[student].assignments.forEach(assignmentObj => {
             if (assignmentObj.isDue && assignmentObj.grade !== 'Ungraded') {
                 numDue++
                 totalGradeVal += MAP_GRADES_TO_INT[assignmentObj.grade]
             }
+            if (assignmentObj.grade === 'F' || assignmentObj.grade === 'I' || assignmentObj.grade === 'Overdue!') {
+                failingGrades++;
+            }
         })
         gradeAvg = totalGradeVal / (numDue || 1);
-        return gradeAvg;
+        return { gradeAvg, failingGrades }
     }
 
     const alphaSort = () => {
@@ -112,8 +138,8 @@ export default function StudentGrades({ enrollmentId, bcsCohortId, studentRoster
         const studentsCopy = [...activeStudents];
 
         studentsCopy.sort((a, b) => {
-            const aGrade = getGradeAvg(a);
-            const bGrade = getGradeAvg(b);
+            const { gradeAvg: aGrade } = getGradeAvg(a);
+            const { gradeAvg: bGrade } = getGradeAvg(b);
             if (isGradeSorted) {
 
                 setIsGradeSorted(false)
@@ -140,7 +166,6 @@ export default function StudentGrades({ enrollmentId, bcsCohortId, studentRoster
     return (
         <div className="StudentGrades">
             <div className="w-100 text-center">
-
                 <p className="lead text-center mt-3 p-2 border-bcs w-75 mx-auto" >The table below will populate with all active students and their current grades on all assignments. <strong>Average Grades</strong> are calculated using only <em>currently due</em> assignments. Assignments which have been turned in but <em>not</em> graded are not factored into the calculations.</p>
             </div>
             <div className="my-5 border" style={{ overflow: 'auto', maxHeight: '75vh', width: '100%' }}>
@@ -150,20 +175,27 @@ export default function StudentGrades({ enrollmentId, bcsCohortId, studentRoster
                             <thead>
                                 <tr>
                                     <th className="table-light th-name-avg" scope="col" style={{ minWidth: 100 }}>Student Name&nbsp;&nbsp;<span onClick={alphaSort}>{isAlphaSorted ? renderIcon('down') : renderIcon('up')}</span></th>
-                                    <th className="table-light th-name-avg second-child" scope="col" style={{ minWidth: 100 }}>Avg&nbsp;&nbsp;<span onClick={gradeSort}>{isGradeSorted ? renderIcon('down') : renderIcon('up')}</span></th>
-                                    {gradeData.assignmentArr.map(assignment => <th scope="col" key={assignment}>{assignment}</th>)}
+                                    <th className="table-light th-name-avg second-child" scope="col" style={{ minWidth: 120 }}>Avg&nbsp;&nbsp;<span onClick={gradeSort}>{isGradeSorted ? renderIcon('down') : renderIcon('up')}</span></th>
+                                    {gradeData.assignmentArr.map(assignment => <th scope="col" key={assignment} style={{ minWidth: 100 }}>{assignment}<br /><p className="bg-secondary text-white p-1">Class AVG: {getKeyByValue(MAP_GRADES_TO_INT, Math.round(avgGrades[assignment] / activeStudents.length))}</p></th>)}
                                 </tr>
                             </thead>
                             <tbody>
                                 {modifiableStudents.map(student => {
 
-                                    const gradeAvg = getGradeAvg(student);
+                                    const { gradeAvg, failingGrades } = getGradeAvg(student);
 
                                     return (
                                         <tr key={student}>
                                             <th className="th-col-header table-light" scope="row">{student}</th>
-                                            <th className="th-avg-grade table-light second-child" scope="row">{getKeyByValue(MAP_GRADES_TO_INT, Math.round(gradeAvg))}</th>
+                                            <th className="th-avg-grade table-light second-child" scope="row">
+                                                {getKeyByValue(MAP_GRADES_TO_INT, Math.round(gradeAvg))}
+                                                <br />
+                                                <span className={failingGrades < 2 ? 'bg-secondary text-light p-1' : 'bg-danger text-light p-1'}>
+                                                    # Failing: {failingGrades}
+                                                </span>
+                                            </th>
                                             {gradeData.studentObj[student].assignments.map((assignmentObj, i) => {
+
                                                 return (
                                                     <td
                                                         key={assignmentObj.name + i}
@@ -177,12 +209,9 @@ export default function StudentGrades({ enrollmentId, bcsCohortId, studentRoster
                                     )
                                 }
                                 )}
-
-
                             </tbody>
                         </table>
                     </div>
-
                 ) : (
                     <div className="d-flex align-items-center my-5 p-5">
                         <strong>Loading Grade Data...</strong>

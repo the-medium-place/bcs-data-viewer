@@ -6,7 +6,7 @@ export default function GroupsBox({ groups }) {
             <h3 className="text-center text-light mt-2"><strong>{groups.title}</strong></h3>
             <div className="row d-flex flex-wrap justify-content-center">
                 {Object.keys(groups.groups).map(groupsArr => {
-                    console.log(groupsArr, groups.groups[groupsArr])
+                    // console.log(groupsArr, groups.groups[groupsArr])
                     // groupsArr => object Key ('Group 1', etc...)
                     // groups.groups[groupsArr] => array of group member objects
                     return (

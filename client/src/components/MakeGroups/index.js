@@ -228,10 +228,9 @@ export default function MakeGroups({
 
                 <select className="form-select mt-2" aria-label="Default select example" onChange={(e) => { console.log(e.target.value); setNoRepeatGroup(e.target.value) }}>
                   <option selected defaultValue disabled>Select saved group to compare...</option>
-                  {cohortGroups.map(cohortGroup => {
-
+                  {cohortGroups.map((cohortGroup, i) => {
                     return (
-                      <option value={JSON.stringify(cohortGroup)}>{cohortGroup.title}</option>
+                      <option key={cohortGroup.title + i} value={JSON.stringify(cohortGroup)}>{cohortGroup.title}</option>
                     )
                   })}
                 </select>

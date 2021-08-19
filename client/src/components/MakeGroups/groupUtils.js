@@ -25,8 +25,6 @@ export const chunkArrayNoRepeats = (gradesArr, numGroups, cohortGroup, activeStu
         return array.slice().sort().join('|');
     }
 
-    // active students turns into object with keys of each possible combination
-    // var data = [[["Jason", "Kim"], ["Callie", "Luke"]], [["Jason", "Luke"], ["Callie", "Kim"]]],
     let object = {};
 
     // CREATE OBJECT OF ALL POSSIBLE STUDENT PAIRINGS WITH INITIAL VALUEOF 0
@@ -57,20 +55,11 @@ export const chunkArrayNoRepeats = (gradesArr, numGroups, cohortGroup, activeStu
         }
     })
 
-    // let keys = Object.keys(object).sort(function (a, b) {
-    //     return object[b] - object[a];
-    // });
-
-    // keys.forEach(function (k) {
-    //     console.log(k, object[k]);
-    // });
-
     // OBJECT HAS KEYS OF EVERY POSSIBLE STUDENT PAIRING -
     // IF PAIRING HAS APPEARED IN PREVIOUS GROUP, VALUE IS 1
     // IF PAIRING HAS NOT APPEARED, VALUE IS 0
     // console.log(object);
 
-    // // console.log({ cohortGroups });
     // EMPTY OBJECT TO HOLD FINAL GROUPS
     const groupsObj = {};
 
@@ -81,26 +70,6 @@ export const chunkArrayNoRepeats = (gradesArr, numGroups, cohortGroup, activeStu
     for (let i = 1; i <= numGroups; i++) {
         groupsObj[`Group ${i}`] = [];
     }
-
-    // function getPreviousGroup(student, checkGroupsArr) {
-    //     // console.log({ student, groups: checkGroupsArr.groups }) // { student : <string>, groups: {"Group 1" : <Array of Student Objects>, etc...} }
-    //     // find current student's past group in current object of groups (checkGroupsArr.groups)
-    //     const groupNamesArr = Object.keys(checkGroupsArr.groups);
-    //     const groupValsArr = Object.values(checkGroupsArr.groups);
-
-    //     // loop array of groups objects
-    //     let prevGroups;
-    //     groupValsArr.forEach((groupArr, i) => {
-    //         // console.log(groupArr, groupNamesArr[i])
-    //         if (groupArr.find(studentObj => studentObj.student === student)) {
-    //             // console.log(student + "'s previous group: \n", { groupArr, title: groupNamesArr[i] })
-    //             // prevGroups[groupNamesArr[i]] = groupArr;
-    //             prevGroups = groupArr
-    //         }
-    //     })
-    //     // console.log(prevGroups)
-    //     return prevGroups;
-    // }
 
     // PUSH STUDENTS INTO GROUP ONE BY ONE
     let counter = 1;
@@ -122,11 +91,10 @@ export const chunkArrayNoRepeats = (gradesArr, numGroups, cohortGroup, activeStu
                 groupsObj[`Group ${counter}`].push(gradeObj); // current group has 0 members, go ahead and add student right away
             }
 
-
             counter++;
-        } else {
+
+        } else { // counter has reached the maximum number of groups requested, reset it
             counter = 1;
-            console.log("down here now")
             if (groupsObj[`Group ${counter}`].length > 0) { // check if there is at least 1 member of the group already
                 groupsObj[`Group ${counter}`].forEach(memberObj => { // current group has at least 1 member, loop through members already assigned to this group
                     if (!object[getKey([gradeObj.student, memberObj.student])]) { // check each student pairing for current group against the value in 'object' above
@@ -139,12 +107,10 @@ export const chunkArrayNoRepeats = (gradesArr, numGroups, cohortGroup, activeStu
             } else {
                 groupsObj[`Group ${counter}`].push(gradeObj); // current group has 0 members, go ahead and add student right away
             }
-            // groupsObj[`Group ${counter}`].push(gradeObj);
+
             counter++;
         }
     });
-    // // IF NO MATCH, COMPLETE MEMBER INSERT AND REMOVE FROM sortedStudentGradesArr
-    // // IF MATCH, RE-RUN CHECK WITH NEXT STUDENT IN ARRAY
     console.log(groupsObj);
     return groupsObj;
 }
