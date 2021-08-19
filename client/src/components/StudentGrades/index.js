@@ -6,42 +6,52 @@ export default function StudentGrades({ enrollmentId, bcsCohortId, studentRoster
 
     const bcsEmail = loggedInUser.bcsLoginInfo.bcsEmail;
     const bcsPassword = loggedInUser.bcsLoginInfo.bcsPassword;
-    // const activeStudents = studentRoster.filter(student => !droppedStudents.includes(student))
+    const activeStudents = studentRoster.filter(student => !droppedStudents.includes(student))
 
     const [gradeData, setGradeData] = useState(null)
-    const [activeStudents, setActiveStudents] = useState(studentRoster.filter(student => !droppedStudents.includes(student)))
     const [modifiableStudents, setModifiableStudents] = useState(activeStudents);
     const [isGradeSorted, setIsGradeSorted] = useState(false);
     const [isAlphaSorted, setIsAlphaSorted] = useState(true);
-    const [avgGrades, setAvgGrades] = useState(null)
+    // const [avgGrades, setAvgGrades] = useState(null)
 
-    const avgGradeObj = {};
+    let avgGrades;
+
     useEffect(() => {
         async function fetchData() {
 
-            setGradeData(await API.getGradeData(bcsEmail, bcsPassword, bcsCohortId, enrollmentId));
-            setAvgGrades(getAvgAssignmentScore());
+            setGradeData(await API.getGradeData(bcsEmail, bcsPassword, bcsCohortId, enrollmentId))
+            // avgGrades = getAvgAssignmentScore();
+            // console.log(avgGrades)
+
+            // setAvgGrades(gradeData ? getAvgAssignmentScore() : null);
             // console.log({ gradeData })
         }
-        fetchData();
+        fetchData()
+
     }, [])
 
+
     const getAvgAssignmentScore = () => {
+        const avgGradeObj = {};
         gradeData.assignmentArr.forEach(assignment => {
             avgGradeObj[assignment] = 0;
         })
         for (let student in gradeData.studentObj) {
             // console.log(gradeData.studentObj[student])
-            let avgDivisor = activeStudents.length;
             gradeData.studentObj[student].assignments.forEach(gradeObj => {
                 // console.log(gradeObj.grade)
                 avgGradeObj[gradeObj.name] += MAP_GRADES_TO_INT[gradeObj.grade];
             })
         }
 
-        // console.log(avgGradeObj)
+        console.log(avgGradeObj)
+        // setAvgGrades(avgGradeObj);
         return avgGradeObj;
     }
+
+
+
+    // const avgGrades = getAvgAssignmentScore();
 
     const getTdClassName = (grade) => {
         const GRADE_CLASS_MAP = {
@@ -163,6 +173,11 @@ export default function StudentGrades({ enrollmentId, bcsCohortId, studentRoster
         )
     }
 
+    if (gradeData) {
+        console.log('got some grade data!');
+        avgGrades = getAvgAssignmentScore();
+    }
+
     return (
         <div className="StudentGrades">
             <div className="w-100 text-center">
@@ -176,7 +191,17 @@ export default function StudentGrades({ enrollmentId, bcsCohortId, studentRoster
                                 <tr>
                                     <th className="table-light th-name-avg" scope="col" style={{ minWidth: 100 }}>Student Name&nbsp;&nbsp;<span onClick={alphaSort}>{isAlphaSorted ? renderIcon('down') : renderIcon('up')}</span></th>
                                     <th className="table-light th-name-avg second-child" scope="col" style={{ minWidth: 120 }}>Avg&nbsp;&nbsp;<span onClick={gradeSort}>{isGradeSorted ? renderIcon('down') : renderIcon('up')}</span></th>
-                                    {gradeData.assignmentArr.map(assignment => <th scope="col" key={assignment} style={{ minWidth: 100 }}>{assignment}<br /><p className="bg-secondary text-white p-1">Class AVG: {getKeyByValue(MAP_GRADES_TO_INT, Math.round(avgGrades[assignment] / activeStudents.length))}</p></th>)}
+                                    {gradeData ?
+                                        gradeData.assignmentArr.map(assignment => (
+                                            <th scope="col" key={assignment} style={{ minWidth: 100 }}>
+                                                {assignment}
+                                                <br />
+                                                <p className="bg-secondary text-white p-1">
+                                                    Class AVG: {getKeyByValue(MAP_GRADES_TO_INT, Math.round(avgGrades[assignment] / activeStudents.length))}
+                                                </p>
+                                            </th>
+                                        )) : null
+                                    }
                                 </tr>
                             </thead>
                             <tbody>
