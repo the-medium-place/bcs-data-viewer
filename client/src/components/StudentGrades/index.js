@@ -12,24 +12,13 @@ export default function StudentGrades({ enrollmentId, bcsCohortId, studentRoster
     const [modifiableStudents, setModifiableStudents] = useState(activeStudents);
     const [isGradeSorted, setIsGradeSorted] = useState(false);
     const [isAlphaSorted, setIsAlphaSorted] = useState(true);
-    // const [avgGrades, setAvgGrades] = useState(null)
-
-    let avgGrades;
 
     useEffect(() => {
         async function fetchData() {
-
             setGradeData(await API.getGradeData(bcsEmail, bcsPassword, bcsCohortId, enrollmentId))
-            // avgGrades = getAvgAssignmentScore();
-            // console.log(avgGrades)
-
-            // setAvgGrades(gradeData ? getAvgAssignmentScore() : null);
-            // console.log({ gradeData })
         }
         fetchData()
-
     }, [])
-
 
     const getAvgAssignmentScore = () => {
         const avgGradeObj = {};
@@ -40,18 +29,13 @@ export default function StudentGrades({ enrollmentId, bcsCohortId, studentRoster
             // console.log(gradeData.studentObj[student])
             gradeData.studentObj[student].assignments.forEach(gradeObj => {
                 // console.log(gradeObj.grade)
-                avgGradeObj[gradeObj.name] += MAP_GRADES_TO_INT[gradeObj.grade];
+                avgGradeObj[gradeObj.name] += MAP_GRADES_TO_INT[gradeObj.grade] / activeStudents.length;
             })
         }
 
-        console.log(avgGradeObj)
-        // setAvgGrades(avgGradeObj);
+        // console.log(avgGradeObj)
         return avgGradeObj;
     }
-
-
-
-    // const avgGrades = getAvgAssignmentScore();
 
     const getTdClassName = (grade) => {
         const GRADE_CLASS_MAP = {
@@ -173,8 +157,8 @@ export default function StudentGrades({ enrollmentId, bcsCohortId, studentRoster
         )
     }
 
+    let avgGrades;
     if (gradeData) {
-        console.log('got some grade data!');
         avgGrades = getAvgAssignmentScore();
     }
 
@@ -197,7 +181,7 @@ export default function StudentGrades({ enrollmentId, bcsCohortId, studentRoster
                                                 {assignment}
                                                 <br />
                                                 <p className="bg-secondary text-white p-1">
-                                                    Class AVG: {getKeyByValue(MAP_GRADES_TO_INT, Math.round(avgGrades[assignment] / activeStudents.length))}
+                                                    Class AVG: {getKeyByValue(MAP_GRADES_TO_INT, Math.round(avgGrades[assignment]))}
                                                 </p>
                                             </th>
                                         )) : null

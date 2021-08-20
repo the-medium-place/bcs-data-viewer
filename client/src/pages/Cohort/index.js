@@ -99,9 +99,6 @@ export default function Cohort() {
                         <li onClick={handleTabClick} data-view="projectpresentations" className='nav-item tab-li'>
                             <span data-view="projectpresentations" className={`nav-link ${view === 'projectpresentations' ? 'active' : null}`}>Presentation Notes</span>
                         </li>
-                        <li onClick={handleTabClick} data-view="feedback" className='nav-item tab-li'>
-                            <span data-view="feedback" className={`nav-link ${view === 'feedback' ? 'active' : null}`}>Feedback</span>
-                        </li>
                     </ul>
                 </nav>
                 {/* <hr /> */}
@@ -109,11 +106,10 @@ export default function Cohort() {
                     {
                         view === 'grades' ? <StudentGrades bcsCohortId={bcsCohortId} enrollmentId={enrollmentId} loggedInUser={loggedInUser} studentRoster={studentRoster} droppedStudents={droppedStudents} /> :
                             view === "roster" ? <StudentRoster cohortId={cohortId} studentRoster={studentRoster} droppedStudents={droppedStudents} /> :
-                                view === "feedback" ? <StudentFeedback /> :
-                                    view === "makegroups" ? <MakeGroups cohortGroups={cohortGroups} loggedInUser={loggedInUser} studentRoster={studentRoster} droppedStudents={droppedStudents} bcsCohortId={bcsCohortId} enrollmentId={enrollmentId} cohortId={cohortId} /> :
-                                        view === 'savedgroups' ? <SavedGroups cohortGroups={cohortGroups} /> :
-                                            view === "projectpresentations" ? <ProjectPresentations /> :
-                                                <h1>what???</h1>
+                                view === "makegroups" ? <MakeGroups cohortGroups={cohortGroups} loggedInUser={loggedInUser} studentRoster={studentRoster} droppedStudents={droppedStudents} bcsCohortId={bcsCohortId} enrollmentId={enrollmentId} cohortId={cohortId} /> :
+                                    view === 'savedgroups' ? <SavedGroups cohortGroups={cohortGroups} /> :
+                                        view === "projectpresentations" ? <ProjectPresentations /> :
+                                            <h1>what???</h1>
                     }
                 </div>
 

@@ -7,6 +7,9 @@
 
 
 Login Page -> Cohort Select Page -> Dashboard View:
+### USER:
+- [ ] edit user info (bcs login info, etc)
+
 ### DASHBOARD:
 - [x] select cohort (small data on each cohort before select) :heavy_check_mark:
 
@@ -17,10 +20,13 @@ Login Page -> Cohort Select Page -> Dashboard View:
 #### Roster:
 - [x] View full enrolled roster
 - [x] Move students from _active_ to _inactive_
+
 #### Grades:
 - [x] student grade data
 - [x] grades table (organized by student, showing averages and missing assignments)
-- [ ] organize table by name, avg grade, assignment grade(?) (click arrow in col header?)
+- [x] organize table by name, avg grade, assignment grade(?) (click arrow in col header?)
+- [x] Display total # of failing/incomplete/overdue assignments for each student
+- [x] display class average grade for each assignment
 - [ ] filter output (search field to filter by name?)
 
 #### Make Groups:
@@ -34,16 +40,9 @@ Login Page -> Cohort Select Page -> Dashboard View:
 - [x] View all saved groups
 - [ ] Option to edit saved groups
 - [ ] add individual group names / extra info (notes?)
+- [ ] option to delete saved groups
 
 #### Presentations:
 - [ ] Space for notes and grade from instructional staff
 - [ ] Save notes from presentation for use in grading 
 - [ ] select group to leave notes for / view presentation order with space for notes at each group
-
-#### Feedback:
-- [ ] View most recent weekly feedback data
-
-#### Student (still unsure here):
-- [x] average grade
-- [ ] select student
-- [ ] num of missing assignments

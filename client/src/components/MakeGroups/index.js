@@ -4,7 +4,7 @@ import { useMutation } from "@apollo/client";
 import { SAVE_GROUPS } from "../../utils/mutations";
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import './style.css';
-import { chunkArray, chunkArrayNoRepeats, getGradeAvg } from './groupUtils';
+import { chunkArray, chunkArrayNoRepeats, getGradeAvg, checkGroupForRepeats } from './groupUtils';
 
 export default function MakeGroups({
   loggedInUser,
@@ -126,7 +126,7 @@ export default function MakeGroups({
   };
 
   const onDragEnd = (result) => {
-    // console.log(result);
+    console.log({ result });
     // console.log(groups)
     const { destination, source, draggableId } = result;
 
@@ -168,8 +168,14 @@ export default function MakeGroups({
     const groupsCopy = { ...groups };
     groupsCopy[source.droppableId] = newSourceColumn;
     groupsCopy[destination.droppableId] = newDestinationColumn;
-    setGroups(groupsCopy);
-
+    const repeatCheck = checkGroupForRepeats(activeStudents, JSON.parse(noRepeatGroup), groups[destination.droppableId], draggableId)
+    console.log({ repeatCheck })
+    if (!repeatCheck.repeatCheck && memberRepeat) {
+      alert(`${draggableId} has already worked with ${repeatCheck.repeatedName} - please try another group.`)
+      return;
+    } else {
+      setGroups(groupsCopy);
+    }
   }
 
   return (
@@ -279,6 +285,7 @@ export default function MakeGroups({
                   droppableId={group}
                   key={group}
                   innerRef={droppableRef}
+
                 >
                   {(provided) => (
                     <div
