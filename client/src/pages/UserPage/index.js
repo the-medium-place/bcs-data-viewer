@@ -68,7 +68,7 @@ export default function UserPage() {
                             <hr />
                             <p className="text-center p-1 bg-bcs text-light w-75 mx-auto shadow"><button className="btn btn-light text-bcs" onClick={cohortInfoClick}>Click Here</button> to view all your cohorts from the BCS Database</p>
                             {apiError ? (
-                                <p className="text-center p-1 text-danger">There was an error connecting to the BCS database. Please check your BCS login info...</p>
+                                <p className="text-center p-1 text-danger">There was an error connecting to the BCS database. <br /><a href="/updateuser"><button className="bg-light border-bcs rounded">Click Here</button></a> check your BCS login info...</p>
                             ) : null}
                             <div className="d-flex justify-content-center">
                                 <ul className="list-group list-group-flush w-75">{cohortInfo.length > 0 ? "All associated Cohorts:" : null}

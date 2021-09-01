@@ -153,7 +153,7 @@ export default function StudentGrades({ enrollmentId, bcsCohortId, studentRoster
 
     const renderIcon = (direction) => {
         return (
-            <i class={`bi-caret-${direction}-fill`}></i>
+            <i className={`bi-caret-${direction}-fill`}></i>
         )
     }
 
@@ -199,7 +199,7 @@ export default function StudentGrades({ enrollmentId, bcsCohortId, studentRoster
                                             <th className="th-avg-grade table-light second-child" scope="row">
                                                 {getKeyByValue(MAP_GRADES_TO_INT, Math.round(gradeAvg))}
                                                 <br />
-                                                <span className={failingGrades < 2 ? 'bg-secondary text-light p-1' : 'bg-danger text-light p-1'}>
+                                                <span className={failingGrades < 3 ? 'bg-secondary text-light p-1' : 'bg-danger text-light p-1'}>
                                                     # Failing: {failingGrades}
                                                 </span>
                                             </th>

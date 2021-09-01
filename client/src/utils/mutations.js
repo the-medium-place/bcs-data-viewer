@@ -24,6 +24,19 @@ export const ADD_USER = gql`
   }
 `;
 
+
+export const UPDATE_USER = gql`
+mutation updateUser($name: String!, $email: String!, $bcsEmail: String!, $bcsPassword: String!){
+  updateUser(name: $name, email: $email, bcsEmail: $bcsEmail, bcsPassword: $bcsPassword) {
+    token
+    user {
+      _id
+      name
+    }
+  }
+}
+`
+
 export const ADD_COHORT = gql`
   mutation addCohort($cohortCode: String!, $cohortId: Int!, $enrollmentId: Int!, $studentRoster: [String!]) {
     addCohort(cohortCode: $cohortCode, cohortId: $cohortId, enrollmentId: $enrollmentId, studentRoster: $studentRoster) {
@@ -117,6 +130,7 @@ mutation addCohortNote($content: String!, $createdBy: ID!, $cohortId: ID!){
   }
 }
 `;
+
 
 export const SAVE_GROUPS = gql`
 mutation saveGroups($title: String!, $groups: JSON!, $cohortId: ID!){

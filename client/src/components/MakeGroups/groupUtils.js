@@ -34,7 +34,7 @@ export const chunkArrayNoRepeats = (gradesArr, numGroups, cohortGroup, activeStu
         }
     }
 
-    // TURN PREVIOUS GROUP OBJECT INTO ARRAY OF NAME-ARRAYS...
+    // TURN PREVIOUS GROUP OBJECT INTO 2-D ARRAY OF NAME-ARRAYS...
     // ... EACH NAME ARRAY IS A STUDENT GROUPING
     const prevGroupingObjs = Object.values(cohortGroup.groups)
     // console.log(prevGroupingObjs);

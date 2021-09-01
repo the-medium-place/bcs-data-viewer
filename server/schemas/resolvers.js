@@ -59,7 +59,27 @@ const resolvers = {
       const newUser = await User.create({ name, password, email, bcsLoginInfo: { bcsEmail, bcsPassword } });
       // console.log('resolvers.js newUser: ', newUser)
       const token = signToken(newUser);
+      console.log({ token, newUser })
       return { token, newUser };
+    },
+    updateUser: async (parent, { name, email, bcsEmail, bcsPassword }, context) => {
+      if (context.user) {
+
+        const updateInfo = {
+          name,
+          email,
+          bcsLoginInfo: {
+            bcsEmail,
+            bcsPassword
+          }
+        }
+        const updatedUser = await User.findOneAndUpdate({ _id: context.user._id }, { $set: updateInfo }, { new: true });
+        const token = signToken(updatedUser);
+        console.log({ token, updatedUser })
+        return { token, updatedUser }
+      }
+      throw new AuthenticationError('You are not logged in!');
+
     },
     login: async (parent, { name, password }) => {
       // console.log("inside the resolvers.js login function")

@@ -9,6 +9,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { setContext } from '@apollo/client/link/context';
 import Splash from './pages/Splash';
 import TestPage from './pages/TestPage';
+import UpdateUser from './pages/UpdateUser';
 
 // Construct our main GraphQL API endpoint
 const httpLink = createHttpLink({
@@ -68,6 +69,11 @@ function App() {
             <Route exact path="/testingtesting">
               <TestPage />
             </Route>
+
+            <Route exact path="/updateuser">
+              <UpdateUser />
+            </Route>
+
 
             <Route exact path="*">
               <h1>404 not found</h1>

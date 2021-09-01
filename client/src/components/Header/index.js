@@ -8,19 +8,20 @@ export default function Header() {
 
 
     return (
-        <nav className="Header p-2 navbar bg-bcs text-light">
+        <nav className="Header p-2 navbar bg-bcs text-light shadow shadow-sm">
             <div className="container-fluid d-flex justify-content-start" >
-                <span class="navbar-brand mb-0 h1">BCS Data Viewer</span>
+                <span className="navbar-brand mb-0 h1">BCS Data Viewer</span>
 
                 <div className="nav-item dropdown">
-                    <span class="nav-link dropdown-toggle text-light" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span className="nav-link dropdown-toggle text-light" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         {loggedInUser ? loggedInUser.data.name : 'Welcome!'}
                     </span>
-                    <ul class="dropdown-menu">
+                    <ul className="dropdown-menu">
                         {loggedInUser ? (
                             <>
                                 <li><a className="dropdown-item" href="/">Home</a></li>
                                 <li><a className="dropdown-item" href="/me">Cohort Select</a></li>
+                                <li><a className="dropdown-item" href="/updateuser">Update User Info</a></li>
                                 <li><span className="dropdown-item" onClick={Auth.logout}>Logout</span></li>
                             </>
                         ) : (

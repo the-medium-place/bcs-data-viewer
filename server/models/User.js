@@ -3,6 +3,31 @@ const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 require('dotenv').config();
 
+
+function encryptBCS(password, bcsEmail) {
+  // console.log({ crypto })
+
+  // ENCRYPT BCS LOGIN INFO USING NODE.JS CRYPTO
+  const algorithm = 'aes-256-cbc';
+
+  // generate 16 bytes salted key using user email as a base 
+  const initVector = crypto.scryptSync(bcsEmail, 'salt', 16);
+
+  // secret key generate 32 bytes salted key using user email as a base
+  const SecurityKey = crypto.scryptSync(bcsEmail, 'salt', 32);
+
+  // the cipher function
+  const cipher = crypto.createCipheriv(algorithm, SecurityKey, initVector)
+
+  let encryptedPassword = cipher.update(password, "utf-8", "hex")
+
+  encryptedPassword += cipher.final('hex')
+
+  console.log({ encryptedPassword })
+
+  return encryptedPassword;
+}
+
 const UserSchema = new Schema({
   name: {
     type: String,
@@ -32,30 +57,6 @@ const UserSchema = new Schema({
 
 // BCRYPT PASSWORD ENCRYPTION
 UserSchema.pre('save', async function save(next) {
-  function encryptBCS(password, bcsEmail) {
-    console.log({ crypto })
-
-    // ENCRYPT BCS LOGIN INFO USING NODE.JS CRYPTO
-    const algorithm = 'aes-256-cbc';
-
-    // generate 16 bytes salted key using username as a base 
-    const initVector = crypto.scryptSync(bcsEmail, 'salt', 16);
-
-    // secret key generate 32 bytes salted key using username as a base
-    const SecurityKey = crypto.scryptSync(bcsEmail, 'salt', 32);
-
-    // the cipher function
-    const cipher = crypto.createCipheriv(algorithm, SecurityKey, initVector)
-
-    let encryptedPassword = cipher.update(password, "utf-8", "hex")
-
-    encryptedPassword += cipher.final('hex')
-
-    console.log({ encryptedPassword })
-
-    return encryptedPassword;
-  }
-
 
   if (!this.isModified('password') || !this.isModified('bcsLoginInfo')) return next();
   try {
@@ -71,13 +72,34 @@ UserSchema.pre('save', async function save(next) {
 
 });
 
+UserSchema.pre('findOneAndUpdate', async function update(next) {
+
+  if (this.getUpdate().$set !== undefined) {
+
+    let bcsPassword = this.getUpdate().$set.bcsLoginInfo.bcsPassword;
+    let bcsEmail = this.getUpdate().$set.bcsLoginInfo.bcsEmail;
+    // if no change to bcs password...
+    if (!bcsPassword) {
+      return next()
+    };
+
+
+    try {
+      this.getUpdate().$set.bcsLoginInfo.bcsPassword = await encryptBCS(bcsPassword, bcsEmail)
+      next();
+    } catch (err) {
+      return next(err);
+    }
+  }
+})
+
 UserSchema.methods.validatePassword = async function validatePassword(data) {
   return bcrypt.compare(data, this.password);
 };
 
-UserSchema.methods.validateBCSPassword = async function validateBCSPassword(data) {
-  return bcrypt.compare(data, this.bcsLoginInfo.bcsPassword);
-};
+// UserSchema.methods.validateBCSPassword = async function validateBCSPassword(data) {
+//   return bcrypt.compare(data, this.bcsLoginInfo.bcsPassword);
+// };
 
 const User = model('User', UserSchema);
 

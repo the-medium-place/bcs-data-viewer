@@ -57,6 +57,7 @@ const typeDefs = gql`
 
   type Mutation {
     addUser(name: String!, password: String!, email: String!, bcsEmail: String!, bcsPassword:String!): Auth
+    updateUser(name: String!, email: String!, bcsEmail: String!, bcsPassword:String!): Auth
     login(name: String!, password: String!): Auth
     addCohort(cohortCode: String!, cohortId: Int!, enrollmentId: Int!, studentRoster: [String!]): User
     dropStudent(name: String!, cohortId: ID!): Cohort

@@ -1,6 +1,4 @@
 import axios from 'axios';
-// const crypto = require('crypto');
-import crypto from 'crypto'
 
 const API_URL = process.env.REACT_APP_API_URL || 'https://bootcampspot.com/api/instructor/v1/';
 
@@ -248,6 +246,7 @@ const API = {
             console.log("API Request FAILURE: \n==========================\n", err)
         }
     },
+
     getAssignmentInfo: async function (bcsEmail, bcsPassword, enrollmentId) {
 
         const authToken = await this.getAuthToken(bcsEmail, bcsPassword);
