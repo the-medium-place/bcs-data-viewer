@@ -130,7 +130,7 @@ export default function UpdateUser() {
                                 name="bcsPassword"
                                 type={passwordType}
                                 value={modifiableFormData.bcsPassword}
-                                className="input form-control"
+                                className="input form-control w-100"
                                 id="bcs-password"
                                 // aria-label="password"
                                 aria-describedby="basic-addon1"

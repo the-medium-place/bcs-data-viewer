@@ -73,33 +73,27 @@ UserSchema.pre('save', async function save(next) {
 });
 
 UserSchema.pre('findOneAndUpdate', async function update(next) {
+  if (!this.getUpdate().$set) { return next() }
 
-  if (this.getUpdate().$set !== undefined) {
-
-    let bcsPassword = this.getUpdate().$set.bcsLoginInfo.bcsPassword;
-    let bcsEmail = this.getUpdate().$set.bcsLoginInfo.bcsEmail;
-    // if no change to bcs password...
-    if (!bcsPassword) {
-      return next()
-    };
+  let bcsPassword = this.getUpdate().$set.bcsLoginInfo.bcsPassword;
+  let bcsEmail = this.getUpdate().$set.bcsLoginInfo.bcsEmail;
+  // if no change to bcs password...
+  if (!bcsPassword) {
+    return next()
+  };
 
 
-    try {
-      this.getUpdate().$set.bcsLoginInfo.bcsPassword = await encryptBCS(bcsPassword, bcsEmail)
-      next();
-    } catch (err) {
-      return next(err);
-    }
+  try {
+    this.getUpdate().$set.bcsLoginInfo.bcsPassword = await encryptBCS(bcsPassword, bcsEmail)
+    next();
+  } catch (err) {
+    return next(err);
   }
 })
 
 UserSchema.methods.validatePassword = async function validatePassword(data) {
   return bcrypt.compare(data, this.password);
 };
-
-// UserSchema.methods.validateBCSPassword = async function validateBCSPassword(data) {
-//   return bcrypt.compare(data, this.bcsLoginInfo.bcsPassword);
-// };
 
 const User = model('User', UserSchema);
 

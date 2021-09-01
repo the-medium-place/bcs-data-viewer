@@ -53,6 +53,7 @@ export default function StudentGrades({ enrollmentId, bcsCohortId, studentRoster
             'D-': 'table-danger',
             'F': 'table-dark',
             'I': 'table-dark',
+            'Incomplete': 'table-dark',
             'Overdue!': 'table-light text-danger text-bold',
             'Not Due!': 'table-secondary',
             'Ungraded': 'text-danger'
@@ -80,6 +81,7 @@ export default function StudentGrades({ enrollmentId, bcsCohortId, studentRoster
         'D-': 12,
         'F': 13,
         'I': 13,
+        'Incomplete': 13,
         'Overdue!': 13,
         'Not Due!': 13,
         'Ungraded': 13,
@@ -97,7 +99,7 @@ export default function StudentGrades({ enrollmentId, bcsCohortId, studentRoster
                 numDue++
                 totalGradeVal += MAP_GRADES_TO_INT[assignmentObj.grade]
             }
-            if (assignmentObj.grade === 'F' || assignmentObj.grade === 'I' || assignmentObj.grade === 'Overdue!') {
+            if (assignmentObj.grade === 'F' || assignmentObj.grade === 'I' || assignmentObj.grade === 'Overdue!' || assignmentObj.grade === 'Incomplete') {
                 failingGrades++;
             }
         })
