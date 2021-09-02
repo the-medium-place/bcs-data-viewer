@@ -6,23 +6,36 @@ import { UPDATE_USER } from '../../utils/mutations';
 
 import { GET_ME } from '../../utils/queries';
 import NotLoggedIn from '../../components/NotLoggedIn';
+import AlertMessage from '../../components/AlertMessage';
+
+
+
 
 export default function UpdateUser() {
 
     const [passwordType, setPasswordType] = useState("password")
     const [eyeIcon, setEyeIcon] = useState("eye");
+    const [errorMessage, setErrorMessage] = useState("There was a server error...");
+    const [showError, setShowError] = useState(false);
 
     const { loading, error, data } = useQuery(
         GET_ME
     );
-    if (error) { console.log(JSON.stringify(error)) }
+    if (error) {
+        console.log(JSON.stringify(error))
+    }
 
     const [updateUser, { error: updateError, data: updateData }] = useMutation(UPDATE_USER);
-    if (updateError) { console.log(JSON.stringify(updateError)) }
+    if (updateError) {
+        console.log(updateError.message)
+        // if (!errorMessage) { setErrorMessage(updateError.message) }
+        // if (!showError) { setShowError(true) }
+        // setErrorMessage(updateError.message);
+        // setShowError(true);
+    }
 
     const loggedInUser = data?.me || null;
-    // console.log(loggedInUser)
-    // console.log(Auth.getProfile())
+
     const [bcsFormData, setBcsFormData] = useState({
         name: '',
         email: '',
@@ -67,11 +80,6 @@ export default function UpdateUser() {
         setModifiableFormData({ ...modifiableFormData, [name]: value })
     }
 
-    const handleUsernameChange = (e) => {
-        const { value } = e.target;
-
-    }
-
     const handleFormSubmit = async (e) => {
         e.preventDefault();
         // console.log(bcsFormData)
@@ -85,10 +93,12 @@ export default function UpdateUser() {
                     bcsPassword
                 },
             });
-            console.log(data)
+            // console.log(data)
             alert("Info Successfully Updated! Returning to Cohort Select page.")
             Auth.login(data.updateUser.token);
         } catch (e) {
+            setErrorMessage(e.message)
+            setShowError(true);
             console.error(e);
         }
     }
@@ -101,6 +111,16 @@ export default function UpdateUser() {
 
     return (
         <div className="UpdateUser">
+            <div className="d-flex flex-column justify-content-center align-items-center mt-5">
+                <h3>Update User Info</h3>
+                {/* <p className="lead text-danger">{errorMessage}</p> */}
+                {/* <button onClick={() => setShowError(true)}>open it</button> */}
+                {showError ? (
+
+                    <AlertMessage color="danger" message={updateError ? updateError.message : error ? error.message : 'There was a server error...'} hideMethod={setShowError} />
+                ) : null}
+
+            </div>
             {loading ? <p>loading...</p> : data ? (
                 <form autoComplete="false" className="row mt-5 border-bcs rounded p-3" onSubmit={handleFormSubmit}>
                     <div className="col-12 col-md-6 form-group">
@@ -122,15 +142,15 @@ export default function UpdateUser() {
                                 onChange={handleInput}
                             />
                         </div>
+                        <label htmlFor="bcs-password">BCS Password:</label>
                         <div className="mb-3 form-group input-group">
-                            <label htmlFor="bcs-password">BCS Password:</label>
 
                             <input
                                 onChange={handleInput}
                                 name="bcsPassword"
                                 type={passwordType}
                                 value={modifiableFormData.bcsPassword}
-                                className="input form-control w-100"
+                                className="input form-control"
                                 id="bcs-password"
                                 // aria-label="password"
                                 aria-describedby="basic-addon1"
@@ -145,10 +165,10 @@ export default function UpdateUser() {
                             </div>
                         </div>
                     </div>
-                    <div className="button-group justify-content-center d-flex">
+                    <div className="justify-content-center d-flex">
 
-                        <input type="submit" value="Save Changes" className="btn btn-lg bg-bcs text-light" />
-                        <input type="button" value="Restore Values" className="btn btn-lg bg-secondary text-light" onClick={handleRestoreValues} />
+                        <input type="submit" value="Save Changes" className="btn btn-lg bg-bcs text-light m-1" />
+                        <input type="button" value="Restore Values" className="btn btn-lg bg-secondary text-light m-1" onClick={handleRestoreValues} />
                     </div>
                 </form>
 

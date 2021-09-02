@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import AlertMessage from "../../components/AlertMessage";
 import { Link } from "react-router-dom";
 
 import { useMutation } from "@apollo/client";
@@ -18,6 +19,8 @@ const Signup = () => {
     bcsPassword: "",
   });
   const [sameInfoCheckbox, setSameInfoCheckbox] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [showError, setShowError] = useState(false)
   const [addUser, { error, data }] = useMutation(ADD_USER);
   if (error) {
     console.log(JSON.stringify(error));
@@ -69,12 +72,18 @@ const Signup = () => {
       Auth.login(data.addUser.token);
     } catch (err) {
       console.log(JSON.stringify(error));
+      setShowError(true);
       console.error(err);
     }
   };
 
   return (
     <>
+      <div className="d-flex w-100 justify-content-center mt-5">
+        {showError ? (
+          <AlertMessage color="danger" message={error.message} hideMethod={setShowError} />
+        ) : null}
+      </div>
       <div className="row main-signup-content bg-success text-center">
         <div className="col-md-2 text-center company__info">
           <div

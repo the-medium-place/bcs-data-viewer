@@ -73,7 +73,11 @@ export default function MakeGroups({
     setShowButton(false);
     // ENABLE THE 'SAVE GROUPS' BUTTON
     setDisableSave(false);
-
+    // ENSURE USER HAS SELECTED COMPARISON GROUP
+    if (!noRepeatGroup) {
+      setShowButton(true);
+      return alert("You must select a group for comparison when selecting 'No Repeats'")
+    }
     // LOOP THROUGH ACTIVE STUDENTS
     // getGradeAvg() RETURNS OBJECT --
     // {student: <student name>, gradeAvg: <numerical representation of average grade>}
@@ -84,6 +88,7 @@ export default function MakeGroups({
       arrCopy.push(getGradeAvg(student, gradeData));
       setGradesArr(arrCopy);
     });
+
 
     // UPDATE groups STATE
     // chunkArray() RETURNS OBJECT --
@@ -180,6 +185,7 @@ export default function MakeGroups({
 
   return (
     <div className="MakeGroups mb-5">
+
       <div className="row">
         <div className="col-12 col-md-8 border-bcs p-2 mt-2 mb-1">
           <p className="lead text-center mt-3">
@@ -189,7 +195,12 @@ export default function MakeGroups({
             that each group has a mixture of performance levels.
           </p>
           {cohortGroups.length > 0 ? (
-            <p className="lead text-center mt-1">Clicking the <em>No Repeats</em> box will ensure that no students are paired together if they have already been paired in one of your 'saved' groups. Use this option to create project groups without repeating group members!</p>
+            <p className="lead text-center mt-1">
+              <strong>
+
+                Clicking the <em>No Repeats</em> box will ensure that no students are paired together if they have already been paired in one of your 'saved' groups. Use this option to create project groups without repeating group members!
+              </strong>
+            </p>
           ) : null}
           <p className="align-text-bottom text-center p-1 bg-bcs text-light"><strong>Drag and drop students to re-order or move to a different group!</strong></p>
         </div>

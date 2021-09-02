@@ -13,6 +13,7 @@ const MAP_GRADES_TO_INT = {
     "D-": 12,
     F: 13,
     I: 13,
+    'Incomplete': 13,
     "Overdue!": 13,
     "Not Due!": 13,
     Ungraded: 13,

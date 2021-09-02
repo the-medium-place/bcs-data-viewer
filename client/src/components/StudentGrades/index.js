@@ -202,7 +202,7 @@ export default function StudentGrades({ enrollmentId, bcsCohortId, studentRoster
                                                 {getKeyByValue(MAP_GRADES_TO_INT, Math.round(gradeAvg))}
                                                 <br />
                                                 <span className={failingGrades < 3 ? 'bg-secondary text-light p-1' : 'bg-danger text-light p-1'}>
-                                                    # Failing: {failingGrades}
+                                                    Failing: {failingGrades}
                                                 </span>
                                             </th>
                                             {gradeData.studentObj[student].assignments.map((assignmentObj, i) => {

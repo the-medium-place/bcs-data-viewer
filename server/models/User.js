@@ -32,8 +32,8 @@ const UserSchema = new Schema({
   name: {
     type: String,
     required: true,
-    unique: true,
     trim: true,
+    unique: true,
   },
   password: {
     type: String,
@@ -55,26 +55,24 @@ const UserSchema = new Schema({
 
 });
 
-// BCRYPT PASSWORD ENCRYPTION
-UserSchema.pre('save', async function save(next) {
+UserSchema.pre('save', async function (next, done) {
 
   if (!this.isModified('password') || !this.isModified('bcsLoginInfo')) return next();
   try {
+    // BCRYPT PASSWORD ENCRYPTION
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
+    // CRYPTO BCS PASSWORD ENCRYPTION
     this.bcsLoginInfo.bcsPassword = await encryptBCS(this.bcsLoginInfo.bcsPassword, this.bcsLoginInfo.bcsEmail)
     return next();
   } catch (err) {
     return next(err);
   }
-
-
-
 });
 
-UserSchema.pre('findOneAndUpdate', async function update(next) {
+UserSchema.pre('findOneAndUpdate', async function (next, done) {
   if (!this.getUpdate().$set) { return next() }
-
+  // CRYPTO BCS PASSWORD ENCRYPTION
   let bcsPassword = this.getUpdate().$set.bcsLoginInfo.bcsPassword;
   let bcsEmail = this.getUpdate().$set.bcsLoginInfo.bcsEmail;
   // if no change to bcs password...
@@ -90,6 +88,22 @@ UserSchema.pre('findOneAndUpdate', async function update(next) {
     return next(err);
   }
 })
+
+UserSchema.post('save', function (error, doc, next) {
+  if (error.name === 'MongoError' && error.code === 11000) {
+    next(new Error(`Username ${this.name} is already in use.`));
+  } else {
+    next(error);
+  }
+});
+
+UserSchema.post('findOneAndUpdate', function (error, doc, next) {
+  if (error.name === 'MongoError' && error.code === 11000) {
+    next(new Error(`Username "${this.getUpdate().$set.name}" is already in use.`));
+  } else {
+    next(error);
+  }
+});
 
 UserSchema.methods.validatePassword = async function validatePassword(data) {
   return bcrypt.compare(data, this.password);
