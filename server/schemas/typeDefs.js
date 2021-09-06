@@ -61,7 +61,7 @@ const typeDefs = gql`
     user(userId: ID!): User
     me: User
     getCohort(cohortId: ID!): Cohort
-
+    getGroups(groupsId: ID!): Groups
   }
 
   type Mutation {
@@ -74,6 +74,7 @@ const typeDefs = gql`
     addCohortNote(content: String!, createdBy: ID!, cohortId: ID!): Cohort
     saveGroups(title: String!, groups: JSON!, cohortId: ID!): Cohort
     addPresentationNotes(groupsId: ID!, notes: String!, grade: String!, groupName: String!): Groups
+    updatePresentationNotes(groupsId: ID!, noteId: ID!, notes: String, grade: String): Groups
   }
 `;
 

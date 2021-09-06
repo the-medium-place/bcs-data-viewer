@@ -50,6 +50,13 @@ const resolvers = {
           .populate('groups')
       }
       throw new AuthenticationError('You need to be logged in!');
+    },
+
+    getGroups: async (parent, { groupsId }, context) => {
+      if (context.user) {
+        return await Groups.findOne({ _id: groupsId }).populate('notes')
+      }
+      throw new AuthenticationError("You need to be logged in!")
     }
   },
 
@@ -174,7 +181,7 @@ const resolvers = {
 
     },
 
-    addPresentationNotes: async (parent, { groupsId, groupName, notes, grade }, context) => {
+    addPresentationNotes: async (parent, { groupsId, groupName, notes, grade, noteId }, context) => {
       if (context.user) {
         const notesObj = {
           author: context.user._id,
@@ -183,7 +190,7 @@ const resolvers = {
           groupName,
         }
         // add note object to 'notes' array on groups model
-        const updatedGroups = await Groups.findOneAndUpdate({ _id: groupsId }, { $addToSet: { 'notes': notesObj } }, { new: true })
+        const updatedGroups = await Groups.findOneAndUpdate({ 'notes._id': noteId }, { $addToSet: { 'notes': notesObj } }, { new: true })
 
         return updatedGroups;
       }
@@ -191,8 +198,36 @@ const resolvers = {
       throw new AuthenticationError('You are not logged in!');
 
 
+    },
+
+    updatePresentationNotes: async (parent, { groupsId, notes, grade, noteId }, context) => {
+      if (context.user) {
+        // const notesObj = {
+        //   notes,
+        //   grade,
+        // }
+
+        const updatedGroups = await Groups.findOneAndUpdate({
+          'notes._id': noteId
+        }, {
+          $set: {
+            'notes.$.notes': notes,
+            'notes.$.grade': grade
+          }
+        }, {
+          new: true
+        }).populate('notes')
+
+        return updatedGroups;
+
+
+      }
+
+      throw new AuthenticationError('You are not logged in!');
     }
   },
+
+
 
 
 

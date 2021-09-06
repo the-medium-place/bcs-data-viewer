@@ -76,6 +76,25 @@ export const GET_ME = gql`
     }
   `;
 
+export const GET_GROUPS = gql`
+    query getGroups($groupsId: ID!){
+      getGroups(groupsId: $groupsId){
+        _id
+        title
+        groups
+        notes {
+          _id
+          author
+          groupName
+          notes
+          grade
+  
+        }
+      }
+    }
+`;
+
+
 export const GET_COHORT = gql`
     query getCohort($cohortId: ID!){
       getCohort(cohortId: $cohortId){

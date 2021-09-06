@@ -30,6 +30,24 @@ export const ADD_PRESENTATION_NOTES = gql`
   }
 `
 
+export const UPDATE_PRESENTATION_NOTES = gql`
+mutation updatePresentationNotes($groupsId: ID!, $noteId: ID!, $notes: String, $grade: String){
+  updatePresentationNotes(groupsId: $groupsId, noteId: $noteId, notes: $notes, grade: $grade){
+    _id
+    title
+    groups
+    notes {
+      _id
+      author
+      groupName
+      notes
+      grade
+
+    }
+  }
+}
+`
+
 export const ADD_USER = gql`
   mutation addUser($name: String!, $password: String!, $email: String!, $bcsEmail: String!, $bcsPassword: String!) {
     addUser(name: $name, password: $password, email: $email, bcsEmail: $bcsEmail, bcsPassword: $bcsPassword) {

@@ -1,43 +1,91 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useMutation } from '@apollo/client';
-import { ADD_PRESENTATION_NOTES } from '../../utils/mutations';
+import { ADD_PRESENTATION_NOTES, UPDATE_PRESENTATION_NOTES } from '../../utils/mutations';
 
 
-export default function PresentationBox({ name, groupsObj, loggedInUser, groupsId }) {
-    // console.log(groupsObj)
+export default function PresentationBox({ name, groupsObj, loggedInUser, groupsId, groupNotes }) {
+    // console.log(groupNotes ? groupNotes : 'no notes for ' + name + ' from this user')
+
+    // const noteText = groupNotes ? groupNotes.notes : '';
+    // const noteGrade = groupNotes ? groupNotes.grade : null;
+    const noteId = groupNotes ? groupNotes.noteId : '';
+
 
     const [noteData, setNoteData] = useState({
         groupName: name,
         notes: '',
         grade: null
     })
+    const [modifiableNoteData, setModifiableNoteData] = useState({
+        groupName: name,
+        notes: '',
+        grade: null
+    })
+
+    useEffect(() => {
+        setNoteData({
+            ...noteData,
+            notes: groupNotes ? groupNotes.notes : '',
+            grade: groupNotes ? groupNotes.grade : null
+        })
+
+        setModifiableNoteData({
+            ...noteData,
+            notes: groupNotes ? groupNotes.notes : '',
+            grade: groupNotes ? groupNotes.grade : null
+        })
+    }, [])
+
 
     const [buttonDisable, setButtonDisable] = useState(false);
 
-    const [addPresentationNotes, { error, data }] = useMutation(ADD_PRESENTATION_NOTES);
+
+    const [addPresentationNotes, { error, data, loading }] = useMutation(ADD_PRESENTATION_NOTES);
     if (error) { console.log(JSON.stringify(error)) }
+
+    const [updatePresentationNotes, { error: updateErr, data: updateData, loading: updateLoading }] = useMutation(UPDATE_PRESENTATION_NOTES);
+    if (updateErr) { console.log(JSON.stringify(updateErr)) }
 
     const handleInput = (e) => {
         const { value, name } = e.target;
         if (buttonDisable) { setButtonDisable(false) }
-        setNoteData({ ...noteData, [name]: value })
+        setModifiableNoteData({ ...modifiableNoteData, [name]: value })
     }
 
     const handleSaveClick = async e => {
         e.preventDefault();
-        setButtonDisable(true);
-        // console.log(noteData)
-        try {
-            const { data } = await addPresentationNotes({
-                variables: {
-                    ...noteData,
-                    groupsId
-                },
-            });
-            console.log(data);
 
-        } catch (e) {
-            console.error(e);
+        setButtonDisable(true);
+        console.log(modifiableNoteData)
+
+        if (!groupNotes) {
+
+            console.log('No note data found, saving...')
+            try {
+                const { data } = await addPresentationNotes({
+                    variables: {
+                        ...modifiableNoteData,
+                        groupsId
+                    },
+                });
+                console.log(data);
+
+            } catch (e) {
+                console.error(e);
+            }
+        } else {
+            console.log("note data present: updating...")
+            try {
+                const { data } = await updatePresentationNotes({
+                    variables: {
+                        ...modifiableNoteData,
+                        groupsId,
+                        noteId
+                    }
+                })
+                console.log(data)
+
+            } catch (e) { console.error(e) }
         }
     }
 
@@ -54,12 +102,12 @@ export default function PresentationBox({ name, groupsObj, loggedInUser, groupsI
             <div className="col-md-7 mx-1 text-light">
                 {/* notes textarea */}
                 <strong>Notes:</strong>
-                <textarea value={noteData.notes} onChange={handleInput} name="notes" className="w-100 my-1 border-bcs"></textarea>
+                <textarea value={modifiableNoteData.notes} onChange={handleInput} name="notes" className="w-100 my-1 border-bcs"></textarea>
             </div>
             <div className="col-md-1 mx-1 text-light">
                 {/* grade dropdown */}
                 <strong>Grade:</strong>
-                <select onChange={handleInput} value={noteData.grade} name="grade">
+                <select onChange={handleInput} value={modifiableNoteData.grade} name="grade">
                     <option selected defaultValue disabled>Select Grade</option>
                     <option value="A+">A+</option>
                     <option value="A">A</option>
@@ -76,7 +124,7 @@ export default function PresentationBox({ name, groupsObj, loggedInUser, groupsI
                     <option value="F">F</option>
                     <option value="I">I</option>
                 </select>
-                <input type="button" className="btn btn-light text-bcs mt-1" value={buttonDisable ? 'Saved' : 'Save'} onClick={handleSaveClick} disabled={buttonDisable} />
+                <input type="button" className="btn btn-light text-bcs mt-1" value={(error || updateErr) ? 'ERROR' : (loading || updateLoading) ? 'Loading...' : updateData ? "Saved!" : "Save"} onClick={handleSaveClick} disabled={buttonDisable} />
             </div>
         </div>
     )
