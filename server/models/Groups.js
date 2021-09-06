@@ -10,6 +10,16 @@ const GroupsSchema = new Schema({
 
     groups: Object,
 
+    notes: [{
+        author: {
+            type: Schema.Types.ObjectId,
+            ref: "User",
+        },
+        groupName: String,
+        notes: String,
+        grade: String
+    }]
+
 })
 
 

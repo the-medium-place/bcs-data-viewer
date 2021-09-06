@@ -8,7 +8,7 @@
 
 Login Page -> Cohort Select Page -> Dashboard View:
 ### USER:
-- [ ] edit user info (bcs login info, etc)
+- [x] edit user info (bcs login info, etc)
 
 ### DASHBOARD:
 - [x] select cohort (small data on each cohort before select) :heavy_check_mark:
@@ -34,7 +34,7 @@ Login Page -> Cohort Select Page -> Dashboard View:
 - [x] auto group formation with variety of performance levels in each group
 - [x] drag n drop students between groups to reform as instructor sees fit
 - [x] save current groups to cohort account
-- [ ] option to make groups without repeating students (keep students from working together a second time between proj 1 and proj 2)
+- [x] option to make groups without repeating students (keep students from working together a second time between proj 1 and proj 2) -- MOSTLY WORKING, COULD USE SOME MORE WORK.......
 
 #### Saved Groups:
 - [x] View all saved groups
@@ -43,6 +43,7 @@ Login Page -> Cohort Select Page -> Dashboard View:
 - [ ] option to delete saved groups
 
 #### Presentations:
-- [ ] Space for notes and grade from instructional staff
-- [ ] Save notes from presentation for use in grading 
-- [ ] select group to leave notes for / view presentation order with space for notes at each group
+- [ ] Select which grouping to add notes
+- [ ] Select specific group to add notes
+- [ ] Save notes / Grade for specific group
+- [ ] view all notes for each individual group

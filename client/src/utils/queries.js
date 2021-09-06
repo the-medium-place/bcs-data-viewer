@@ -99,6 +99,12 @@ export const GET_COHORT = gql`
           _id
           title
           groups
+          notes {
+            author
+            notes
+            grade
+            groupName
+          }
         }
       }
     }

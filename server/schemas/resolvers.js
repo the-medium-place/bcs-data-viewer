@@ -172,6 +172,25 @@ const resolvers = {
 
       throw new AuthenticationError('You are not logged in!');
 
+    },
+
+    addPresentationNotes: async (parent, { groupsId, groupName, notes, grade }, context) => {
+      if (context.user) {
+        const notesObj = {
+          author: context.user._id,
+          notes,
+          grade,
+          groupName,
+        }
+        // add note object to 'notes' array on groups model
+        const updatedGroups = await Groups.findOneAndUpdate({ _id: groupsId }, { $addToSet: { 'notes': notesObj } }, { new: true })
+
+        return updatedGroups;
+      }
+
+      throw new AuthenticationError('You are not logged in!');
+
+
     }
   },
 

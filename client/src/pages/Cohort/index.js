@@ -108,7 +108,7 @@ export default function Cohort() {
                             view === "roster" ? <StudentRoster cohortId={cohortId} studentRoster={studentRoster} droppedStudents={droppedStudents} /> :
                                 view === "makegroups" ? <MakeGroups cohortGroups={cohortGroups} loggedInUser={loggedInUser} studentRoster={studentRoster} droppedStudents={droppedStudents} bcsCohortId={bcsCohortId} enrollmentId={enrollmentId} cohortId={cohortId} /> :
                                     view === 'savedgroups' ? <SavedGroups cohortGroups={cohortGroups} /> :
-                                        view === "projectpresentations" ? <ProjectPresentations /> :
+                                        view === "projectpresentations" ? <ProjectPresentations cohortGroups={cohortGroups} loggedInUser={loggedInUser} /> :
                                             <h1>what???</h1>
                     }
                 </div>

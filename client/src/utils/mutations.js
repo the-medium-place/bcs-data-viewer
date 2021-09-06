@@ -12,6 +12,24 @@ export const LOGIN_USER = gql`
   }
 `;
 
+export const ADD_PRESENTATION_NOTES = gql`
+  mutation addPresentationNotes($groupsId: ID!, $notes: String!, $groupName: String!, $grade: String!) {
+    addPresentationNotes(groupsId: $groupsId, notes: $notes, groupName: $groupName, grade: $grade) {
+      _id
+      title
+      groups
+      notes {
+        _id
+        author
+        groupName
+        notes
+        grade
+
+      }
+    }
+  }
+`
+
 export const ADD_USER = gql`
   mutation addUser($name: String!, $password: String!, $email: String!, $bcsEmail: String!, $bcsPassword: String!) {
     addUser(name: $name, password: $password, email: $email, bcsEmail: $bcsEmail, bcsPassword: $bcsPassword) {

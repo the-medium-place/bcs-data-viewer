@@ -24,11 +24,20 @@ const typeDefs = gql`
     createdAt: String
     createdBy: User
   }
+
+  type PresentationNotes {
+    _id: ID!
+    author: ID!
+    groupName: String
+    notes: String
+    grade: String
+  }
   
   type Groups {
     _id: ID!
     title: String
     groups: JSON
+    notes: [PresentationNotes]
   }
 
   type Cohort {
@@ -64,6 +73,7 @@ const typeDefs = gql`
     removeDropStudent(name: String!, cohortId: ID!): Cohort
     addCohortNote(content: String!, createdBy: ID!, cohortId: ID!): Cohort
     saveGroups(title: String!, groups: JSON!, cohortId: ID!): Cohort
+    addPresentationNotes(groupsId: ID!, notes: String!, grade: String!, groupName: String!): Groups
   }
 `;
 
