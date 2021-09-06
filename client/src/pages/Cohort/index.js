@@ -16,6 +16,7 @@ import SavedGroups from '../../components/SavedGroups';
 import './style.css';
 import NotLoggedIn from '../../components/NotLoggedIn';
 import ProjectPresentations from '../../components/ProjectPresentations';
+import ViewPresentationNotes from '../../components/ViewPresentationNotes';
 
 export default function Cohort() {
     const params = useParams();
@@ -94,10 +95,13 @@ export default function Cohort() {
                             <span data-view="makegroups" className={`nav-link ${view === 'makegroups' ? 'active' : null}`}>Make Groups</span>
                         </li>
                         <li onClick={handleTabClick} data-view="savedgroups" className='nav-item tab-li'>
-                            <span data-view="savedgroups" className={`nav-link ${view === 'savedgroups' ? 'active' : null}`}>Saved Groups</span>
+                            <span data-view="savedgroups" className={`nav-link ${view === 'savedgroups' ? 'active' : null}`}>View Groups</span>
                         </li>
                         <li onClick={handleTabClick} data-view="projectpresentations" className='nav-item tab-li'>
                             <span data-view="projectpresentations" className={`nav-link ${view === 'projectpresentations' ? 'active' : null}`}>Presentation Notes</span>
+                        </li>
+                        <li onClick={handleTabClick} data-view="viewpresentationnotes" className='nav-item tab-li'>
+                            <span data-view="viewpresentationnotes" className={`nav-link ${view === 'viewpresentationnotes' ? 'active' : null}`}>View Presentation Notes</span>
                         </li>
                     </ul>
                 </nav>
@@ -109,7 +113,8 @@ export default function Cohort() {
                                 view === "makegroups" ? <MakeGroups cohortGroups={cohortGroups} loggedInUser={loggedInUser} studentRoster={studentRoster} droppedStudents={droppedStudents} bcsCohortId={bcsCohortId} enrollmentId={enrollmentId} cohortId={cohortId} /> :
                                     view === 'savedgroups' ? <SavedGroups cohortGroups={cohortGroups} /> :
                                         view === "projectpresentations" ? <ProjectPresentations cohortGroups={cohortGroups} loggedInUser={loggedInUser} /> :
-                                            <h1>what???</h1>
+                                            view === 'viewpresentationnotes' ? <ViewPresentationNotes cohortGroups={cohortGroups} /> :
+                                                <h1>what???</h1>
                     }
                 </div>
 

@@ -181,17 +181,20 @@ const resolvers = {
 
     },
 
-    addPresentationNotes: async (parent, { groupsId, groupName, notes, grade, noteId }, context) => {
+    addPresentationNotes: async (parent, { groupsId, groupName, notes, grade }, context) => {
       if (context.user) {
+
         const notesObj = {
           author: context.user._id,
           notes,
           grade,
           groupName,
         }
-        // add note object to 'notes' array on groups model
-        const updatedGroups = await Groups.findOneAndUpdate({ 'notes._id': noteId }, { $addToSet: { 'notes': notesObj } }, { new: true })
 
+        console.log({ notesObj, groupsId })
+        // add note object to 'notes' array on groups model
+        const updatedGroups = await Groups.findOneAndUpdate({ _id: groupsId }, { $addToSet: { 'notes': notesObj } }, { new: true })
+        console.log({ updatedGroups })
         return updatedGroups;
       }
 
@@ -200,7 +203,7 @@ const resolvers = {
 
     },
 
-    updatePresentationNotes: async (parent, { groupsId, notes, grade, noteId }, context) => {
+    updatePresentationNotes: async (parent, { notes, grade, noteId }, context) => {
       if (context.user) {
         // const notesObj = {
         //   notes,

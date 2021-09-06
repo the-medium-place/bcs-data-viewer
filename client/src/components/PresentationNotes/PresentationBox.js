@@ -125,6 +125,7 @@ export default function PresentationBox({ name, groupsObj, loggedInUser, groupsI
                     <option value="I">I</option>
                 </select>
                 <input type="button" className="btn btn-light text-bcs mt-1" value={(error || updateErr) ? 'ERROR' : (loading || updateLoading) ? 'Loading...' : updateData ? "Saved!" : "Save"} onClick={handleSaveClick} disabled={buttonDisable} />
+                <input type="button" className="btn btn-light text-bcs mt-1" value="Reset" onClick={() => { setModifiableNoteData({ ...noteData }) }} />
             </div>
         </div>
     )
