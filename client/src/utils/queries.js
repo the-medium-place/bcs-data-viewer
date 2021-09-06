@@ -84,7 +84,11 @@ export const GET_GROUPS = gql`
         groups
         notes {
           _id
-          author
+          author {
+            _id
+            name
+            email
+          }
           groupName
           notes
           grade
@@ -119,7 +123,11 @@ export const GET_COHORT = gql`
           title
           groups
           notes {
-            author
+            author {
+              _id
+              name
+              email
+            }
             notes
             grade
             groupName

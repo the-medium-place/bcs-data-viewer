@@ -27,7 +27,7 @@ const typeDefs = gql`
 
   type PresentationNotes {
     _id: ID!
-    author: ID!
+    author: User
     groupName: String
     notes: String
     grade: String

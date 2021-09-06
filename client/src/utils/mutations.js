@@ -20,7 +20,11 @@ export const ADD_PRESENTATION_NOTES = gql`
       groups
       notes {
         _id
-        author
+        author {
+          _id
+          name
+          email
+        }
         groupName
         notes
         grade
@@ -38,7 +42,11 @@ mutation updatePresentationNotes($groupsId: ID!, $noteId: ID!, $notes: String, $
     groups
     notes {
       _id
-      author
+      author {
+        _id
+        name
+        email
+      }
       groupName
       notes
       grade
