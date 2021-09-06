@@ -16,7 +16,6 @@ export default function ViewNotesBox({ groupName, groupNotes }) {
                             return <NotesCard note={note} />
                         }) : null}
                     </div>
-                    <textarea value={groupNotes.length > 0 ? groupNotes[0].notes : ''} readonly className="w-100 my-1 border-bcs"></textarea>
                 </div>
             </div>
         </div>
@@ -26,9 +25,9 @@ export default function ViewNotesBox({ groupName, groupNotes }) {
 function NotesCard({ note }) {
     console.log(note)
     return (
-        <div class="card text-dark" style={{ width: "18rem" }}>
+        <div class="card text-dark" style={{ width: "23%" }}>
             <div class="card-body">
-                <h5 class="card-title">{note.author}'s Notes</h5>
+                <h5 class="card-title">{note.author.name}'s Notes</h5>
                 <h6 class="card-subtitle mb-2 text-muted">Grade: {note.grade}</h6>
                 <p class="card-text">{note.notes}</p>
             </div>

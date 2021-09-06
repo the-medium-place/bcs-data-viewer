@@ -54,7 +54,7 @@ const resolvers = {
 
     getGroups: async (parent, { groupsId }, context) => {
       if (context.user) {
-        return await Groups.findOne({ _id: groupsId }).populate('notes')
+        return await Groups.findOne({ _id: groupsId }).populate({ path: 'notes', populate: 'author' })
       }
       throw new AuthenticationError("You need to be logged in!")
     }
@@ -193,7 +193,7 @@ const resolvers = {
 
         console.log({ notesObj, groupsId })
         // add note object to 'notes' array on groups model
-        const updatedGroups = await Groups.findOneAndUpdate({ _id: groupsId }, { $addToSet: { 'notes': notesObj } }, { new: true })
+        const updatedGroups = await Groups.findOneAndUpdate({ _id: groupsId }, { $addToSet: { 'notes': notesObj } }, { new: true }).populate({ path: 'notes', populate: 'author' })
         console.log({ updatedGroups })
         return updatedGroups;
       }
@@ -219,7 +219,7 @@ const resolvers = {
           }
         }, {
           new: true
-        }).populate('notes')
+        }).populate({ path: 'notes', populate: 'author' })
 
         return updatedGroups;
 
