@@ -2,15 +2,20 @@ import React from 'react'
 
 export default function ViewNotesBox({ groupName, groupNotes, groupMembers }) {
     console.log({ groupName, groupNotes, groupMembers })
+
+    const renderStudentNames = () => {
+        const namesArr = groupMembers.map(studObj => studObj.student);
+        return namesArr.join(' - ')
+    }
+
+
     return (
         <div className="ViewNotesBox">
             <div className="mb-3 row bg-bcs p-2 rounded shadow shadow-sm">
                 <div className="text-center bg-light col-12 border-bcs mx-1 text-dark rounded p-2">
                     <strong className="p-2 rounded">{groupName}</strong>
                     <br />
-                    {groupMembers.map(studObj => {
-                        return <span className="" key={studObj.student} >| {studObj.student} |</span>
-                    })}
+                    <span className="">{renderStudentNames()}</span>
                 </div>
                 <div className="col-12 mx-1 text-light">
                     {/* notes textarea */}

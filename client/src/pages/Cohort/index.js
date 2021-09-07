@@ -48,16 +48,6 @@ export default function Cohort() {
     const cohortNotes = data?.getCohort.notes || [];
     const cohortGroups = data?.getCohort.groups || []
 
-    // console.log({ cohortGroups })
-
-    // console.log("cohortNotes: ", cohortNotes)
-
-
-    // if (error) { console.log(JSON.stringify(error)) }
-
-    // if (meData) { console.log(meData?.me) }
-    // if (meError) { console.log(JSON.stringify(meError)) }
-
     const handleTabClick = e => {
         const clickId = e.target.dataset.view;
         console.log(clickId)
@@ -74,15 +64,6 @@ export default function Cohort() {
                 {/* <h3>BCS Cohort ID: {bcsCohortId}</h3> */}
                 {/* <h3>Cohort Mongoose Id: {cohortId}</h3> */}
                 {/* <h3>Cohort Enrollment Id: {enrollmentId}</h3> */}
-                {/* <hr /> */}
-                {/* <div className="view-select w-100 d-flex justify-content-center">
-                    <div className="btn-group" role="group" aria-label="Basic example">
-                    <button type="button" className="btn btn-primary btn-lg" onClick={() => setView('grades')}>Grades</button>
-                    <button type="button" className="btn btn-primary btn-lg" onClick={() => setView('roster')}>Roster</button>
-                    <button type="button" className="btn btn-primary btn-lg" onClick={() => setView('feedback')}>Feedback</button>
-                    <button type="button" className="btn btn-primary btn-lg" onClick={() => setView('makegroups')}>Make Groups</button>
-                    </div>
-                </div> */}
                 <nav className="row">
                     <ul className="nav nav-tabs">
                         <li onClick={handleTabClick} data-view="roster" className="nav-item tab-li">
@@ -98,7 +79,7 @@ export default function Cohort() {
                             <span data-view="savedgroups" className={`nav-link ${view === 'savedgroups' ? 'active' : null}`}>View Groups</span>
                         </li>
                         <li onClick={handleTabClick} data-view="projectpresentations" className='nav-item tab-li'>
-                            <span data-view="projectpresentations" className={`nav-link ${view === 'projectpresentations' ? 'active' : null}`}>Presentation Notes</span>
+                            <span data-view="projectpresentations" className={`nav-link ${view === 'projectpresentations' ? 'active' : null}`}>Presentation Feedback</span>
                         </li>
                         <li onClick={handleTabClick} data-view="viewpresentationnotes" className='nav-item tab-li'>
                             <span data-view="viewpresentationnotes" className={`nav-link ${view === 'viewpresentationnotes' ? 'active' : null}`}>View Presentation Notes</span>

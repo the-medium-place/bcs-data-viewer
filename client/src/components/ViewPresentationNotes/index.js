@@ -39,7 +39,7 @@ export default function ViewPresentationNotes({ cohortGroups }) {
                             return (<ViewNotesBox groupName={group} groupNotes={getGroupNotes(group)} groupMembers={currentGroup.groups[group]} />)
                         })}
                     </>
-                ) : <p>something went wrong...</p>}
+                ) : null}
             </div>
         </div>
     )
