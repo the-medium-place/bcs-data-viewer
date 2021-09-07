@@ -173,12 +173,17 @@ export default function MakeGroups({
     const groupsCopy = { ...groups };
     groupsCopy[source.droppableId] = newSourceColumn;
     groupsCopy[destination.droppableId] = newDestinationColumn;
-    const repeatCheck = checkGroupForRepeats(activeStudents, JSON.parse(noRepeatGroup), groups[destination.droppableId], draggableId)
+    let repeatCheck = null;
+    if (memberRepeat && noRepeatGroup) {
+      repeatCheck = checkGroupForRepeats(activeStudents, JSON.parse(noRepeatGroup), groups[destination.droppableId], draggableId)
+    }
     console.log({ repeatCheck })
-    if (!repeatCheck.repeatCheck && memberRepeat) {
+    if (repeatCheck && !repeatCheck.repeatCheck && memberRepeat) {
       alert(`${draggableId} has already worked with ${repeatCheck.repeatedName} - please try another group.`)
       return;
-    } else {
+    } else if (repeatCheck && repeatCheck.repeatCheck && memberRepeat) {
+      setGroups(groupsCopy)
+    } else if (!memberRepeat) {
       setGroups(groupsCopy);
     }
   }
