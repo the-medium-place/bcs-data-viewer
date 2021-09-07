@@ -14,7 +14,7 @@ export default function ViewPresentationNotes({ cohortGroups }) {
 
     return (
         <div className="ViewPresentationNotes my-5">
-            <h1 className="text-center">View Notes</h1>
+            <h1 className="text-center">View Feedback</h1>
             <div className="d-flex justify-content-center">
 
                 <p className="lead text-center mt-3 border-bcs rounded p-3 d-inline-block">
@@ -36,7 +36,7 @@ export default function ViewPresentationNotes({ cohortGroups }) {
                     <>
                         <h2 className="text-center">{currentGroup.title}</h2>
                         {Object.keys(currentGroup.groups).map(group => {
-                            return (<ViewNotesBox groupName={group} groupNotes={getGroupNotes(group)} />)
+                            return (<ViewNotesBox groupName={group} groupNotes={getGroupNotes(group)} groupMembers={currentGroup.groups[group]} />)
                         })}
                     </>
                 ) : <p>something went wrong...</p>}

@@ -74,7 +74,7 @@ export default function MakeGroups({
     // ENABLE THE 'SAVE GROUPS' BUTTON
     setDisableSave(false);
     // ENSURE USER HAS SELECTED COMPARISON GROUP
-    if (!noRepeatGroup) {
+    if (memberRepeat && !noRepeatGroup) {
       setShowButton(true);
       return alert("You must select a group for comparison when selecting 'No Repeats'")
     }

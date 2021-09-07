@@ -9,15 +9,14 @@ export default function ProjectPresentations({ cohortGroups, loggedInUser }) {
     // console.log(loggedInUser)
 
     return (
-        <div className="ProjectPresentations row">
+        <div className="ProjectPresentations row my-5">
             <div className="col">
-                <h1>Presentations Feedback</h1>
+                <h1 className="text-center">Presentations Feedback</h1>
                 <div className="d-flex justify-content-center">
 
                     <p className="lead border-bcs p-2 w-75">Select a group below to add or edit feedback for group project presentations. Any feedback you saved will be displayed.</p>
                 </div>
             </div>
-            <hr />
             <div className="notes-wrapper">
                 {/* DROP DOWN TO SELECT GROUPING FOR NOTES */}
                 <div className="d-flex justify-content-center mb-5">
