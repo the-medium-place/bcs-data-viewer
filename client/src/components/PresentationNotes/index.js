@@ -22,7 +22,7 @@ export default function PresentationNotes({ currentGroup, loggedInUser }) {
     const getGroupNotes = (groupName) => {
 
         const userGroupNotes = groupsData.notes.filter(note => {
-            return (note.groupName === groupName && note.author === userId)
+            return (note.groupName === groupName && note.author._id === userId)
         })
         console.log({ userGroupNotes })
         return userGroupNotes.length > 0 ? { notes: userGroupNotes[0].notes, grade: userGroupNotes[0].grade, noteId: userGroupNotes[0]._id } : null;

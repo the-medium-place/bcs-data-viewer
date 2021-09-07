@@ -47,7 +47,13 @@ const resolvers = {
             path: 'createdBy'
           }
         })
-          .populate('groups')
+          .populate({
+            path: 'groups',
+            populate: {
+              path: 'notes',
+              populate: 'author'
+            }
+          })
       }
       throw new AuthenticationError('You need to be logged in!');
     },

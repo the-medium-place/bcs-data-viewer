@@ -11,9 +11,11 @@ export default function ProjectPresentations({ cohortGroups, loggedInUser }) {
     return (
         <div className="ProjectPresentations row">
             <div className="col">
-                <h1>Presentations!!</h1>
-                <p className="lead">This will be a space to save and aggregate all instructors' notes on group projects presentations. </p>
-                <p className="text-danger">Not Yet Functional!</p>
+                <h1>Presentations Feedback</h1>
+                <div className="d-flex justify-content-center">
+
+                    <p className="lead border-bcs p-2 w-75">Select a group below to add or edit feedback for group project presentations. Any feedback you saved will be displayed.</p>
+                </div>
             </div>
             <hr />
             <div className="notes-wrapper">

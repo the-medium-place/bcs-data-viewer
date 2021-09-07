@@ -48,7 +48,7 @@ export default function Cohort() {
     const cohortNotes = data?.getCohort.notes || [];
     const cohortGroups = data?.getCohort.groups || []
 
-    console.log({ cohortGroups })
+    // console.log({ cohortGroups })
 
     // console.log("cohortNotes: ", cohortNotes)
 
