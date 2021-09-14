@@ -82,7 +82,7 @@ export default function Cohort() {
                             <span data-view="projectpresentations" className={`nav-link ${view === 'projectpresentations' ? 'active' : null}`}>Presentation Feedback</span>
                         </li>
                         <li onClick={handleTabClick} data-view="viewpresentationnotes" className='nav-item tab-li'>
-                            <span data-view="viewpresentationnotes" className={`nav-link ${view === 'viewpresentationnotes' ? 'active' : null}`}>View Presentation Notes</span>
+                            <span data-view="viewpresentationnotes" className={`nav-link ${view === 'viewpresentationnotes' ? 'active' : null}`}>View Feedback</span>
                         </li>
                     </ul>
                 </nav>

@@ -50,6 +50,10 @@ function App() {
               <Splash />
             </Route> */}
 
+            <Route exact path="/">
+              <Login />
+            </Route>
+
             <Route exact path={["/users/:id", "/me"]}>
               <UserPage />
             </Route>
