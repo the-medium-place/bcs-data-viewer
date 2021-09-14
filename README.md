@@ -63,13 +63,13 @@ Clicking the cohort code will redirect you to the cohort information page, where
 <br>
 <img src="client/public/bcs-screenshots/cohortPageGradeTable.png" style="width:80%;">
 
-* **View/Make Groups:** Form project and/or class activity groups. Select a number of groups to form and click "Form Groups". Once a set of groups has been saved to the cohort, the option to create groups with 'no repeats' becomes available. Clicking this option will allow you to select a group for comparison, and then form a set of groups wherein no students are working with someone they have already worked with. Click the 'View Groups' tab to view all saved group sets:<br><div style="width:100%;">
+* **View/Make Groups:** Form project and/or class activity groups. Select a number of groups to form and click "Form Groups". Once a set of groups has been saved to the cohort, the option to create groups with 'no repeats' becomes available. Clicking this option will allow you to select a group for comparison, and then form a set of groups wherein no students are working with someone they have already worked with. Click the 'View Groups' tab to view all saved group sets:<br><div style="width:100%;display:flex;flex-direction:row;justify-content:space-between;">
 <br>
     <img src="client/public/bcs-screenshots/cohortPageMakeGroupsEmpty.png" style="width:45%;">
     <img src="client/public/bcs-screenshots/cohortPageViewGroups.png" style="width:45%;">
 </div>
 
-* **Presentation Feedback/View Feedback:** Enter notes and a prospective grade for each group in a particular set during group project presentations. Click 'View Feedback' and select a group set to view all notes from all users.<br><div>
+* **Presentation Feedback/View Feedback:** Enter notes and a prospective grade for each group in a particular set during group project presentations. Click 'View Feedback' and select a group set to view all notes from all users.<br><div style="width:100%;display:flex;flex-direction:row;justify-content:space-between;">
 <img src="client/public/bcs-screenshots/cohortPageProjFeedback.png" style="width:45%;">
 <img src="client/public/bcs-screenshots/cohortPageViewFeedback.png" style="width:45%;">
 </div>
