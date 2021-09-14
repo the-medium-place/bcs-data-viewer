@@ -9,10 +9,10 @@ export default function Header() {
 
     return (
         <nav className="Header p-2 navbar bg-bcs text-light shadow shadow-sm">
-            <div className="container-fluid d-flex justify-content-start" >
+            <div className="container-fluid d-flex justify-content-start pe-5" >
                 <span className="navbar-brand mb-0 h1">BCS Data Viewer</span>
 
-                <div className="nav-item dropdown">
+                <div className="nav-item dropdown ms-auto">
                     <span className="nav-link dropdown-toggle text-light" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         {loggedInUser ? loggedInUser.data.name : 'Welcome!'}
                     </span>

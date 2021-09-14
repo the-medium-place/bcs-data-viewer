@@ -46,9 +46,9 @@ function App() {
         <Router>
           <Switch>
 
-            <Route exact path="/">
+            {/* <Route exact path="/">
               <Splash />
-            </Route>
+            </Route> */}
 
             <Route exact path={["/users/:id", "/me"]}>
               <UserPage />

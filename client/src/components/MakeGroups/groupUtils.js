@@ -82,10 +82,10 @@ export const chunkArrayNoRepeats = (gradesArr, numGroups, cohortGroup, activeStu
             groupsObj[`Group ${counter}`].forEach(memberObj => { // current group has at least 1 member, loop through members already assigned to this group
                 if (shouldSkip) { return; }
                 if (!object[getKey([gradeObj.student, memberObj.student])]) { // check each student pairing for current group against the value in 'object' above
-                    console.log(`%c${gradeObj.student} and ${memberObj.student} have not worked together before. canBeAdded remains true.`, 'color:lightgreen;')
+                    console.log(`%c${gradeObj.student} and ${memberObj.student} have not worked together before.`, 'color:lightgreen;')
 
                 } else { // current pairing has value of '1' in object, meaning students have worked together before
-                    console.log(`%c${gradeObj.student} and ${memberObj.student} HAVE WORKED TOGETHER BEFORE!! canBeAdded becomes false.`, 'color:red;');
+                    console.log(`%c${gradeObj.student} and ${memberObj.student} HAVE WORKED TOGETHER BEFORE!!`, 'color:red;');
                     canBeAdded = false; // set boolean trigger to false to prevent adding student
                     shouldSkip = true; // no need to check next student in this group, since there is already a repeated pairing
                 }
@@ -101,16 +101,16 @@ export const chunkArrayNoRepeats = (gradesArr, numGroups, cohortGroup, activeStu
                 sortedStudentGradesArr.push(gradeObj);
 
                 let maxGroupSize = Math.ceil(sortedStudentGradesArr.length / numGroups);
-                console.log({ maxGroupSize })
+                // console.log({ maxGroupSize })
 
                 if (groupsObj[`Group ${counter}`].length >= maxGroupSize) {
                     const groupsArr = Object.keys(groupsObj);
                     const minLengthGroup = groupsArr.reduce((a, b) => groupsObj[a].length <= groupsObj[b].length ? a : b)
-                    console.log("minLengthGroup: ", minLengthGroup)
-                    console.log("position in array: ", groupsArr)
-                    console.log('before: ', counter)
+                    // console.log("minLengthGroup: ", minLengthGroup)
+                    // console.log("position in array: ", groupsArr)
+                    // console.log('before: ', counter)
                     counter = groupsArr.indexOf(minLengthGroup) - 1
-                    console.log('after: ', counter)
+                    // console.log('after: ', counter)
 
                     // counter-- // reset counter so it tries the same group again but with new value at that index
                 }
@@ -140,7 +140,7 @@ export const chunkArrayNoRepeats = (gradesArr, numGroups, cohortGroup, activeStu
     }
 
 
-    console.log(groupsObj);
+    // console.log(groupsObj);
     return groupsObj;
 }
 
@@ -233,7 +233,7 @@ export const checkGroupForRepeats = (activeStudents, cohortGroup, destinationGro
     // OBJECT HAS KEYS OF EVERY POSSIBLE STUDENT PAIRING -
     // IF PAIRING HAS APPEARED IN PREVIOUS GROUP, VALUE IS 1
     // IF PAIRING HAS NOT APPEARED, VALUE IS 0
-    console.log(object);
+    // console.log(object);
     let repeatCheck = true;
     let repeatedName;
 

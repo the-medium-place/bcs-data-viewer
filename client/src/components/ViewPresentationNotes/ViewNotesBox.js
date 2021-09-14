@@ -23,7 +23,7 @@ export default function ViewNotesBox({ groupName, groupNotes, groupMembers }) {
                     <div className="d-flex justify-content-around">
                         {groupNotes.length > 0 ? groupNotes.map(note => {
                             return <NotesCard note={note} />
-                        }) : <h3 className="text-center">No saved notes. Use the 'Presentation Notes' tab above to add presentation feedback.</h3>}
+                        }) : <h3 className="text-center">No saved notes. Use the 'Presentation Feedback' tab above to add presentation feedback.</h3>}
                     </div>
                 </div>
             </div>

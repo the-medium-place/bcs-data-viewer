@@ -29,7 +29,9 @@ export default function UserPage() {
 
     // Check if data is returning from the `QUERY_ME` query, then the `QUERY_SINGLE_PROFILE` query
     const loggedInUser = data?.me || data?.user || {};
-    // console.log(loggedInUser)
+    // console.log(loggedInUser.cohorts)
+    const cohortCodeArray = loggedInUser.cohorts ? loggedInUser.cohorts.map(cohObj => cohObj.cohortCode) : [];
+    // console.log(cohortCodeArray)
     // get bcs login info from user object
     const bcsEmail = loggedInUser.bcsLoginInfo?.bcsEmail || null;
     const bcsPassword = loggedInUser.bcsLoginInfo?.bcsPassword || null;
@@ -68,11 +70,12 @@ export default function UserPage() {
                             <hr />
                             <p className="text-center p-1 bg-bcs text-light w-75 mx-auto shadow"><button className="btn btn-light text-bcs" onClick={cohortInfoClick}>Click Here</button> to view all your cohorts from the BCS Database</p>
                             {apiError ? (
-                                <p className="text-center p-1 text-danger">There was an error connecting to the BCS database. <br /><a href="/updateuser"><button className="bg-light border-bcs rounded">Click Here</button></a> check your BCS login info...</p>
+                                <p className="text-center p-1 text-danger">There was an error connecting to the BCS database. <br /><a href="/updateuser"><button className="bg-light border-bcs rounded">Click Here</button></a> to update your BCS login info...</p>
                             ) : null}
                             <div className="d-flex justify-content-center">
-                                <ul className="list-group list-group-flush w-75">{cohortInfo.length > 0 ? "All associated Cohorts:" : null}
-                                    {cohortInfo.length > 0 ? cohortInfo.map(cohort => <CohortListItem key={cohort.cohortId} cohort={cohort} saveButton={true} loggedInUser={loggedInUser} />) : null}
+                                <ul className="list-group list-group-flush w-75">
+                                    {/* {cohortInfo.length > 0 ? "Your cohorts:" : null} */}
+                                    {cohortInfo.length > 0 ? cohortInfo.map(cohort => <CohortListItem cohortCodeArray={cohortCodeArray} key={cohort.cohortId} cohort={cohort} saveButton={true} loggedInUser={loggedInUser} />) : null}
                                 </ul>
                             </div>
                         </>

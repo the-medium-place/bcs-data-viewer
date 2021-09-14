@@ -60,6 +60,11 @@ const API = {
                     infoObj.cohortCode = courseObj.course.code;
                     infoObj.cohortId = courseObj.courseId;
                     infoObj.enrollmentId = courseObj.id
+                    infoObj.startDate = courseObj.course.startDate;
+                    infoObj.endDate = courseObj.course.endDate;
+                    infoObj.university = courseObj.course.cohort.program.university.name;
+                    infoObj.universityLogo = courseObj.course.cohort.program.university.logoUrl;
+                    // console.log(infoObj)
                     resArr.push(infoObj)
 
                 })

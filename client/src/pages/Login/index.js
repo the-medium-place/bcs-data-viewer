@@ -11,7 +11,7 @@ import logo2u from '../../assets/images/2uLogo.png'
 export default function Login() {
 
     const [login, { error, data }] = useMutation(LOGIN_USER);
-    // if (error) { console.log(JSON.stringify(error.message)) }
+    if (error) { console.log(JSON.stringify(error.message)) }
     const [loginState, setLoginState] = useState({
         name: '',
         password: ''
@@ -29,7 +29,7 @@ export default function Login() {
             const { data } = await login({
                 variables: { ...loginState },
             });
-            console.log(data)
+            // console.log(data)
             Auth.login(data.login.token);
         } catch (e) {
             console.error(e);
@@ -46,8 +46,10 @@ export default function Login() {
         <>
             <div className="row main-content bg-success text-center">
                 <div className="col-md-4 text-center company__info">
-                    <div className="logo__wrapper p-2 d-flex justify-content-center align-items-center" style={{ background: 'white', borderRadius: '50%', aspectRatio: '1/1' }}>
-
+                    <div
+                        className="logo__wrapper p-2 d-flex justify-content-center align-items-center rounded-circle"
+                        style={{ background: 'white', aspectRatio: '1/1' }}
+                    >
                         <img className="company__logo" src={logo2u} alt="2U Logo" />
                     </div>
 

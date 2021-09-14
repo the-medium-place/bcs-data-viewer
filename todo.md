@@ -3,7 +3,6 @@
 - [x] cohort table - include array of students who have dropped (to eliminate from results output), include array of Notes
 - [x] groups table - save project/class activity groups 
 - [x] notes table - used for both cohort and student notes - include creation date, content, and creator profile info
-- [ ] student table - include basic student info and array of Notes from instructional staff
 
 
 Login Page -> Cohort Select Page -> Dashboard View:
@@ -43,7 +42,17 @@ Login Page -> Cohort Select Page -> Dashboard View:
 - [ ] option to delete saved groups
 
 #### Presentations:
-- [ ] Select which grouping to add notes
-- [ ] Select specific group to add notes
-- [ ] Save notes / Grade for specific group
-- [ ] view all notes for each individual group
+- [x] Select which grouping to add notes
+- [x] Select specific group to add notes
+- [x] Save notes / Grade for specific group
+- [x] view all notes for each individual group
+
+### PARKING LOT!!
+
+#### Attendance:
+* Below is requiring edit access to API...
+- [ ] See attendance for current/past session
+- [ ] Update attendance for current session
+- [ ] Integrate with zoom/slack to message students who are present but not checked in??
+
+
