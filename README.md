@@ -20,7 +20,7 @@ To install locally, clone this repository and then run `npm i` from the root dir
 To run the project on your local machine run `npm run develop` and all servers will start (React server will run on PORT 3000, backend/Mongo server will run on PORT 3001)
 
 ## Usage: 
-1. Navigate your browser to the application homepage ([click here](https://https://bcs-data-viewer.herokuapp.com/)). You will automatically be directed to the login page:<br>
+1. Navigate your browser to the application homepage ([click here](https://bcs-data-viewer.herokuapp.com/)). You will automatically be directed to the login page:<br>
 <img src="client/public/bcs-screenshots/loginPage.png" style="width:80%;">
 
 * If you have an account, log-in. Or, if you do not have an account, click on <span style="color:skyblue;">Register Here</span> to be directed to the registration page:

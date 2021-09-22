@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AlertMessage from "../../components/AlertMessage";
 import { Link } from "react-router-dom";
 
@@ -19,7 +19,7 @@ const Signup = () => {
     bcsPassword: "",
   });
   const [sameInfoCheckbox, setSameInfoCheckbox] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(null);
+  // const [errorMessage, setErrorMessage] = useState(null);
   const [showError, setShowError] = useState(false)
   const [addUser, { error, data }] = useMutation(ADD_USER);
   if (error) {
@@ -40,12 +40,14 @@ const Signup = () => {
   //   const { name, value } = e.target;
   //   setFormState({
   //     ...formState,
-  //     bcsLoginInfo: {
-  //       ...formState.bcsLoginInfo,
-  //       [name]: value
-  //     }
+  //     [name]: value
   //   })
   // }
+
+  // useEffect(() => {
+
+
+  // }, [sameInfoCheckbox])
 
   const handleSameInfoClick = (e) => {
     setSameInfoCheckbox(!sameInfoCheckbox);
@@ -55,19 +57,20 @@ const Signup = () => {
       bcsEmail: !sameInfoCheckbox ? formState.email : "",
       bcsPassword: !sameInfoCheckbox ? formState.password : "",
     });
+
   };
 
   // submit form
   const handleFormSubmit = async (e) => {
     e.preventDefault();
 
-    console.log(formState);
+    // console.log(formState);
 
     try {
       const { data } = await addUser({
         variables: { ...formState },
       });
-      console.log("create user post-data: ", data.addUser.token);
+      // console.log("create user post-data: ", data.addUser.token);
 
       Auth.login(data.addUser.token);
     } catch (err) {

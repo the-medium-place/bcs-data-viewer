@@ -75,6 +75,7 @@ const typeDefs = gql`
     saveGroups(title: String!, groups: JSON!, cohortId: ID!): Cohort
     addPresentationNotes(groupsId: ID!, notes: String!, grade: String!, groupName: String!): Groups
     updatePresentationNotes(groupsId: ID!, noteId: ID!, notes: String, grade: String): Groups
+    updateCohortRoster(cohortId: ID!, newRoster: [String!]): Cohort
   }
 `;
 

@@ -101,6 +101,29 @@ export const ADD_COHORT = gql`
   }
 `
 
+export const UPDATE_COHORT_ROSTER = gql`
+  mutation updateCohortRoster($cohortId: ID!, $newRoster: [String!]) {
+    updateCohortRoster(cohortId: $cohortId, newRoster: $newRoster){
+      _id
+      cohortCode
+      cohortId
+      enrollmentId
+      studentRoster
+      droppedStudents
+      notes {
+        _id
+        content
+        createdAt
+        createdBy {
+          _id
+          name
+          email
+        }
+      }
+    }
+  }
+`
+
 export const DROP_STUDENT = gql`
   mutation dropStudent($name: String!, $cohortId: ID!){
     dropStudent(name: $name, cohortId: $cohortId){

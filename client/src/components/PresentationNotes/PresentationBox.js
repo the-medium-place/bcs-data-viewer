@@ -34,7 +34,7 @@ export default function PresentationBox({ name, groupsObj, loggedInUser, groupsI
             notes: groupNotes ? groupNotes.notes : '',
             grade: groupNotes ? groupNotes.grade : null
         })
-    }, [])
+    }, [groupNotes])
 
 
     const [buttonDisable, setButtonDisable] = useState(false);

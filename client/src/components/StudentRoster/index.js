@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { DROP_STUDENT, REMOVE_DROP_STUDENT } from '../../utils/mutations'
+import { DROP_STUDENT, REMOVE_DROP_STUDENT, UPDATE_COHORT_ROSTER } from '../../utils/mutations'
 import { useMutation } from '@apollo/client';
+import API from '../../utils/API'
 import './style.css';
 
-export default function StudentRoster({ cohortId, studentRoster, droppedStudents }) {
+export default function StudentRoster({ cohortId, studentRoster, droppedStudents, bcsCohortId, loggedInUser }) {
 
-
+    // console.log({ bcsCohortId, loggedInUser })
     const [studentDrop, setStudentDrop] = useState('');
 
 
@@ -13,6 +14,7 @@ export default function StudentRoster({ cohortId, studentRoster, droppedStudents
     if (dropError) { console.log(dropError) }
 
     const [removeDropStudent, { error: removeError, data: removeData }] = useMutation(REMOVE_DROP_STUDENT)
+    const [updateCohortRoster, { error: rosterError, data: rosterData }] = useMutation(UPDATE_COHORT_ROSTER)
 
     useEffect(() => {
 
@@ -50,14 +52,38 @@ export default function StudentRoster({ cohortId, studentRoster, droppedStudents
         }
     }
 
+    const updateRosterClick = async e => {
+        let newRoster = []
+        const studentData = await API.getStudentNames(loggedInUser.bcsLoginInfo.bcsEmail, loggedInUser.bcsLoginInfo.bcsPassword, bcsCohortId);
+        if (studentData.data) {
+            studentData.data.forEach(studentObj => {
+                if (!newRoster.includes(studentObj.studentName)) {
+                    newRoster.push(studentObj.studentName)
+                }
+            })
+        }
+        // console.log(newRoster)
+        try {
+            const { data } = await updateCohortRoster({
+                variables: { newRoster, cohortId },
+            });
+            console.log(data)
+        } catch (err) {
+            console.log(JSON.stringify(err))
+        }
+
+    }
+
 
     return (
         <div className="StudentRoster row d-flex p-3">
             <p className="text-center p-2 w-75 mt-3 mx-auto lead border-bcs" >Use this tool to view all current students enrolled in this cohort. Since students are not removed from the roster when they drop the course, you are able to move students to an <em>inactive</em> list. <em>Inactive</em> students will be removed from all further actions, such as viewing grades and forming of groups. </p>
-
             <div className="col-md-6">
 
                 <h3>Active Student Roster: </h3>
+                <p className="text-center">Have students been added to this cohort?&nbsp;
+                    <button className="btn bg-bcs text-light my-2" onClick={updateRosterClick}>Update Roster</button>
+                </p>
                 <ol className="list-group list-group-numbered">
                     {studentRoster.filter(student => !droppedStudents.includes(student)).map(student => <li className="list-group-item w-100" key={student}>{student}</li>)}
                 </ol>

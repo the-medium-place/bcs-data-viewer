@@ -131,7 +131,7 @@ export default function MakeGroups({
   };
 
   const onDragEnd = (result) => {
-    console.log({ result });
+    // console.log({ result });
     // console.log(groups)
     const { destination, source, draggableId } = result;
 
@@ -177,7 +177,7 @@ export default function MakeGroups({
     if (memberRepeat && noRepeatGroup) {
       repeatCheck = checkGroupForRepeats(activeStudents, JSON.parse(noRepeatGroup), groups[destination.droppableId], draggableId)
     }
-    console.log({ repeatCheck })
+    // console.log({ repeatCheck })
     if (repeatCheck && !repeatCheck.repeatCheck && memberRepeat) {
       alert(`${draggableId} has already worked with ${repeatCheck.repeatedName} - please try another group.`)
       return;
@@ -248,7 +248,7 @@ export default function MakeGroups({
 
               {memberRepeat ? (
 
-                <select className="form-select mt-2" aria-label="Default select example" onChange={(e) => { console.log(e.target.value); setNoRepeatGroup(e.target.value) }}>
+                <select className="form-select mt-2" aria-label="Default select example" onChange={(e) => { setNoRepeatGroup(e.target.value) }}>
                   <option selected defaultValue disabled>Select saved group to compare...</option>
                   {cohortGroups.map((cohortGroup, i) => {
                     return (

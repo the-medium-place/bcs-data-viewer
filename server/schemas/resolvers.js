@@ -233,7 +233,18 @@ const resolvers = {
       }
 
       throw new AuthenticationError('You are not logged in!');
+    },
+
+    updateCohortRoster: async (parent, { cohortId, newRoster }, context) => {
+      if (context.user) {
+        const updatedCohort = await Cohort.findOneAndUpdate({ _id: cohortId }, { $set: { studentRoster: newRoster } }, { new: true }).populate({ path: 'notes', populate: 'createdBy' }).populate('groups')
+        return updatedCohort;
+
+      }
+      throw new AuthenticationError('You are not logged in!');
+
     }
+
   },
 
 

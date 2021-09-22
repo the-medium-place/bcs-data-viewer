@@ -90,7 +90,7 @@ export default function Cohort() {
                 <div className="content-wrapper row d-flex justify-content-center">
                     {
                         view === 'grades' ? <StudentGrades bcsCohortId={bcsCohortId} enrollmentId={enrollmentId} loggedInUser={loggedInUser} studentRoster={studentRoster} droppedStudents={droppedStudents} /> :
-                            view === "roster" ? <StudentRoster cohortId={cohortId} studentRoster={studentRoster} droppedStudents={droppedStudents} /> :
+                            view === "roster" ? <StudentRoster cohortId={cohortId} studentRoster={studentRoster} droppedStudents={droppedStudents} bcsCohortId={bcsCohortId} loggedInUser={loggedInUser} /> :
                                 view === "makegroups" ? <MakeGroups cohortGroups={cohortGroups} loggedInUser={loggedInUser} studentRoster={studentRoster} droppedStudents={droppedStudents} bcsCohortId={bcsCohortId} enrollmentId={enrollmentId} cohortId={cohortId} /> :
                                     view === 'savedgroups' ? <SavedGroups cohortGroups={cohortGroups} /> :
                                         view === "projectpresentations" ? <ProjectPresentations cohortGroups={cohortGroups} loggedInUser={loggedInUser} /> :

@@ -61,7 +61,16 @@ export default function CohortListItem({ cohort, saveButton, loggedInUser, cohor
                     </>
                 ) : null}
                 <p className="lead my-2" style={{ textDecoration: 'none' }}>{cohort.cohortCode}</p>
-                {saveButton ? <button className="btn bg-bcs text-light mx-auto" style={{ width: '50%' }} onClick={handleSave} disabled={cohortCodeArray.includes(cohort.cohortCode)}>{cohortCodeArray.includes(cohort.cohortCode) ? "Already Connected!" : "Connect!"}</button> : null}
+                {
+                    saveButton ? <button
+                        className="btn bg-bcs text-light mx-auto"
+                        style={{ width: '50%' }}
+                        onClick={handleSave}
+                        disabled={cohortCodeArray.includes(cohort.cohortCode)}
+                    >
+                        {cohortCodeArray.includes(cohort.cohortCode) ? "Already Connected!" : "Connect!"}
+                    </button> : null
+                }
             </div>
         </li>
     )
