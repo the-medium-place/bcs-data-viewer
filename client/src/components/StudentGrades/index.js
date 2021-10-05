@@ -175,8 +175,30 @@ export default function StudentGrades({ enrollmentId, bcsCohortId, studentRoster
                         <table className="table table-sm table-hover table-condensed w-100">
                             <thead>
                                 <tr>
-                                    <th className="table-light th-name-avg" scope="col" style={{ minWidth: 100 }}>Student Name&nbsp;&nbsp;<span onClick={alphaSort}>{isAlphaSorted ? renderIcon('down') : renderIcon('up')}</span></th>
-                                    <th className="table-light th-name-avg second-child" scope="col" style={{ minWidth: 120 }}>Avg&nbsp;&nbsp;<span onClick={gradeSort}>{isGradeSorted ? renderIcon('down') : renderIcon('up')}</span></th>
+                                    <th
+                                        className="table-light th-name-avg"
+                                        scope="col"
+                                        style={{ minWidth: '15ch' }}
+                                    >
+                                        Student Name&nbsp;&nbsp;
+                                        <span
+                                            onClick={alphaSort}
+                                        >
+                                            {isAlphaSorted ? renderIcon('down') : renderIcon('up')}
+                                        </span>
+                                    </th>
+                                    <th
+                                        className="table-light th-name-avg second-child"
+                                        scope="col"
+                                        style={{ minWidth: '12ch' }}
+                                    >
+                                        Avg&nbsp;&nbsp;
+                                        <span
+                                            onClick={gradeSort}
+                                        >
+                                            {isGradeSorted ? renderIcon('down') : renderIcon('up')}
+                                        </span>
+                                    </th>
                                     {gradeData ?
                                         gradeData.assignmentArr.map(assignment => (
                                             <th scope="col" key={assignment} style={{ minWidth: 100 }}>
@@ -199,7 +221,7 @@ export default function StudentGrades({ enrollmentId, bcsCohortId, studentRoster
                                         <tr key={student}>
                                             <th className="th-col-header table-light" scope="row">{student}</th>
                                             <th className="th-avg-grade table-light second-child" scope="row">
-                                                {getKeyByValue(MAP_GRADES_TO_INT, Math.round(gradeAvg))}
+                                                <p className="d-inline-block">{getKeyByValue(MAP_GRADES_TO_INT, Math.round(gradeAvg))}</p>
                                                 <br />
                                                 <span className={failingGrades < 3 ? 'bg-secondary text-light p-1' : 'bg-danger text-light p-1'}>
                                                     Failing: {failingGrades}
