@@ -178,7 +178,7 @@ export default function StudentGrades({ enrollmentId, bcsCohortId, studentRoster
                                     <th
                                         className="table-light th-name-avg"
                                         scope="col"
-                                        style={{ minWidth: '15ch' }}
+                                        style={{ minWidth: '17ch' }}
                                     >
                                         Student Name&nbsp;&nbsp;
                                         <span
