@@ -259,6 +259,189 @@ const API = {
         // return object of assignment names and due dates
         const gradeData = await this.gradesAPI(authToken, parseInt(enrollmentId))
         return gradeData;
+    },
+
+    getSessions: async function (authToken, enrollmentId) {
+        let academicSess, careerSess;
+        // GET ALL SESSIONS DATA WITH DATES
+        const sessionURL = "https://bootcampspot.com/api/instructor/v1/sessions"
+        const sessionPayload = {
+            enrollmentId: parseInt(enrollmentId)
+        }
+        const sessionConfig = {
+            headers: {
+                'Content-Type': 'application/json',
+                authToken
+            }
+        }
+
+        try {
+            const sessionRes = await axios.post(sessionURL, sessionPayload, sessionConfig);
+            // SPLIT SESSIONS BY CAREER (OPTIONAL) / ACADEMIC (REQUIRED)
+            careerSess = sessionRes.data.calendarSessions.filter(sessObj => sessObj.category.code === 'career');
+            academicSess = sessionRes.data.calendarSessions.filter(sessObj => sessObj.category.code === 'academic')
+            // console.log(sessionRes)
+        } catch (err) {
+            throw new Error(err)
+        }
+        // console.log({ academicSess, careerSess })
+        return { academicSess, careerSess }
+
+    },
+
+    getStudentAttendanceInfo: async function (authToken, bcsCohortId) {
+        // GET ATTENDANCE DATA
+        const attendanceURL = 'https://bootcampspot.com/api/instructor/v1/attendance';
+        const attendancePayload = {
+            courseId: parseInt(bcsCohortId)
+        }
+        const attendanceConfig = {
+            headers: {
+                'Content-Type': 'application/json',
+                authToken
+            }
+        }
+        // VALUES TO BE RETURNED
+        // const sessionNamesArr = []
+        const studentSessionAttendanceObj = {};
+
+        // API CALL FOR ATTENDANCE INFO
+        // ========================
+        try {
+            const res = await axios.post(attendanceURL, attendancePayload, attendanceConfig)
+            // console.log(res.data)
+            console.log("API request SUCCESS!\n================================================\n")
+            console.log("attendance data: ", res.data)
+            const cssSessions = res.data.filter(obj => obj.sessionName.toLowerCase().includes('advanced css'))
+            // console.log({ cssSessions })
+            // return res.data
+            let prevSessName;
+            let prevStudentName;
+            res.data.forEach(attObj => {
+                let currSessName = attObj.sessionName;
+                // let currStudentName = attObj.studentName;
+                if (attObj.sessionName === prevSessName && attObj.studentName === prevStudentName) {
+
+                    const numCheck = typeof currSessName[currSessName.length - 1] === 'number';
+
+                    if (numCheck) {
+                        const currSessNum = parseInt(currSessName[currSessName.length - 1])
+                        currSessName = currSessName.split().pop().push(" - Day " + currSessNum + 1).join()
+                    } else {
+                        currSessName = currSessName + ' - Day 2'
+                    }
+                }
+
+                const studentAttObj = {
+                    name: attObj.studentName,
+                    session: currSessName,
+                    attendance: {
+                        excused: attObj.excused,
+                        pending: attObj.pending,
+                        present: attObj.present,
+                        remote: attObj.remote
+                    }
+                }
+                // CREATE ARRAY OF STUDENT OBJECTS: [{sessionName: [studentName: {...attendance info}]}]
+                if (!studentSessionAttendanceObj[attObj.sessionName]) {
+                    studentSessionAttendanceObj[attObj.sessionName] = []
+                    studentSessionAttendanceObj[attObj.sessionName].push(studentAttObj)
+                }
+                if (!studentSessionAttendanceObj[attObj.sessionName].includes(studentAttObj)) {
+                    studentSessionAttendanceObj[attObj.sessionName].push(studentAttObj)
+                }
+
+                prevSessName = attObj.sessionName
+                prevStudentName = attObj.studentName
+                // return sessionNamesArr.includes(attObj.sessionName) ? null : sessionNamesArr.push(attObj.sessionName);
+            })
+            // console.log(studentSessionAttendanceObj)
+            return { sessionInfo: studentSessionAttendanceObj }
+
+        } catch (err) {
+
+            console.log("API Request FAILURE: \n==========================\n", err)
+        }
+    },
+
+    getAttendance: async function (bcsEmail, bcsPassword, bcsCohortId, enrollmentId) {
+        // GET AUTH TOKEN FOR ALL DATA COLLECTION
+        const authToken = await this.getAuthToken(bcsEmail, bcsPassword);
+
+        // GET ARRAYS OF SESSION DATA
+        const { careerSess, academicSess } = await this.getSessions(authToken, enrollmentId)
+        // console.log({ academicSess })
+
+        // GET INDIVIDUAL STUDENT ATTENDANCE DATA
+        const { sessionInfo } = await this.getStudentAttendanceInfo(authToken, bcsCohortId)
+        // console.log({ sessionInfo })
+
+        // LOOP THROUGH ARRAY OF SESSION OBJECTS, CREATE ARRAY OF OBJECTS
+        let prevSessName;
+        const newSessionAttendanceArray = academicSess
+            .sort((a, b) => {
+                const date1 = new Date(a.session.startTime).getTime();
+                const date2 = new Date(b.session.startTime).getTime()
+                // console.log({ date1, date2 })
+                if (date1 < date2) {
+                    return -1;
+                } else if (date2 < date1) {
+                    return 1;
+                }
+                return 0
+            })
+            .map(sessObj => {
+                const newObj = {
+                }
+                const sessDate = sessObj.session.startTime
+                // let newKey = sessObj.session.chapter + ' - ' + sessObj.session.name;
+                let newKey;
+                if (sessObj.session.name === prevSessName) {
+                    newKey = sessObj.session.name + ' - Day 2';
+                } else {
+                    newKey = sessObj.session.name;
+                }
+
+                // CREATE BASE ARRAY OF OBJECTS
+                newObj[newKey] = []
+                // console.log({ newObj })
+
+                // LOOP THROUGH SESSION ATTENDANCE INFO TO POPULATE ARRAY OBJECTS
+                sessionInfo[sessObj.session.name].forEach(attObj => {
+                    // console.log(attObj)
+                    // attObj.date = sessDate
+                    newObj[newKey].push(attObj)
+                })
+                newObj.date = sessDate
+                newObj.chapter = sessObj.session.chapter;
+                const now = new Date();
+                newObj.isPast = new Date(sessDate) < now ? true : false;
+                // console.log({ newObj })
+                newObj.sessionName = sessObj.session.name
+                prevSessName = sessObj.session.name
+                return newObj;
+
+            })
+        // console.log({ newSessionAttendanceArray })
+        // LOOP ARRAY OF SESSION OBJECTS [{sessionName<STRING>: [{name:<STRING>, session:<STRING>, attendance:<OBJECT>}]}]
+        const fullSessionAttendnaceList = newSessionAttendanceArray.map(sessObj => {
+            // GET CURRENT KEY - SESSION NAME
+            const sessName = Object.keys(sessObj)[0];
+
+            // console.log(sessName, " before ", sessObj[sessName])
+
+            // LOOP THROUGH ARRAY OF STUDENT ATTENDANCE OBJECTS AND FILTER OUT EXTRA VALUES
+            sessObj[sessName] = sessObj[sessName].filter(attObj => attObj.session === sessName)
+            // console.log(sessName);
+            // console.log(sessName, " after ", sessObj[sessName])
+            return sessObj;
+
+        })
+
+        // console.log({ fullSessionAttendnaceList })
+
+        return fullSessionAttendnaceList
+
     }
 
 

@@ -17,6 +17,7 @@ import './style.css';
 import NotLoggedIn from '../../components/NotLoggedIn';
 import ProjectPresentations from '../../components/ProjectPresentations';
 import ViewPresentationNotes from '../../components/ViewPresentationNotes';
+import Attendance from '../../components/Attendance';
 
 export default function Cohort() {
     const params = useParams();
@@ -54,6 +55,19 @@ export default function Cohort() {
         setView(clickId)
     }
 
+    const renderPage = () => {
+        const MAP_COMPONENT = {
+            grades: <StudentGrades bcsCohortId={bcsCohortId} enrollmentId={enrollmentId} loggedInUser={loggedInUser} studentRoster={studentRoster} droppedStudents={droppedStudents} />,
+            roster: <StudentRoster cohortId={cohortId} studentRoster={studentRoster} droppedStudents={droppedStudents} bcsCohortId={bcsCohortId} loggedInUser={loggedInUser} />,
+            makegroups: <MakeGroups cohortGroups={cohortGroups} loggedInUser={loggedInUser} studentRoster={studentRoster} droppedStudents={droppedStudents} bcsCohortId={bcsCohortId} enrollmentId={enrollmentId} cohortId={cohortId} />,
+            savedgroups: <SavedGroups cohortGroups={cohortGroups} />,
+            projectpresentations: <ProjectPresentations cohortGroups={cohortGroups} loggedInUser={loggedInUser} />,
+            viewpresentationnotes: <ViewPresentationNotes cohortGroups={cohortGroups} />,
+            attendance: <Attendance bcsCohortId={bcsCohortId} loggedInUser={loggedInUser} enrollmentId={enrollmentId} studentRoster={studentRoster} droppedStudents={droppedStudents} />
+        }
+        return MAP_COMPONENT[view]
+    }
+
 
     return (
         <div className="Cohort">
@@ -72,6 +86,9 @@ export default function Cohort() {
                         <li onClick={handleTabClick} data-view="grades" className='nav-item tab-li'>
                             <span data-view="grades" className={`nav-link ${view === 'grades' ? 'active' : null}`}>Grades</span>
                         </li>
+                        <li onClick={handleTabClick} data-view="attendance" className='nav-item tab-li'>
+                            <span data-view="attendance" className={`nav-link ${view === 'attendance' ? 'active' : null}`}>Attendance</span>
+                        </li>
                         <li onClick={handleTabClick} data-view="makegroups" className='nav-item tab-li'>
                             <span data-view="makegroups" className={`nav-link ${view === 'makegroups' ? 'active' : null}`}>Make Groups</span>
                         </li>
@@ -89,13 +106,7 @@ export default function Cohort() {
                 {/* <hr /> */}
                 <div className="content-wrapper row d-flex justify-content-center">
                     {
-                        view === 'grades' ? <StudentGrades bcsCohortId={bcsCohortId} enrollmentId={enrollmentId} loggedInUser={loggedInUser} studentRoster={studentRoster} droppedStudents={droppedStudents} /> :
-                            view === "roster" ? <StudentRoster cohortId={cohortId} studentRoster={studentRoster} droppedStudents={droppedStudents} bcsCohortId={bcsCohortId} loggedInUser={loggedInUser} /> :
-                                view === "makegroups" ? <MakeGroups cohortGroups={cohortGroups} loggedInUser={loggedInUser} studentRoster={studentRoster} droppedStudents={droppedStudents} bcsCohortId={bcsCohortId} enrollmentId={enrollmentId} cohortId={cohortId} /> :
-                                    view === 'savedgroups' ? <SavedGroups cohortGroups={cohortGroups} /> :
-                                        view === "projectpresentations" ? <ProjectPresentations cohortGroups={cohortGroups} loggedInUser={loggedInUser} /> :
-                                            view === 'viewpresentationnotes' ? <ViewPresentationNotes cohortGroups={cohortGroups} /> :
-                                                <h1>what???</h1>
+                        renderPage()
                     }
                 </div>
 
