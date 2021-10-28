@@ -92,7 +92,9 @@ export default function StudentGrades({ enrollmentId, bcsCohortId, studentRoster
         let numDue = 0,
             totalGradeVal = 0,
             gradeAvg = 0,
-            failingGrades = 0;
+            failingGrades = 0,
+            ungraded = 0;
+
 
         gradeData.studentObj[student].assignments.forEach(assignmentObj => {
             if (assignmentObj.isDue && assignmentObj.grade !== 'Ungraded') {
@@ -102,9 +104,12 @@ export default function StudentGrades({ enrollmentId, bcsCohortId, studentRoster
             if (assignmentObj.grade === 'F' || assignmentObj.grade === 'I' || assignmentObj.grade === 'Overdue!' || assignmentObj.grade === 'Incomplete') {
                 failingGrades++;
             }
+            if (assignmentObj.isDue && assignmentObj.grade === 'Ungraded') {
+                ungraded++;
+            }
         })
         gradeAvg = totalGradeVal / (numDue || 1);
-        return { gradeAvg, failingGrades }
+        return { gradeAvg, failingGrades, ungraded }
     }
 
     const alphaSort = () => {
@@ -201,7 +206,7 @@ export default function StudentGrades({ enrollmentId, bcsCohortId, studentRoster
                                     </th>
                                     {gradeData ?
                                         gradeData.assignmentArr.map(assignment => (
-                                            <th scope="col" key={assignment} style={{ minWidth: 100 }}>
+                                            <th className="table-light th-name-avg" scope="col" key={assignment} style={{ minWidth: 100 }}>
                                                 {assignment}
                                                 <br />
                                                 <p className="bg-secondary text-white p-1">
@@ -215,17 +220,24 @@ export default function StudentGrades({ enrollmentId, bcsCohortId, studentRoster
                             <tbody>
                                 {modifiableStudents.map(student => {
 
-                                    const { gradeAvg, failingGrades } = getGradeAvg(student);
+                                    const { gradeAvg, failingGrades, ungraded } = getGradeAvg(student);
 
                                     return (
                                         <tr key={student}>
-                                            <th className="th-col-header table-light" scope="row">{student}</th>
+                                            <th className="th-col-header table-light" scope="row">
+                                                {student}
+                                                <p className={failingGrades < 3 ? 'bg-secondary text-light p-1 mb-1' : 'bg-danger text-light p-1 mb-1'}>
+                                                    Failing: {failingGrades}
+                                                </p>
+                                                {/* <br /> */}
+                                                <p className="bg-secondary mt-2 p-1 text-light">
+                                                    Ungraded: {ungraded}
+                                                </p>
+                                            </th>
                                             <th className="th-avg-grade table-light second-child" scope="row">
                                                 <p className="d-inline-block">{getKeyByValue(MAP_GRADES_TO_INT, Math.round(gradeAvg))}</p>
                                                 <br />
-                                                <span className={failingGrades < 3 ? 'bg-secondary text-light p-1' : 'bg-danger text-light p-1'}>
-                                                    Failing: {failingGrades}
-                                                </span>
+
                                             </th>
                                             {gradeData.studentObj[student].assignments.map((assignmentObj, i) => {
 

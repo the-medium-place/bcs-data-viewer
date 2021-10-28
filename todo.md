@@ -26,7 +26,8 @@ Login Page -> Cohort Select Page -> Dashboard View:
 - [x] organize table by name, avg grade, assignment grade(?) (click arrow in col header?)
 - [x] Display total # of failing/incomplete/overdue assignments for each student
 - [x] display class average grade for each assignment
-- [ ] filter output (search field to filter by name?)
+- [x] filter output (search field to filter by name?)
+- [ ] display total # ungraded assignments
 
 #### Make Groups:
 - [x] select number of groups

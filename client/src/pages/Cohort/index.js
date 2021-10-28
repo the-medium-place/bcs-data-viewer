@@ -17,6 +17,7 @@ import './style.css';
 import NotLoggedIn from '../../components/NotLoggedIn';
 import ProjectPresentations from '../../components/ProjectPresentations';
 import ViewPresentationNotes from '../../components/ViewPresentationNotes';
+import Attendance from '../../components/Attendance';
 
 export default function Cohort() {
     const params = useParams();
@@ -61,7 +62,8 @@ export default function Cohort() {
             makegroups: <MakeGroups cohortGroups={cohortGroups} loggedInUser={loggedInUser} studentRoster={studentRoster} droppedStudents={droppedStudents} bcsCohortId={bcsCohortId} enrollmentId={enrollmentId} cohortId={cohortId} />,
             savedgroups: <SavedGroups cohortGroups={cohortGroups} />,
             projectpresentations: <ProjectPresentations cohortGroups={cohortGroups} loggedInUser={loggedInUser} />,
-            viewpresentationnotes: <ViewPresentationNotes cohortGroups={cohortGroups} />
+            viewpresentationnotes: <ViewPresentationNotes cohortGroups={cohortGroups} />,
+            attendance: <Attendance bcsCohortId={bcsCohortId} loggedInUser={loggedInUser} enrollmentId={enrollmentId} studentRoster={studentRoster} droppedStudents={droppedStudents} />
         }
         return MAP_COMPONENT[view]
     }
@@ -95,6 +97,9 @@ export default function Cohort() {
                         </li>
                         <li onClick={handleTabClick} data-view="viewpresentationnotes" className='nav-item tab-li'>
                             <span data-view="viewpresentationnotes" className={`nav-link ${view === 'viewpresentationnotes' ? 'active' : null}`}>View Feedback</span>
+                        </li>
+                        <li onClick={handleTabClick} data-view="viewpresentationnotes" className='nav-item tab-li'>
+                            <span data-view="attendance" className={`nav-link ${view === 'attendance' ? 'active' : null}`}>Attendance</span>
                         </li>
                     </ul>
                 </nav>
