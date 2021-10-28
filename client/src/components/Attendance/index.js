@@ -51,7 +51,7 @@ export default function Attendance({ bcsCohortId, loggedInUser, enrollmentId, st
             };
             attendanceData.forEach(sessObj => {
                 // CURRENT LOOP SESSION NAME
-                console.log({ sessObj })
+                // console.log({ sessObj })
                 const currKey = Object.keys(sessObj)[0];
                 // GET CURRENT STUDENT ATTENDANCE FOR CURRENT SESSION
                 const stuAtt = sessObj[currKey].find(attObj => attObj.name === student)
@@ -80,17 +80,35 @@ export default function Attendance({ bcsCohortId, loggedInUser, enrollmentId, st
 
     return (
         <div className="Attendance">
-            <h1>ATTENDANCE!!</h1>
-            <div className="d-flex justify-content-center mx-auto w-75">
-                <form>
-                    <div className="form-group">
-                        <label htmlFor="filter-input">
-                            Filter Students:
-                        </label>
-                        <input className="form-control" name="filter-input" id="filter-input" type="text" value={filter} onChange={handleInput} />
-                    </div>
-                </form>
+            {/* <h1>ATTENDANCE!!</h1> */}
+            <div className="row">
+                <div className="col-12 col-md-8 border-bcs p-2 mt-2 mb-1">
+                    <p className="lead text-center mt-3">
+                        This table displays student attendance. Use the 'Filter Students' input to search the table for a specific student's attendance records.
+                    </p>
+                    <p className="lead text-center text-bold mt-3">
+                        <strong>
+                            Note: There may be errors in displaying attendance for sessions with the same name - this issue is being worked on and should be fixed soon.
+                        </strong>
+                    </p>
+                </div>
+                <div className="col-12 col-md-4 d-flex justify-content-center p-2 mt-2 mb-1 bg-bcs text-light rounded-right align-items-center">
+                    <form>
+                        <div className="form-group">
+                            <label htmlFor="filter-input">
+                                Filter Students:
+                            </label>
+                            <input className="form-control" name="filter-input" id="filter-input" type="text" value={filter} onChange={handleInput} />
+                        </div>
+                    </form>
+                    {/* {filter.length > 0 ? (
+                        <p>
+                            Found {modifiableStuAttArr.length} records
+                        </p>
+                    ) : null} */}
+                </div>
             </div>
+
             <div className="my-5 border" style={{ overflow: 'auto', maxHeight: '75vh', width: '100%' }}>
                 {rawData ? (
                     <div className="table-wrapper w-100">

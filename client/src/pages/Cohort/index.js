@@ -86,6 +86,9 @@ export default function Cohort() {
                         <li onClick={handleTabClick} data-view="grades" className='nav-item tab-li'>
                             <span data-view="grades" className={`nav-link ${view === 'grades' ? 'active' : null}`}>Grades</span>
                         </li>
+                        <li onClick={handleTabClick} data-view="attendance" className='nav-item tab-li'>
+                            <span data-view="attendance" className={`nav-link ${view === 'attendance' ? 'active' : null}`}>Attendance</span>
+                        </li>
                         <li onClick={handleTabClick} data-view="makegroups" className='nav-item tab-li'>
                             <span data-view="makegroups" className={`nav-link ${view === 'makegroups' ? 'active' : null}`}>Make Groups</span>
                         </li>
@@ -97,9 +100,6 @@ export default function Cohort() {
                         </li>
                         <li onClick={handleTabClick} data-view="viewpresentationnotes" className='nav-item tab-li'>
                             <span data-view="viewpresentationnotes" className={`nav-link ${view === 'viewpresentationnotes' ? 'active' : null}`}>View Feedback</span>
-                        </li>
-                        <li onClick={handleTabClick} data-view="viewpresentationnotes" className='nav-item tab-li'>
-                            <span data-view="attendance" className={`nav-link ${view === 'attendance' ? 'active' : null}`}>Attendance</span>
                         </li>
                     </ul>
                 </nav>

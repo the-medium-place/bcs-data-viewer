@@ -311,7 +311,9 @@ const API = {
             const res = await axios.post(attendanceURL, attendancePayload, attendanceConfig)
             // console.log(res.data)
             console.log("API request SUCCESS!\n================================================\n")
-            // console.log("attendance data: ", res.data)
+            console.log("attendance data: ", res.data)
+            const cssSessions = res.data.filter(obj => obj.sessionName.toLowerCase().includes('advanced css'))
+            // console.log({ cssSessions })
             // return res.data
             let prevSessName;
             let prevStudentName;
