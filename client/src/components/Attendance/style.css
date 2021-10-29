@@ -1,0 +1,14 @@
+span[data-studentname]:active::after, span[data-studentname]:hover::after {
+    content: attr(data-studentname) '\00000a' attr(data-session);
+    white-space: pre;
+    position: absolute;
+    left: 0px;
+    bottom: 24px;
+    width: auto;
+    border: 1px #aaaaaa solid;
+    background-color: #13293d;
+    padding: 12px;
+    color: #fff;
+    font-size: 80%;
+    z-index: 5;
+}

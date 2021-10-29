@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import API from '../../utils/API'
+import './style.css';
 
 export default function Attendance({ bcsCohortId, loggedInUser, enrollmentId, studentRoster, droppedStudents }) {
 
@@ -147,9 +148,7 @@ export default function Attendance({ bcsCohortId, loggedInUser, enrollmentId, st
                                                                 .sort((a, b) => {
                                                                     const date1 = new Date(a.date).getTime();
                                                                     const date2 = new Date(b.date).getTime()
-                                                                    // console.log({ date1, date2 })
-                                                                    // new Date(a.date).getTime() - new Date(b.date).getTime()
-                                                                    // date1 < date2 ? -1 : date2 < date1 ? 1 : 0;
+
                                                                     if (date1 < date2) {
                                                                         return -1;
                                                                     } else if (date2 < date1) {
@@ -162,8 +161,8 @@ export default function Attendance({ bcsCohortId, loggedInUser, enrollmentId, st
                                                                     // console.log({ sessionObj })
                                                                     const sessStatus = excused ? 'excused' : pending ? 'pending' : present ? 'present' : remote ? 'remote' : 'absent'
                                                                     return (
-                                                                        <td key={`${sessionObj.name} + ${i}`} className={MAP_BG_COLOR[sessStatus]} data-student={sessionObj.name} data-session={sessionObj.session}>
-                                                                            {excused ? 'Excused' : pending ? 'Pending' : present ? 'Present' : remote ? 'Remote' : 'Absent'}
+                                                                        <td key={`${sessionObj.name} + ${i}`} className={MAP_BG_COLOR[sessStatus]}>
+                                                                            <span data-studentname={sessionObj.name} data-session={sessionObj.session}>{excused ? 'Excused' : pending ? 'Pending' : present ? 'Present' : remote ? 'Remote' : 'Absent'}</span>
                                                                         </td>
                                                                     )
                                                                 })}
