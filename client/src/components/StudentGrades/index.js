@@ -2,6 +2,59 @@ import React, { useState, useEffect } from 'react'
 import API from '../../utils/API';
 import './style.css';
 
+
+const getTdClassName = (grade) => {
+    const GRADE_CLASS_MAP = {
+        'A+': 'table-success',
+        'A': 'table-success',
+        'A-': 'table-success',
+        'B+': 'table-primary',
+        'B': 'table-primary',
+        'B-': 'table-primary',
+        'C+': 'table-warning',
+        'C': 'table-warning',
+        'C-': 'table-warning',
+        'D+': 'table-danger',
+        'D': 'table-danger',
+        'D-': 'table-danger',
+        'F': 'table-dark',
+        'I': 'table-dark',
+        'Incomplete': 'table-dark',
+        'Overdue!': 'table-light text-danger text-bold',
+        'Not Due!': 'table-secondary',
+        'Ungraded': 'text-danger'
+    }
+
+    return GRADE_CLASS_MAP[grade]
+}
+
+function getKeyByValue(object, value) {
+    return Object.keys(object).find(key => object[key] === value);
+}
+
+const MAP_GRADES_TO_INT = {
+    'A+': 1,
+    'A': 2,
+    'A-': 3,
+    'B+': 4,
+    'B': 5,
+    'B-': 6,
+    'C+': 7,
+    'C': 8,
+    'C-': 9,
+    'D+': 10,
+    'D': 11,
+    'D-': 12,
+    'F': 13,
+    'I': 13,
+    'Incomplete': 13,
+    'Overdue!': 13,
+    'Not Due!': 13,
+    'Ungraded': 13,
+    'N/A': 0
+}
+
+
 export default function StudentGrades({ enrollmentId, bcsCohortId, studentRoster, droppedStudents, loggedInUser }) {
 
     const bcsEmail = loggedInUser.bcsLoginInfo.bcsEmail;
@@ -19,74 +72,34 @@ export default function StudentGrades({ enrollmentId, bcsCohortId, studentRoster
         }
         fetchData()
     }, [])
+    console.log(gradeData)
 
     const getAvgAssignmentScore = () => {
         const avgGradeObj = {};
         gradeData.assignmentArr.forEach(assignment => {
             avgGradeObj[assignment] = 0;
         })
-        for (let student in gradeData.studentObj) {
+
+        activeStudents.forEach(student => {
             // console.log(gradeData.studentObj[student])
             gradeData.studentObj[student].assignments.forEach(gradeObj => {
                 // console.log(gradeObj.grade)
                 avgGradeObj[gradeObj.name] += MAP_GRADES_TO_INT[gradeObj.grade] / activeStudents.length;
             })
-        }
+        })
+
+        // for (let student in gradeData.studentObj) {
+        //     // console.log(gradeData.studentObj[student])
+        //     gradeData.studentObj[student].assignments.forEach(gradeObj => {
+        //         // console.log(gradeObj.grade)
+        //         avgGradeObj[gradeObj.name] += MAP_GRADES_TO_INT[gradeObj.grade] / activeStudents.length;
+        //     })
+        // }
 
         // console.log(avgGradeObj)
         return avgGradeObj;
     }
 
-    const getTdClassName = (grade) => {
-        const GRADE_CLASS_MAP = {
-            'A+': 'table-success',
-            'A': 'table-success',
-            'A-': 'table-success',
-            'B+': 'table-primary',
-            'B': 'table-primary',
-            'B-': 'table-primary',
-            'C+': 'table-warning',
-            'C': 'table-warning',
-            'C-': 'table-warning',
-            'D+': 'table-danger',
-            'D': 'table-danger',
-            'D-': 'table-danger',
-            'F': 'table-dark',
-            'I': 'table-dark',
-            'Incomplete': 'table-dark',
-            'Overdue!': 'table-light text-danger text-bold',
-            'Not Due!': 'table-secondary',
-            'Ungraded': 'text-danger'
-        }
-
-        return GRADE_CLASS_MAP[grade]
-    }
-
-    function getKeyByValue(object, value) {
-        return Object.keys(object).find(key => object[key] === value);
-    }
-
-    const MAP_GRADES_TO_INT = {
-        'A+': 1,
-        'A': 2,
-        'A-': 3,
-        'B+': 4,
-        'B': 5,
-        'B-': 6,
-        'C+': 7,
-        'C': 8,
-        'C-': 9,
-        'D+': 10,
-        'D': 11,
-        'D-': 12,
-        'F': 13,
-        'I': 13,
-        'Incomplete': 13,
-        'Overdue!': 13,
-        'Not Due!': 13,
-        'Ungraded': 13,
-        'N/A': 0
-    }
 
     const getGradeAvg = (student) => {
         let numDue = 0,
@@ -181,7 +194,7 @@ export default function StudentGrades({ enrollmentId, bcsCohortId, studentRoster
                             <thead>
                                 <tr>
                                     <th
-                                        className="table-light th-name-avg"
+                                        className="table-light th-name-avg stick-col"
                                         scope="col"
                                         style={{ minWidth: '17ch' }}
                                     >
@@ -193,7 +206,7 @@ export default function StudentGrades({ enrollmentId, bcsCohortId, studentRoster
                                         </span>
                                     </th>
                                     <th
-                                        className="table-light th-name-avg second-child"
+                                        className="table-light th-name-avg second-child stick-col"
                                         scope="col"
                                         style={{ minWidth: '12ch' }}
                                     >

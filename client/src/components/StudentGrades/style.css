@@ -3,7 +3,7 @@
 }
 
 span[data-student]:active::after, span[data-student]:hover::after {
-    content: attr(data-student) '\00000a' attr(data-assignment);
+    content: attr(data-student) '\00000a'attr(data-assignment);
     white-space: pre;
     position: absolute;
     left: 0px;
@@ -53,5 +53,10 @@ thead {
 }
 
 .second-child {
+    position: sticky;
     left: 17ch;
+}
+
+.stick-col {
+    z-index: 10;
 }

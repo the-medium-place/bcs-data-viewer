@@ -1,7 +1,7 @@
 {
-  "name": "graphql-todo",
+  "name": "bcs-data-viewer",
   "version": "1.0.0",
-  "description": "",
+  "description": "A tool for 2U/Trilogy instructors to track student grades and attendance, as well as creating work groups and project notes.",
   "main": "server/server.js",
   "scripts": {
     "start": "node server/server.js",
@@ -18,6 +18,6 @@
     "concurrently": "^5.1.0"
   },
   "engines": {
-    "node": "14.17.0"
+    "node": "17.2.0"
   }
 }

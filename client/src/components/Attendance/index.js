@@ -119,7 +119,7 @@ export default function Attendance({ bcsCohortId, loggedInUser, enrollmentId, st
                                     <th className="table-light th-name-avg">
                                         Name
                                     </th>
-                                    <th className="table-light">
+                                    <th className="table-light " style={{ position: 'sticky', left: 92, zIndex: 3 }}>
                                         Absences
                                     </th>
                                     {sessionNamesArr.map(sessName => {
@@ -140,7 +140,7 @@ export default function Attendance({ bcsCohortId, loggedInUser, enrollmentId, st
                                                             {stuAttObj.student}
 
                                                         </th>
-                                                        <th className={`table-${stuAttObj.absences < 6 ? 'light' : 'danger'} text-center`}>
+                                                        <th style={{ position: 'sticky', left: 92, zIndex: 2 }} className={`table-${stuAttObj.absences < 6 ? 'light' : 'danger'} text-center`}>
                                                             {stuAttObj.absences}
                                                         </th>
                                                         {
